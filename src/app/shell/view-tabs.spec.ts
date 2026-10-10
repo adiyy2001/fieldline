@@ -24,11 +24,18 @@ describe('view tabs', () => {
     const { root } = mount();
     expect(root.querySelector('[role="tablist"]')?.getAttribute('aria-label')).toBe('Views');
     const tabs = root.querySelectorAll('[role="tab"]');
-    expect(tabs).toHaveLength(1);
+    expect(tabs).toHaveLength(3);
     expect(tabs[0]?.getAttribute('aria-selected')).toBe('true');
     expect(tabs[0]?.getAttribute('aria-controls')).toBe('fl-view-ground');
     expect(tabs[0]?.getAttribute('tabindex')).toBe('0');
     expect(tabs[0]?.textContent).toContain('Ground');
+    expect(Array.from(tabs).map((tab) => tab.getAttribute('aria-controls'))).toEqual([
+      'fl-view-ground',
+      'fl-view-profile',
+      'fl-view-optimizer',
+    ]);
+    expect(tabs[1]?.getAttribute('aria-selected')).toBe('false');
+    expect(tabs[1]?.getAttribute('tabindex')).toBe('-1');
   });
 
   it('wraps the arrow keys and supports home and end', () => {
@@ -43,6 +50,20 @@ describe('view tabs', () => {
     const { root, store, fixture } = mount();
     root.querySelector<HTMLElement>('[role="tab"]')?.click();
     fixture.detectChanges();
+    expect(store.view()).toBe('ground');
+  });
+
+  it('switches to the profile and optimizer tabs and moves with the arrow keys', () => {
+    const { root, store, fixture } = mount();
+    const tabs = root.querySelectorAll<HTMLElement>('[role="tab"]');
+    tabs[1]?.click();
+    fixture.detectChanges();
+    expect(store.view()).toBe('profile');
+    expect(tabs[1]?.getAttribute('aria-selected')).toBe('true');
+    tabs[1]?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+    fixture.detectChanges();
+    expect(store.view()).toBe('optimizer');
+    tabs[2]?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', cancelable: true }));
     expect(store.view()).toBe('ground');
   });
 });

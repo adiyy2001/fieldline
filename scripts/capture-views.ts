@@ -31,6 +31,13 @@ const SHOTS: readonly Shot[] = [
   { name: 'ground-delta-tower', search: '?v=1&t=d' },
   { name: 'ground-cross-section', search: '?v=1&m=cross-section-2d' },
   { name: 'ground-high-voltage', search: '?v=1&kv=1100&a=2000' },
+  { name: 'profile', search: '?v=1&w=profile' },
+  { name: 'profile-overlay', search: '?v=1&w=profile&o2=1&sec=0.25' },
+  { name: 'profile-custom-level', search: '?v=1&w=profile&cl=e:3:Site%20limit&hl=e:10' },
+  { name: 'profile-table', search: '?v=1&w=profile', prepare: showTable },
+  { name: 'optimizer', search: '?v=1&w=optimizer&t=dc' },
+  { name: 'optimizer-magnetic', search: '?v=1&w=optimizer&t=dc&rk=pb' },
+  { name: 'optimizer-single-circuit', search: '?v=1&w=optimizer' },
   {
     name: 'help',
     search: '',
@@ -40,6 +47,11 @@ const SHOTS: readonly Shot[] = [
     },
   },
 ];
+
+async function showTable(page: Page): Promise<void> {
+  await page.getByRole('button', { name: 'Data table' }).click();
+  await page.getByTestId('profile-table').waitFor();
+}
 
 const READBACK = { width: 512, height: 192 };
 
@@ -93,7 +105,7 @@ async function capture(
     path: join(outputDirectory, `${group}-${viewport.name}-${shot.name}.png`),
     fullPage: true,
   });
-  if (viewport.name === 'desktop' && shot.prepare === undefined) {
+  if (viewport.name === 'desktop' && shot.prepare === undefined && !shot.search.includes('w=')) {
     const png = await readbackPng(page);
     if (png !== null) {
       writeFileSync(join(outputDirectory, `${group}-readback-${shot.name}.png`), png);

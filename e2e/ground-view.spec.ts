@@ -181,9 +181,11 @@ test.describe('the ground view on WebGPU', () => {
     await expect(page.getByRole('main')).toBeVisible();
     await expect(page.getByRole('complementary', { name: 'Parameters' })).toBeVisible();
     const tabs = page.getByRole('tab');
-    await expect(tabs).toHaveCount(1);
+    await expect(tabs).toHaveCount(3);
     await expect(tabs.first()).toHaveAttribute('aria-selected', 'true');
     await expect(tabs.first()).toHaveAttribute('tabindex', '0');
+    await expect(tabs.nth(1)).toHaveAttribute('tabindex', '-1');
+    await expect(tabs.nth(2)).toHaveAttribute('tabindex', '-1');
     const summary = page.getByRole('status', { name: 'Ground field summary' });
     await expect(summary).toContainText('peak E');
     await expect(summary).toContainText('Poland residential');

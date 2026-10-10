@@ -157,6 +157,12 @@ Reference levels apply to the resultant rms value at the evaluation height, calc
 
 Users can add custom levels with a value, a unit and a label. Checks: `exposure/levels.spec.ts`, "pins the ICNIRP 2010 general public levels as the default", "pins the 1998 and national presets", "converts a field strength to a flux density with mu0", "creates custom levels in SI from displayed units".
 
+### Profile and level crossings
+
+The profile view samples the resultant rms value along x at the evaluation height, at the chosen section z along the reference span. The 2D model has no z and ignores the section. For a level L the crossing positions are found by linear interpolation between neighbouring samples where the profile passes through L. The leftmost and rightmost crossings are reported as the lateral distances at which the level is reached on each side. If the profile is still above L at the edge of the sampled range, the readout says "beyond" that edge instead of inventing a crossing, and a level above the peak reads "not reached". Checks: `exposure/summary.spec.ts`, the level crossing and description cases.
+
+The levels drawn on the charts are the built-in levels of all four presets, merged where values coincide, plus up to four custom levels per field. A built-in level can be hidden. Hiding and adding only change which lines are drawn and listed. They never change a computed field value. Checks: `exposure/level-edits.spec.ts`, `exposure/contour-levels.spec.ts`, custom and hidden cases.
+
 ## 4. The phasing optimizer
 
 A double circuit with the phases stacked vertically has six conductor positions. Each circuit takes one of the six orderings of the phases, which gives 36 arrangements.
@@ -192,7 +198,7 @@ The far magnetic field of an arrangement is proportional to its moment |Σ I_j r
 
 Electric field. A conductor with charge q at height y_c and its image −q form a dipole whose potential at a distant point is (q/(2πε0))·(2 y_c sinθ)/R. The ground image removes the monopole term whatever the sum of the charges is, so the dominant term is the vertical moment Σ q_j y_j. The optimizer takes the charges per volt of each conductor from the basis solve and reports |Σ V_g·dipolePerVolt_g|.
 
-The explanation text for the best and the worst arrangement is generated from these two moments, their ratio, and the number of heights at which the two circuits carry different phases. Checks: `optimizer/explanation.spec.ts`, "counts the levels where the two circuits carry different phases", "builds the sentences from the numbers", "omits the mirror sentence for a self mirrored best arrangement". The explanation covers what the moments show. It says nothing about tower mechanics or insulation distances.
+The optimizer view lists the six classes in a table with the peak values, the values at the chosen distance, the rank, and a mirror marker for the two cyclic classes. A moment below one millionth of the other arrangement's moment is written as 0 in the text, because the numerical value there is rounding noise. The explanation text for the best and the worst arrangement is generated from these two moments, their ratio, and the number of heights at which the two circuits carry different phases. Checks: `optimizer/explanation.spec.ts`, "counts the levels where the two circuits carry different phases", "builds the sentences from the numbers", "omits the mirror sentence for a self mirrored best arrangement". The explanation covers what the moments show. It says nothing about tower mechanics or insulation distances.
 
 ## 5. Validation of the 2D model
 
