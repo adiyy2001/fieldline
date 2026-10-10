@@ -324,6 +324,10 @@ function acceptable(candidate: Configuration, field: UrlField): boolean {
   );
 }
 
+export function urlStateKeys(): readonly string[] {
+  return ['v', 't', ...FIELDS.map((field) => field.key)];
+}
+
 function decodePart(part: string): string {
   const spaced = part.replaceAll('+', ' ');
   try {

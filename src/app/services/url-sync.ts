@@ -1,10 +1,30 @@
 import { Injectable, InjectionToken, inject } from '@angular/core';
 import { type Configuration, defaultConfiguration } from '../../core/model/settings';
-import { decodeConfiguration } from '../../core/model/url-state';
+import { decodeConfiguration, urlStateKeys } from '../../core/model/url-state';
 
 export interface LocationAccess {
   search(): string;
   replaceQuery(query: string): void;
+}
+
+export const DEFAULT_STATE_QUERY = 'v=1';
+
+function keyOf(pair: string): string {
+  const raw = pair.split('=')[0] ?? '';
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
+export function mergeQuery(currentSearch: string, stateQuery: string): string {
+  const own = new Set(urlStateKeys());
+  const text = currentSearch.startsWith('?') ? currentSearch.slice(1) : currentSearch;
+  const foreign = text.split('&').filter((pair) => pair !== '' && !own.has(keyOf(pair)));
+  const state = stateQuery === DEFAULT_STATE_QUERY ? [] : [stateQuery];
+  const merged = [...foreign, ...state].join('&');
+  return merged === '' ? '' : `?${merged}`;
 }
 
 export const LOCATION_ACCESS = new InjectionToken<LocationAccess>('LOCATION_ACCESS', {
@@ -12,7 +32,8 @@ export const LOCATION_ACCESS = new InjectionToken<LocationAccess>('LOCATION_ACCE
   factory: () => ({
     search: () => window.location.search,
     replaceQuery: (query) => {
-      const url = `${window.location.pathname}?${query}${window.location.hash}`;
+      const search = mergeQuery(window.location.search, query);
+      const url = `${window.location.pathname}${search}${window.location.hash}`;
       window.history.replaceState(window.history.state, '', url);
     },
   }),

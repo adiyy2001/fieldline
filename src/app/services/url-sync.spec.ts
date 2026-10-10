@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { defaultConfiguration } from '../../core/model/settings';
 import { encodeConfiguration } from '../../core/model/url-state';
-import { LOCATION_ACCESS, URL_WRITE_INTERVAL_MILLISECONDS, UrlSync } from './url-sync';
+import { LOCATION_ACCESS, URL_WRITE_INTERVAL_MILLISECONDS, UrlSync, mergeQuery } from './url-sync';
 
 function setup(search: string) {
   const writes: string[] = [];
@@ -64,5 +64,20 @@ describe('URL synchronisation', () => {
     const { sync, writes } = setup('');
     sync.write(encodeConfiguration(defaultConfiguration()));
     expect(writes).toEqual(['v=1']);
+  });
+});
+
+describe('merging the state into the query', () => {
+  it('keeps parameters the codec does not own', () => {
+    expect(mergeQuery('?automation&kv=300&x=1', 'v=1&kv=500')).toBe('?automation&x=1&v=1&kv=500');
+  });
+
+  it('writes nothing for the default state', () => {
+    expect(mergeQuery('?kv=300', 'v=1')).toBe('');
+    expect(mergeQuery('?automation&kv=300', 'v=1')).toBe('?automation');
+  });
+
+  it('starts from an empty query', () => {
+    expect(mergeQuery('', 'v=1&q=b')).toBe('?v=1&q=b');
   });
 });
