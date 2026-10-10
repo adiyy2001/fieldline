@@ -13,7 +13,7 @@ function sample(x: number, electricRms: number, magneticRms: number): ProfileSam
 function profileOf(electricKilovolts: readonly number[]): Profile {
   return {
     spec: { xMin: -2, xMax: 2, step: 1, height: 1, z: 0 },
-    samples: electricKilovolts.map((value, index) => sample(index - 2, value * 1000, value * 10)),
+    samples: electricKilovolts.map((value, index) => sample(index - 2, value * 1000, value * 1e-5)),
   };
 }
 
@@ -50,7 +50,8 @@ describe('profile summary', () => {
 
   it('finds the peaks', () => {
     expect(summary.peakElectric).toEqual({ x: 0, value: 6 });
-    expect(summary.peakMagnetic).toEqual({ x: 0, value: 60 });
+    expect(summary.peakMagnetic.x).toBe(0);
+    expect(summary.peakMagnetic.value).toBeCloseTo(60, 9);
   });
 
   it('reports which of the levels are reached', () => {

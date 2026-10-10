@@ -2,11 +2,11 @@ import { quantityOffset, displayScale } from '../core/heatmap/scalar';
 import type { ContourLevel } from '../core/exposure/contour-levels';
 import { MAXIMUM_CONTOUR_LEVELS } from '../core/exposure/contour-levels';
 import type { FieldQuantity } from '../core/exposure/levels';
+import { CONTOUR_HALF_WIDTH_PIXELS } from '../core/heatmap/contour-style';
 import type { DisplayMode } from '../core/model/settings';
 
 export const HEATMAP_PARAMS_BYTES = 112;
 export const LEVEL_BYTES = 16;
-export const CONTOUR_HALF_WIDTH_PIXELS = 1.1;
 
 export interface HeatmapUniforms {
   readonly nx: number;

@@ -31,7 +31,9 @@ describe('the field pipeline', () => {
     expect(frame.profile.samples).toHaveLength(241);
     expect(frame.referenceMidZ).toBe(450);
     expect(frame.timings.totalMilliseconds).toBeGreaterThanOrEqual(0);
-    expect((await frame.read()).length).toBe(128 * 256 * 12);
+    expect(frame.values.length).toBe(128 * 256 * 12);
+    expect(frame.maxima.electric).toBeGreaterThan(1);
+    expect(frame.maxima.magnetic).toBeGreaterThan(1);
   });
 
   it('uses the draft size and the draft solve while a slider moves', async () => {

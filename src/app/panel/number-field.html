@@ -1,0 +1,38 @@
+<div class="field" [attr.data-invalid]="issue() === null ? null : 'true'">
+  <label [for]="inputId">{{ label() }}</label>
+  <div class="entry">
+    <input
+      [id]="inputId"
+      type="number"
+      inputmode="decimal"
+      [min]="min()"
+      [max]="max()"
+      [step]="step()"
+      [value]="value()"
+      [attr.aria-invalid]="issue() === null ? null : 'true'"
+      [attr.aria-describedby]="issue() === null ? null : issueId"
+      (input)="typed($event)"
+      (change)="committed($event)"
+    />
+    @if (unit() !== '') {
+      <span class="unit" aria-hidden="true">{{ unit() }}</span>
+    }
+  </div>
+  @if (slider()) {
+    <input
+      class="slider"
+      type="range"
+      tabindex="-1"
+      aria-hidden="true"
+      [min]="min()"
+      [max]="max()"
+      [step]="step()"
+      [value]="sliderValue()"
+      (input)="typed($event)"
+      (change)="committed($event)"
+    />
+  }
+  @if (issue(); as message) {
+    <p class="issue" [id]="issueId">{{ message }}</p>
+  }
+</div>

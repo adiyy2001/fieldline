@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contourSegments, segmentCount } from './contours';
+import { chainSegments, contourSegments, segmentCount } from './contours';
 
 function cone(nx: number, nz: number): Float32Array {
   const scalars = new Float32Array(nx * nz);
@@ -89,5 +89,49 @@ describe('marching squares contours', () => {
 
   it('handles a flat field exactly at the level', () => {
     expect(segmentCount(contourSegments(new Float32Array(9).fill(1), 3, 3, 1))).toBe(0);
+  });
+
+  it('chains the segments of a circle into one closed loop', () => {
+    const contour = contourSegments(cone(41, 41), 41, 41, 12.3);
+    const chains = chainSegments(contour);
+    expect(chains).toHaveLength(1);
+    const loop = chains[0] ?? new Float32Array(0);
+    expect(loop.length / 2).toBe(segmentCount(contour) + 1);
+    expect([loop[0], loop[1]]).toEqual([loop[loop.length - 2], loop[loop.length - 1]]);
+  });
+
+  it('chains a straight front into one open line in order', () => {
+    const nx = 5;
+    const nz = 6;
+    const scalars = new Float32Array(nx * nz);
+    for (let iz = 0; iz < nz; iz += 1) {
+      for (let ix = 0; ix < nx; ix += 1) {
+        scalars[ix + nx * iz] = ix;
+      }
+    }
+    const chains = chainSegments(contourSegments(scalars, nx, nz, 1.5));
+    expect(chains).toHaveLength(1);
+    const line = Array.from(chains[0] ?? []);
+    const zs = line.filter((_, index) => index % 2 === 1);
+    expect(zs).toHaveLength(nz);
+    const ascending = zs.every((z, index) => index === 0 || z > (zs[index - 1] ?? 0));
+    const descending = zs.every((z, index) => index === 0 || z < (zs[index - 1] ?? 0));
+    expect(ascending || descending).toBe(true);
+  });
+
+  it('keeps separate fronts apart', () => {
+    const nx = 9;
+    const nz = 3;
+    const scalars = new Float32Array(nx * nz);
+    for (let iz = 0; iz < nz; iz += 1) {
+      for (let ix = 0; ix < nx; ix += 1) {
+        scalars[ix + nx * iz] = Math.abs(ix - 4);
+      }
+    }
+    expect(chainSegments(contourSegments(scalars, nx, nz, 2.5))).toHaveLength(2);
+  });
+
+  it('returns no chains for an empty contour', () => {
+    expect(chainSegments({ level: 1, coordinates: new Float32Array(0) })).toEqual([]);
   });
 });

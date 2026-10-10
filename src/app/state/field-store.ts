@@ -19,6 +19,8 @@ import {
   defaultParameters,
 } from '../../core/model/parameters';
 import {
+  DEFAULT_CYCLE_SECONDS,
+  FULL_CYCLE_DEGREES,
   type Configuration,
   type ViewId,
   type ViewSettings,
@@ -293,6 +295,15 @@ export const FieldStore = signalStore(
           playing: false,
         });
       },
+      advancePhase(milliseconds: number): void {
+        const step = (FULL_CYCLE_DEGREES * milliseconds) / (DEFAULT_CYCLE_SECONDS * 1000);
+        patchState(store, {
+          settings: {
+            ...store.settings(),
+            phaseDegrees: wrapPhase(store.settings().phaseDegrees + step),
+          },
+        });
+      },
       setPlaying(playing: boolean): void {
         patchState(store, { playing });
       },
@@ -320,7 +331,9 @@ export const FieldStore = signalStore(
       store._evaluate(store.request);
       effect(() => {
         store.configuration();
-        store._syncUrl();
+        if (!store.animating()) {
+          store._syncUrl();
+        }
       });
     },
   }),

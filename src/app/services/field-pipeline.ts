@@ -12,6 +12,7 @@ import {
 } from '../../core/backend/regions';
 import type { FieldBackend, FieldBuffer, GridSpec } from '../../core/backend/types';
 import type { FieldEvaluator } from '../../core/field-types';
+import { type RmsMaxima, rmsMaxima } from '../../core/heatmap/scalar';
 import { createFieldEvaluator3D } from '../../core/field3d/evaluate';
 import type { LineGeometry } from '../../core/geometry/line-geometry';
 import { groupExcitation } from '../../core/model/excitation';
@@ -41,12 +42,13 @@ export interface FieldFrame {
   readonly backend: FrameBackend;
   readonly grid: GridSpec;
   readonly source: GPUBuffer | Float32Array;
+  readonly values: Float32Array;
+  readonly maxima: RmsMaxima;
   readonly evaluator: FieldEvaluator;
   readonly profile: Profile;
   readonly geometry: LineGeometry;
   readonly referenceMidZ: number;
   readonly timings: FrameTimings;
-  read(): Promise<Float32Array>;
   release(): void;
 }
 
@@ -134,6 +136,8 @@ export function createFieldPipeline(dependencies: PipelineDependencies): FieldPi
         backend: 'cross-section',
         grid,
         source: values,
+        values,
+        maxima: rmsMaxima(values),
         evaluator: field.evaluator,
         profile: profileFor(field.evaluator, request.quality, settings.evaluationHeight, 0),
         geometry,
@@ -143,7 +147,6 @@ export function createFieldPipeline(dependencies: PipelineDependencies): FieldPi
           evaluateMilliseconds: now - evaluateStarted,
           totalMilliseconds: now - started,
         },
-        read: () => Promise.resolve(values),
         release: () => undefined,
       },
     };
@@ -174,7 +177,12 @@ export function createFieldPipeline(dependencies: PipelineDependencies): FieldPi
       buffer.release();
       return { status: 'stale' };
     }
-    const source = hasDeviceBuffer(buffer) ? buffer.buffer : await buffer.read();
+    const values = await buffer.read();
+    if (generation !== latest) {
+      buffer.release();
+      return { status: 'stale' };
+    }
+    const source = hasDeviceBuffer(buffer) ? buffer.buffer : values;
     const evaluator = createFieldEvaluator3D(
       solved.system,
       excitation.voltages,
@@ -191,6 +199,8 @@ export function createFieldPipeline(dependencies: PipelineDependencies): FieldPi
         backend: backend.kind,
         grid,
         source,
+        values,
+        maxima: rmsMaxima(values),
         evaluator,
         profile: profileFor(evaluator, request.quality, settings.evaluationHeight, midZ),
         geometry,
@@ -200,7 +210,6 @@ export function createFieldPipeline(dependencies: PipelineDependencies): FieldPi
           evaluateMilliseconds: now - evaluateStarted,
           totalMilliseconds: now - started,
         },
-        read: () => buffer.read(),
         release: () => {
           buffer.release();
         },

@@ -1,0 +1,293 @@
+<form class="panel" aria-label="Line and display parameters" (submit)="$event.preventDefault()">
+  <fieldset class="group">
+    <legend>Display</legend>
+    <div class="row">
+      <label for="fl-model">Model</label>
+      <select id="fl-model" (change)="setModel($event)">
+        @for (entry of models; track entry.model) {
+          <option [value]="entry.model" [selected]="entry.model === store.settings().model">
+            {{ entry.label }}
+          </option>
+        }
+      </select>
+    </div>
+    <fieldset class="choice">
+      <legend>Field</legend>
+      <label>
+        <input
+          type="radio"
+          name="fl-quantity"
+          [checked]="store.settings().quantity === 'electric'"
+          (change)="setQuantity('electric')"
+        />
+        Electric (E)
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="fl-quantity"
+          [checked]="store.settings().quantity === 'magnetic'"
+          (change)="setQuantity('magnetic')"
+        />
+        Magnetic (B)
+      </label>
+    </fieldset>
+    <fieldset class="choice">
+      <legend>Value</legend>
+      <label>
+        <input
+          type="radio"
+          name="fl-mode"
+          [checked]="store.settings().mode === 'rms'"
+          (change)="setMode('rms')"
+        />
+        rms
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="fl-mode"
+          [checked]="store.settings().mode === 'instantaneous'"
+          (change)="setMode('instantaneous')"
+        />
+        Instantaneous
+      </label>
+    </fieldset>
+    <div class="row phase">
+      <label for="fl-phase">Phase angle</label>
+      <div class="phase-controls">
+        <input
+          id="fl-phase"
+          type="range"
+          [min]="phaseRange.min"
+          [max]="phaseRange.max"
+          [step]="phaseRange.step"
+          [value]="store.settings().phaseDegrees"
+          [disabled]="!instantaneous()"
+          [attr.aria-valuetext]="store.settings().phaseDegrees + ' degrees'"
+          (input)="setPhaseFromSlider($event)"
+        />
+        <output for="fl-phase">{{ store.settings().phaseDegrees }}°</output>
+        <button
+          type="button"
+          class="play"
+          [disabled]="!instantaneous()"
+          [attr.aria-pressed]="store.playing()"
+          (click)="store.togglePlaying()"
+        >
+          {{ store.playing() ? 'Pause' : 'Play' }}
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <label for="fl-height">Evaluation height</label>
+      <select id="fl-height" (change)="setHeight($event)">
+        @for (height of heights; track height) {
+          <option [value]="height" [selected]="height === store.settings().evaluationHeight">
+            {{ height }} m
+          </option>
+        }
+      </select>
+    </div>
+    <div class="row">
+      <label for="fl-preset">Exposure limits</label>
+      <select id="fl-preset" (change)="setPreset($event)">
+        @for (preset of presets; track preset.id) {
+          <option [value]="preset.id" [selected]="preset.id === store.settings().presetId">
+            {{ preset.label }}
+          </option>
+        }
+      </select>
+    </div>
+  </fieldset>
+
+  <fieldset class="group">
+    <legend>Tower</legend>
+    <div class="row">
+      <label for="fl-tower">Tower type</label>
+      <select id="fl-tower" (change)="setTower($event)">
+        @for (entry of towerKinds; track entry.kind) {
+          <option [value]="entry.kind" [selected]="entry.kind === store.parameters().tower.kind">
+            {{ entry.label }}
+          </option>
+        }
+      </select>
+    </div>
+    <div class="grid">
+      @for (field of towerFields(); track field.key) {
+        <fl-number-field
+          [label]="field.range.label"
+          [value]="field.value"
+          [min]="field.range.min"
+          [max]="field.range.max"
+          [step]="field.range.step"
+          [unit]="field.range.unit"
+          [issue]="issue('tower.' + field.key)"
+          (edited)="setTowerValue(field.key, $event)"
+        />
+      }
+    </div>
+  </fieldset>
+
+  <fieldset class="group">
+    <legend>Spans and sag</legend>
+    <div class="row">
+      <label for="fl-spans">Number of spans</label>
+      <select id="fl-spans" (change)="setSpanCount($event)">
+        @for (count of spanCounts; track count) {
+          <option [value]="count" [selected]="count === store.parameters().spanLengths.length">
+            {{ count }}
+          </option>
+        }
+      </select>
+    </div>
+    <div class="grid">
+      @for (span of spans(); track span.index) {
+        <fl-number-field
+          [label]="'Span ' + (span.index + 1) + ' length'"
+          [value]="span.length"
+          [min]="conductor.spanLength.min"
+          [max]="conductor.spanLength.max"
+          [step]="conductor.spanLength.step"
+          unit="m"
+          [issue]="issue('spanLengths.' + span.index)"
+          (edited)="setSpan(span.index, $event)"
+        />
+      }
+      <fl-number-field
+        [label]="conductor.phaseSag.label"
+        [value]="store.parameters().phaseSag"
+        [min]="conductor.phaseSag.min"
+        [max]="conductor.phaseSag.max"
+        [step]="conductor.phaseSag.step"
+        [unit]="conductor.phaseSag.unit"
+        [issue]="issue('phaseSag')"
+        (edited)="setNumber('phaseSag', $event)"
+      />
+      <fl-number-field
+        [label]="conductor.shieldSagRatio.label"
+        [value]="store.parameters().shieldSagRatio"
+        [min]="conductor.shieldSagRatio.min"
+        [max]="conductor.shieldSagRatio.max"
+        [step]="conductor.shieldSagRatio.step"
+        [issue]="issue('shieldSagRatio')"
+        (edited)="setNumber('shieldSagRatio', $event)"
+      />
+    </div>
+  </fieldset>
+
+  <fieldset class="group">
+    <legend>Electrical</legend>
+    <div class="grid">
+      <fl-number-field
+        [label]="electrical.lineToLineKilovolts.label"
+        [value]="store.parameters().lineToLineKilovolts"
+        [min]="electrical.lineToLineKilovolts.min"
+        [max]="electrical.lineToLineKilovolts.max"
+        [step]="electrical.lineToLineKilovolts.step"
+        [unit]="electrical.lineToLineKilovolts.unit"
+        [issue]="issue('lineToLineKilovolts')"
+        (edited)="setNumber('lineToLineKilovolts', $event)"
+      />
+      <fl-number-field
+        [label]="electrical.currentAmperes.label"
+        [value]="store.parameters().currentAmperes"
+        [min]="electrical.currentAmperes.min"
+        [max]="electrical.currentAmperes.max"
+        [step]="electrical.currentAmperes.step"
+        [unit]="electrical.currentAmperes.unit"
+        [issue]="issue('currentAmperes')"
+        (edited)="setNumber('currentAmperes', $event)"
+      />
+      <fl-number-field
+        [label]="electrical.powerFactorAngleDegrees.label"
+        [value]="store.parameters().powerFactorAngleDegrees"
+        [min]="electrical.powerFactorAngleDegrees.min"
+        [max]="electrical.powerFactorAngleDegrees.max"
+        [step]="electrical.powerFactorAngleDegrees.step"
+        [unit]="electrical.powerFactorAngleDegrees.unit"
+        [issue]="issue('powerFactorAngleDegrees')"
+        (edited)="setNumber('powerFactorAngleDegrees', $event)"
+      />
+      <div class="row">
+        <label for="fl-frequency">Frequency</label>
+        <select id="fl-frequency" (change)="setFrequency($event)">
+          @for (frequency of frequencies; track frequency) {
+            <option [value]="frequency" [selected]="frequency === store.parameters().frequencyHz">
+              {{ frequency }} Hz
+            </option>
+          }
+        </select>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="group">
+    <legend>Conductors</legend>
+    <div class="grid">
+      <fl-number-field
+        [label]="conductor.bundleCount.label"
+        [value]="store.parameters().bundleCount"
+        [min]="conductor.bundleCount.min"
+        [max]="conductor.bundleCount.max"
+        [step]="conductor.bundleCount.step"
+        [issue]="issue('bundleCount')"
+        (edited)="setNumber('bundleCount', $event)"
+      />
+      <fl-number-field
+        [label]="conductor.bundleSpacingMetres.label"
+        [value]="store.parameters().bundleSpacingMetres"
+        [min]="conductor.bundleSpacingMetres.min"
+        [max]="conductor.bundleSpacingMetres.max"
+        [step]="conductor.bundleSpacingMetres.step"
+        [unit]="conductor.bundleSpacingMetres.unit"
+        [issue]="issue('bundleSpacingMetres')"
+        (edited)="setNumber('bundleSpacingMetres', $event)"
+      />
+      <fl-number-field
+        [label]="conductor.subconductorDiameterMillimetres.label"
+        [value]="store.parameters().subconductorDiameterMillimetres"
+        [min]="conductor.subconductorDiameterMillimetres.min"
+        [max]="conductor.subconductorDiameterMillimetres.max"
+        [step]="conductor.subconductorDiameterMillimetres.step"
+        [unit]="conductor.subconductorDiameterMillimetres.unit"
+        [issue]="issue('subconductorDiameterMillimetres')"
+        (edited)="setNumber('subconductorDiameterMillimetres', $event)"
+      />
+      <fl-number-field
+        [label]="conductor.shieldDiameterMillimetres.label"
+        [value]="store.parameters().shieldDiameterMillimetres"
+        [min]="conductor.shieldDiameterMillimetres.min"
+        [max]="conductor.shieldDiameterMillimetres.max"
+        [step]="conductor.shieldDiameterMillimetres.step"
+        [unit]="conductor.shieldDiameterMillimetres.unit"
+        [issue]="issue('shieldDiameterMillimetres')"
+        (edited)="setNumber('shieldDiameterMillimetres', $event)"
+      />
+    </div>
+  </fieldset>
+
+  <fieldset class="group">
+    <legend>Phasing</legend>
+    @if (issue('phasing'); as message) {
+      <p class="issue">{{ message }}</p>
+    }
+    <div class="grid">
+      @for (position of positions(); track position.index) {
+        <div class="row">
+          <label [for]="'fl-phasing-' + position.index">{{ position.label }}</label>
+          <select
+            [id]="'fl-phasing-' + position.index"
+            (change)="setPhaseAt(position.index, $event)"
+          >
+            @for (name of phaseNames; track name; let letter = $index) {
+              <option [value]="letter" [selected]="letter === position.phase">
+                Phase {{ name }}
+              </option>
+            }
+          </select>
+        </div>
+      }
+    </div>
+  </fieldset>
+</form>

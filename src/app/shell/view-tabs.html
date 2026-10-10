@@ -1,0 +1,18 @@
+<div role="tablist" aria-label="Views">
+  @for (tab of tabs; track tab.id; let index = $index) {
+    <button
+      type="button"
+      role="tab"
+      [id]="'fl-tab-' + tab.id"
+      [attr.aria-selected]="store.view() === tab.id"
+      [attr.aria-controls]="'fl-view-' + tab.id"
+      [attr.aria-keyshortcuts]="tab.key"
+      [tabindex]="store.view() === tab.id ? 0 : -1"
+      (click)="select(tab.id)"
+      (keydown)="navigate($event, index)"
+    >
+      {{ tab.label }}
+      <kbd aria-hidden="true">{{ tab.key }}</kbd>
+    </button>
+  }
+</div>

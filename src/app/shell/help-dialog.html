@@ -1,0 +1,20 @@
+<dialog #dialog aria-labelledby="fl-help-title" (close)="closed()" (cancel)="closed()">
+  <h2 id="fl-help-title">Keyboard shortcuts</h2>
+  <dl>
+    @for (shortcut of shortcuts; track shortcut.keys) {
+      <div class="entry">
+        <dt>
+          <kbd>{{ shortcut.keys }}</kbd>
+        </dt>
+        <dd>{{ shortcut.action }}</dd>
+      </div>
+    }
+  </dl>
+  <p class="note">
+    The link in the address bar always holds the current state, so a copy of it reopens this exact
+    view.
+  </p>
+  <form method="dialog">
+    <button type="submit" class="close">Close</button>
+  </form>
+</dialog>

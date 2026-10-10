@@ -1,7 +1,12 @@
 import type { Profile } from '../profile/sampler';
 import { profilePeak, profileValues } from '../profile/sampler';
 import { type ContourLevel, formatNumber, formatQuantity } from './contour-levels';
-import type { FieldQuantity } from './levels';
+import {
+  type FieldQuantity,
+  VOLTS_PER_METRE_PER_KILOVOLT_PER_METRE,
+  kilovoltsPerMetre,
+  microtesla,
+} from './levels';
 
 export interface Interval {
   readonly from: number;
@@ -61,7 +66,9 @@ export function exceedanceIntervals(
 
 function displayedValues(profile: Profile, quantity: FieldQuantity): readonly number[] {
   const values = profileValues(profile, quantity);
-  return quantity === 'electric' ? values.map((value) => value / 1000) : values;
+  return quantity === 'electric'
+    ? values.map((value) => value / VOLTS_PER_METRE_PER_KILOVOLT_PER_METRE)
+    : values.map(microtesla);
 }
 
 export function summarizeProfile(
@@ -74,8 +81,8 @@ export function summarizeProfile(
   const positions = profile.samples.map((sample) => sample.x);
   const values = displayedValues(profile, quantity);
   return {
-    peakElectric: { x: electric.x, value: electric.value / 1000 },
-    peakMagnetic: magnetic,
+    peakElectric: { x: electric.x, value: kilovoltsPerMetre(electric.value) },
+    peakMagnetic: { x: magnetic.x, value: microtesla(magnetic.value) },
     reports: levels.map((level) => {
       const intervals = exceedanceIntervals(positions, values, level.value);
       return { level, reached: intervals.length > 0, intervals };

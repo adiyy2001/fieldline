@@ -102,3 +102,54 @@ function segmentPairs(code: number, centerHigh: boolean, edges: CellEdges): [Poi
 export function segmentCount(contour: ContourSegments): number {
   return contour.coordinates.length / 4;
 }
+
+type End = 0 | 1;
+
+export function chainSegments(contour: ContourSegments): readonly Float32Array[] {
+  const { coordinates } = contour;
+  const count = coordinates.length / 4;
+  const pointOf = (index: number, end: End): [number, number] => [
+    coordinates[index * 4 + end * 2] ?? 0,
+    coordinates[index * 4 + end * 2 + 1] ?? 0,
+  ];
+  const keyOf = (index: number, end: End): string => pointOf(index, end).join(',');
+  const endpoints = new Map<string, [number, End][]>();
+  for (let index = 0; index < count; index += 1) {
+    for (const end of [0, 1] as const) {
+      const key = keyOf(index, end);
+      endpoints.set(key, [...(endpoints.get(key) ?? []), [index, end]]);
+    }
+  }
+  const used = new Array<boolean>(count).fill(false);
+  const walk = (start: number, leaving: End): [number, number][] => {
+    const points: [number, number][] = [];
+    let index = start;
+    let exit: End = leaving;
+    for (;;) {
+      const next = (endpoints.get(keyOf(index, exit)) ?? []).find(
+        ([candidate]) => !used[candidate],
+      );
+      if (next === undefined) {
+        return points;
+      }
+      const [following, entered] = next;
+      used[following] = true;
+      exit = entered === 0 ? 1 : 0;
+      points.push(pointOf(following, exit));
+      index = following;
+    }
+  };
+  const chains: Float32Array[] = [];
+  for (let index = 0; index < count; index += 1) {
+    if (used[index]) {
+      continue;
+    }
+    used[index] = true;
+    const before = walk(index, 0).reverse();
+    const after = walk(index, 1);
+    chains.push(
+      Float32Array.from([...before, pointOf(index, 0), pointOf(index, 1), ...after].flat()),
+    );
+  }
+  return chains;
+}

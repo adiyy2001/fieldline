@@ -1,4 +1,4 @@
-import type { FieldQuantity } from '../exposure/levels';
+import { type FieldQuantity, microtesla } from '../exposure/levels';
 import { FIELD_COMPONENTS } from '../backend/types';
 import type { DisplayMode } from '../model/settings';
 import { type ComplexVector3, instantaneousMagnitude, resultantRms } from '../phasor';
@@ -52,7 +52,9 @@ export function scalarOfVector(vector: ComplexVector3, selection: ScalarSelectio
     selection.mode === 'rms'
       ? resultantRms(vector)
       : instantaneousMagnitude(vector, selection.phaseRadians);
-  return magnitude * displayScale(selection.quantity);
+  return selection.quantity === 'electric'
+    ? magnitude * displayScale('electric')
+    : microtesla(magnitude);
 }
 
 export function maximum(values: Float32Array): number {
@@ -63,4 +65,21 @@ export function maximum(values: Float32Array): number {
     }
   }
   return best;
+}
+
+export interface RmsMaxima {
+  readonly electric: number;
+  readonly magnetic: number;
+}
+
+export function rmsMaxima(values: Float32Array): RmsMaxima {
+  const count = Math.floor(values.length / FIELD_COMPONENTS);
+  const selection: ScalarSelection = { quantity: 'electric', mode: 'rms', phaseRadians: 0 };
+  let electric = 0;
+  let magnetic = 0;
+  for (let index = 0; index < count; index += 1) {
+    electric = Math.max(electric, scalarAt(values, index, selection));
+    magnetic = Math.max(magnetic, scalarAt(values, index, { ...selection, quantity: 'magnetic' }));
+  }
+  return { electric, magnetic };
 }

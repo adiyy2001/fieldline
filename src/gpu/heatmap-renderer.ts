@@ -21,7 +21,7 @@ function alignedRowBytes(width: number): number {
 export function createHeatmapRenderer(
   ready: ReadyDevice,
   canvas: HTMLCanvasElement,
-  presentationFormat: GPUTextureFormat,
+  presentationFormat: GPUTextureFormat = navigator.gpu.getPreferredCanvasFormat(),
 ): HeatmapRenderer {
   const { device } = ready;
   const context = canvas.getContext('webgpu');
