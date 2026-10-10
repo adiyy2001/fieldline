@@ -3,9 +3,13 @@ import { ELECTRIC_CONSTANT } from '../core/constants';
 import {
   DEFAULT_WORKGROUPS,
   TILE_SIZE,
+  LINE_WORKGROUP_SIZE,
   composeKernel,
+  composeLinesKernel,
+  composeMarchingCubes,
   constantsHeader,
   defaultKernelOptions,
+  physicsHeader,
   wgslFloat,
 } from './shader-modules';
 
@@ -66,5 +70,31 @@ describe('WGSL composition', () => {
     for (const kind of ['ground', 'volume', 'points'] as const) {
       expect(composeKernel(kind)).not.toMatch(/\/\/|\/\*/);
     }
+  });
+});
+
+describe('3D shader composition', () => {
+  it('puts the physics constants and the segment maths before the line tracer', () => {
+    const source = composeLinesKernel();
+    expect(source.indexOf('const ELECTRIC_PER_MICROCOULOMB')).toBe(0);
+    expect(source.indexOf('fn electricShape')).toBeGreaterThan(0);
+    expect(source.indexOf('fn traceMain')).toBeGreaterThan(source.indexOf('fn electricShape'));
+    expect(source).toContain(`const LINE_WORKGROUP: u32 = ${String(LINE_WORKGROUP_SIZE)}u;`);
+    expect(source).not.toMatch(/\/\/|\/\*/);
+  });
+
+  it('writes the case table layout into the marching cubes module', () => {
+    const source = composeMarchingCubes(24, 16);
+    expect(source).toContain('const CASE_OFFSET: u32 = 24u;');
+    expect(source).toContain('const CASE_STRIDE: u32 = 16u;');
+    expect(source).toContain('fn extractMain');
+    expect(source).toContain('fn finalizeMain');
+    expect(source).not.toMatch(/\/\/|\/\*/);
+  });
+
+  it('keeps the shared physics header identical in every kernel', () => {
+    const header = physicsHeader();
+    expect(composeKernel('ground').startsWith(header)).toBe(true);
+    expect(composeLinesKernel().startsWith(header)).toBe(true);
   });
 });

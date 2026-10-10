@@ -9,6 +9,14 @@ import type { FieldStatus, Probe } from '../state/field-store';
 import type { FrameBackend, FrameTimings, Quality } from '../services/field-pipeline';
 import type { MirrorDifference, ParityStatistics } from '../../core/validation/parity';
 import type { AdapterSummary } from '../../gpu/device';
+import type {
+  FieldLinesRequest,
+  FieldLinesRun,
+  IsosurfaceRequest,
+  IsosurfaceRun,
+  VolumeImageRequest,
+  VolumeImageRun,
+} from './scene3d-types';
 
 export type ParityScenario = 'ground' | 'volume' | 'profile' | 'clamp';
 export type FieldKind = 'ground' | 'volume' | 'profile' | 'clamp';
@@ -157,6 +165,9 @@ export interface FieldlineAutomation {
   runMirror(request: MirrorRequest): Promise<MirrorRun>;
   runKernelBench(request: KernelBenchRequest): Promise<readonly KernelBenchRow[]>;
   runCpuPool(request: CpuPoolRequest): Promise<CpuPoolRun>;
+  runIsosurface(request: IsosurfaceRequest): Promise<IsosurfaceRun>;
+  runVolumeImage(request: VolumeImageRequest): Promise<VolumeImageRun>;
+  runFieldLines(request: FieldLinesRequest): Promise<FieldLinesRun>;
 }
 
 export interface ScenarioTiming {

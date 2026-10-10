@@ -2,7 +2,10 @@ import { ELECTRIC_CONSTANT, MAGNETIC_CONSTANT } from '../core/constants';
 import { MICROCOULOMB_PER_COULOMB, MICROTESLA_PER_TESLA } from '../core/backend/types';
 import fieldGround from './shaders/field_ground.wgsl';
 import fieldPoints from './shaders/field_points.wgsl';
+import fieldLines from './shaders/field_lines.wgsl';
 import fieldVolume from './shaders/field_volume.wgsl';
+import marchingCubes from './shaders/marching_cubes.wgsl';
+import segmentMath from './shaders/segment_math.wgsl';
 import segmentModule from './shaders/segment.wgsl';
 
 export type KernelKind = 'ground' | 'volume' | 'points';
@@ -37,13 +40,19 @@ export function wgslFloat(value: number): string {
   return /[.e]/.test(text) ? text : `${text}.0`;
 }
 
-export function constantsHeader(options: KernelOptions): string {
-  const { workgroup } = options;
+export function physicsHeader(): string {
   const electric = ELECTRIC_CONSTANT / MICROCOULOMB_PER_COULOMB;
   const magnetic = MAGNETIC_CONSTANT * MICROTESLA_PER_TESLA;
   return [
     `const ELECTRIC_PER_MICROCOULOMB: f32 = ${wgslFloat(electric)};`,
     `const MAGNETIC_MICROTESLA_PER_AMPERE: f32 = ${wgslFloat(magnetic)};`,
+  ].join('\n');
+}
+
+export function constantsHeader(options: KernelOptions): string {
+  const { workgroup } = options;
+  return [
+    physicsHeader(),
     `const TILED: bool = ${String(options.tiled)};`,
     `const TILE_SIZE: u32 = ${String(TILE_SIZE)}u;`,
     `const WORKGROUP_X: u32 = ${String(workgroup.x)}u;`,
@@ -61,5 +70,24 @@ export function composeKernel(
   kind: KernelKind,
   options: KernelOptions = defaultKernelOptions(kind),
 ): string {
-  return [constantsHeader(options), segmentModule, entrySources[kind]].join('\n\n');
+  return [constantsHeader(options), segmentMath, segmentModule, entrySources[kind]].join('\n\n');
+}
+
+export const LINE_WORKGROUP_SIZE = 64;
+
+export function composeLinesKernel(): string {
+  return [
+    physicsHeader(),
+    `const LINE_WORKGROUP: u32 = ${String(LINE_WORKGROUP_SIZE)}u;`,
+    segmentMath,
+    fieldLines,
+  ].join('\n\n');
+}
+
+export function composeMarchingCubes(caseOffset: number, caseStride: number): string {
+  return [
+    `const CASE_OFFSET: u32 = ${String(caseOffset)}u;`,
+    `const CASE_STRIDE: u32 = ${String(caseStride)}u;`,
+    marchingCubes,
+  ].join('\n\n');
 }
