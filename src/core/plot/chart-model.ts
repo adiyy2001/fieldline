@@ -47,6 +47,7 @@ export interface ChartSpec {
   readonly levelLines?: readonly LevelLine[];
   readonly width?: number;
   readonly height?: number;
+  readonly legend?: boolean;
 }
 
 export interface PlotArea {
@@ -82,6 +83,8 @@ export interface ChartModel {
   readonly description: string;
   readonly xLabel: string;
   readonly yLabel: string;
+  readonly xDomain: readonly [number, number];
+  readonly yDomain: readonly [number, number];
   readonly xTicks: readonly Tick[];
   readonly yTicks: readonly Tick[];
   readonly series: readonly ModelSeries[];
@@ -92,6 +95,8 @@ export interface ChartModel {
 export const DEFAULT_CHART_WIDTH = 720;
 export const DEFAULT_CHART_HEIGHT = 420;
 const MARGIN = { left: 76, right: 24, top: 56, bottom: 76 } as const;
+const MARGIN_WITHOUT_LEGEND_BOTTOM = 54;
+const MARGIN_WITHOUT_LEGEND_TOP = 20;
 const MARKER_POINT_LIMIT = 40;
 const DASH_PATTERNS = ['', '8 4', '2 3', '10 3 2 3', '4 4'] as const;
 const MARKER_SHAPES: readonly MarkerShape[] = ['circle', 'square', 'triangle', 'diamond'];
@@ -179,11 +184,14 @@ function describeChart(spec: ChartSpec, xDomain: readonly number[], yDomain: rea
 export function buildChart(spec: ChartSpec): ChartModel {
   const width = spec.width ?? DEFAULT_CHART_WIDTH;
   const height = spec.height ?? DEFAULT_CHART_HEIGHT;
+  const withLegend = spec.legend ?? true;
+  const top = withLegend ? MARGIN.top : MARGIN_WITHOUT_LEGEND_TOP;
+  const bottom = withLegend ? MARGIN.bottom : MARGIN_WITHOUT_LEGEND_BOTTOM;
   const plot: PlotArea = {
     left: MARGIN.left,
-    top: MARGIN.top,
+    top,
     width: width - MARGIN.left - MARGIN.right,
-    height: height - MARGIN.top - MARGIN.bottom,
+    height: height - top - bottom,
   };
   const cleaned = spec.series.map((series) => ({ series, points: finitePoints(series.points) }));
   const xValues = cleaned.flatMap(({ points }) => points.map((point) => point.x));
@@ -205,6 +213,8 @@ export function buildChart(spec: ChartSpec): ChartModel {
     description: spec.description,
     xLabel: spec.x.label,
     yLabel: spec.y.label,
+    xDomain,
+    yDomain,
     xTicks: buildTicks(xScale, 8),
     yTicks: buildTicks(yScale, 6),
     series: cleaned.map(({ series, points }, index) => ({
@@ -232,4 +242,33 @@ export function buildChart(spec: ChartSpec): ChartModel {
     })),
     textAlternative: describeChart(spec, xDomain, yDomain),
   };
+}
+
+export function xToPixel(model: ChartModel, x: number): number {
+  const [low, high] = model.xDomain;
+  const span = high - low || 1;
+  return model.plot.left + ((x - low) / span) * model.plot.width;
+}
+
+export function pixelToX(model: ChartModel, pixel: number): number {
+  const [low, high] = model.xDomain;
+  const fraction = (pixel - model.plot.left) / model.plot.width;
+  return low + Math.min(1, Math.max(0, fraction)) * (high - low);
+}
+
+export function snapToStep(value: number, origin: number, step: number): number {
+  return origin + Math.round((value - origin) / step) * step;
+}
+
+export function nearestPoint(
+  series: ModelSeries,
+  pixel: number,
+): { readonly x: number; readonly y: number } | null {
+  let best: { readonly x: number; readonly y: number } | null = null;
+  for (const point of series.markerPoints) {
+    if (best === null || Math.abs(point.x - pixel) < Math.abs(best.x - pixel)) {
+      best = point;
+    }
+  }
+  return best;
 }

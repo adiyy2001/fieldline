@@ -1,4 +1,12 @@
-import { buildChart, dashForIndex, type ChartSpec } from './chart-model';
+import {
+  buildChart,
+  dashForIndex,
+  nearestPoint,
+  pixelToX,
+  snapToStep,
+  xToPixel,
+  type ChartSpec,
+} from './chart-model';
 
 const spec: ChartSpec = {
   title: 'Electric field',
@@ -143,5 +151,43 @@ describe('series without a line', () => {
     expect(scatter.series[0]?.path).toBe('');
     expect(scatter.series[0]?.marker).not.toBe('none');
     expect(scatter.series[0]?.markerPoints).toHaveLength(80);
+  });
+});
+
+describe('chart coordinates', () => {
+  const model = buildChart(spec);
+
+  it('maps the ends of the x domain to the ends of the plot area', () => {
+    expect(xToPixel(model, model.xDomain[0])).toBeCloseTo(model.plot.left, 9);
+    expect(xToPixel(model, model.xDomain[1])).toBeCloseTo(model.plot.left + model.plot.width, 9);
+  });
+
+  it('inverts the mapping and clamps outside the plot area', () => {
+    const pixel = xToPixel(model, 3.7);
+    expect(pixelToX(model, pixel)).toBeCloseTo(3.7, 9);
+    expect(pixelToX(model, model.plot.left - 100)).toBe(model.xDomain[0]);
+    expect(pixelToX(model, model.width + 100)).toBe(model.xDomain[1]);
+  });
+
+  it('snaps a value to the step grid', () => {
+    expect(snapToStep(3.7, 0, 0.5)).toBe(3.5);
+    expect(snapToStep(-59.9, -60, 0.5)).toBe(-60);
+    expect(snapToStep(0.26, 0, 0.5)).toBe(0.5);
+  });
+
+  it('finds the point of a series nearest to a pixel column', () => {
+    const series = model.series[0];
+    expect(series).toBeDefined();
+    if (series === undefined) {
+      return;
+    }
+    const middle = series.markerPoints[1];
+    expect(nearestPoint(series, (middle?.x ?? 0) + 3)).toEqual(middle);
+    expect(nearestPoint({ ...series, markerPoints: [] }, 10)).toBeNull();
+  });
+
+  it('exposes the resolved domains', () => {
+    expect(model.xDomain[0]).toBeLessThanOrEqual(-10);
+    expect(model.yDomain[1]).toBeGreaterThanOrEqual(5);
   });
 });
