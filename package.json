@@ -27,6 +27,8 @@
     "capture:views": "pnpm build && tsx scripts/capture-views.ts",
     "bench:gpu": "pnpm build && tsx bench/gpu-bench.ts",
     "bench:scene3d": "pnpm build && tsx bench/scene3d-bench.ts",
+    "bench:latency": "pnpm build && tsx bench/latency.ts",
+    "bench:fps": "pnpm build && tsx bench/frame-times.ts",
     "verify": "pnpm format:check && pnpm lint && pnpm check:style && pnpm typecheck && pnpm test:coverage && pnpm build && playwright test"
   },
   "dependencies": {
