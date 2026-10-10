@@ -58,7 +58,9 @@ function measure(tower: 'horizontal' | 'double-circuit', segmentsPerSpan: number
         rhs[row * groupCount + group] = 1;
       }
     }
-    const solved = timed(() => solveLu(factors.value, rhs, groupCount));
+    const solved = timed(() => {
+      solveLu(factors.value, rhs, groupCount);
+    });
     const whole = timed(() => solveBasisCharges(set, groupCount));
     if (repeat > 0) {
       assembly.push(matrix.milliseconds);

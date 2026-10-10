@@ -64,7 +64,9 @@ describe('convergence of the 3D model to the 2D cross-section', () => {
   it('does not depend on the segment count when the line is straight', () => {
     const samples = ratioVersusSegments(straight, [4, 12, 24]);
     const first = samples[0]?.electricRatio ?? 0;
-    samples.forEach((sample) => expect(sample.electricRatio).toBeCloseTo(first, 7));
+    samples.forEach((sample) => {
+      expect(sample.electricRatio).toBeCloseTo(first, 7);
+    });
   });
 
   it('changes the mid-span value by less than 1e-4 for E and 2e-3 for B when the run-outs go', () => {

@@ -15,7 +15,9 @@ export interface SerializedChargeSystem {
 export function serializeChargeSystem(system: ChargeSystem): SerializedChargeSystem {
   const { set, groupCount } = system;
   const basisCharges = new Float64Array(groupCount * set.count);
-  system.basisCharges.forEach((charges, group) => basisCharges.set(charges, group * set.count));
+  system.basisCharges.forEach((charges, group) => {
+    basisCharges.set(charges, group * set.count);
+  });
   return {
     count: set.count,
     groupCount,
