@@ -12,6 +12,7 @@ export interface ExposureLevel {
 export interface ExposurePreset {
   readonly id: string;
   readonly label: string;
+  readonly shortLabel: string;
   readonly source: string;
   readonly electric: ExposureLevel;
   readonly magnetic: ExposureLevel;
@@ -70,18 +71,21 @@ export const EXPOSURE_PRESETS: readonly ExposurePreset[] = [
   {
     id: 'icnirp-2010',
     label: 'ICNIRP 2010, general public',
+    shortLabel: 'ICNIRP 2010',
     source: 'ICNIRP, Health Physics 99(6):818-836, 2010, Table 4, unperturbed rms values at 50 Hz',
     ...presetLevels('icnirp-2010', 5000, 200e-6, 'ICNIRP 2010'),
   },
   {
     id: 'icnirp-1998',
     label: 'ICNIRP 1998 and Council Recommendation 1999/519/EC',
+    shortLabel: 'ICNIRP 1998',
     source: 'ICNIRP, Health Physics 74(4):494-522, 1998, Table 7, at 50 Hz',
     ...presetLevels('icnirp-1998', 5000, 100e-6, 'ICNIRP 1998'),
   },
   {
     id: 'poland-public',
     label: 'Poland, places accessible to the public',
+    shortLabel: 'Poland public',
     source:
       'Regulation of the Minister of Health of 17 December 2019, Dz.U. 2019 poz. 2448, Table 2',
     ...presetLevels('poland-public', 10000, teslaFromAmperePerMetre(60), 'Poland public'),
@@ -89,6 +93,7 @@ export const EXPOSURE_PRESETS: readonly ExposurePreset[] = [
   {
     id: 'poland-residential',
     label: 'Poland, residential development areas',
+    shortLabel: 'Poland residential',
     source:
       'Regulation of the Minister of Health of 17 December 2019, Dz.U. 2019 poz. 2448, Table 1',
     ...presetLevels('poland-residential', 1000, teslaFromAmperePerMetre(60), 'Poland residential'),
