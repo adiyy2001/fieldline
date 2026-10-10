@@ -64,10 +64,10 @@
           [step]="phaseRange.step"
           [value]="store.settings().phaseDegrees"
           [disabled]="!instantaneous()"
-          [attr.aria-valuetext]="store.settings().phaseDegrees + ' degrees'"
+          [attr.aria-valuetext]="phaseText() + ' degrees'"
           (input)="setPhaseFromSlider($event)"
         />
-        <output for="fl-phase">{{ store.settings().phaseDegrees }}°</output>
+        <output for="fl-phase">{{ phaseText() }}°</output>
         <button
           type="button"
           class="play"

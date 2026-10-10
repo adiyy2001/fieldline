@@ -1,11 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  effect,
-  inject,
-  viewChild,
-} from '@angular/core';
+import type { ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, viewChild } from '@angular/core';
 import { SHORTCUT_DESCRIPTIONS } from '../services/shortcuts';
 import { UiState } from '../services/ui-state';
 

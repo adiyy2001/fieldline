@@ -69,6 +69,9 @@ export class ParameterPanel {
     max: FULL_CYCLE_DEGREES - PHASE_STEP_DEGREES,
     step: PHASE_STEP_DEGREES,
   };
+  protected readonly phaseText = computed(() =>
+    String(Math.round(this.store.settings().phaseDegrees)),
+  );
   protected readonly electrical = ELECTRICAL_RANGES;
   protected readonly conductor = CONDUCTOR_RANGES;
 

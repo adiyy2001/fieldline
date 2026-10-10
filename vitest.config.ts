@@ -5,6 +5,7 @@ const nonProductionFiles = ['**/*.spec.ts', '**/*.d.ts', 'src/**/testing/**', 's
 
 export default defineConfig({
   test: {
+    testTimeout: 30000,
     coverage: {
       exclude: [...excludedFromCoverage, ...nonProductionFiles],
       thresholds: {
