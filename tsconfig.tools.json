@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM"],
+    "types": ["node", "@webgpu/types"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+  "include": [
+    "src/wgsl.d.ts",
+    "scripts/**/*.ts",
+    "bench/**/*.ts",
+    "e2e/**/*.ts",
+    "playwright.config.ts",
+    "vitest.config.ts",
+    "vitest.scripts.config.ts"
+  ]
+}

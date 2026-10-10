@@ -1,0 +1,86 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "pnpm",
+    "analytics": false
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "fieldline": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "fl",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": ["src/styles.css"],
+            "loader": {
+              ".wgsl": "text"
+            },
+            "webWorkerTsConfig": "tsconfig.worker.json",
+            "polyfills": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "400kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": {
+            "host": "127.0.0.1",
+            "port": 4330
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "fieldline:build:production"
+            },
+            "development": {
+              "buildTarget": "fieldline:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "runnerConfig": "vitest.config.ts",
+            "coverageInclude": ["src/**/*.ts"]
+          }
+        }
+      }
+    }
+  }
+}

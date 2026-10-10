@@ -1,0 +1,13 @@
+BRIEF.md
+NOTES_FOR_ADRIAN.md
+PLAN.md
+pnpm-lock.yaml
+dist
+coverage
+.angular
+.artifacts
+playwright-report
+test-results
+bench/results
+e2e/baselines
+docs/img

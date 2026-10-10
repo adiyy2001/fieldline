@@ -1,0 +1,8 @@
+allowBuilds:
+  esbuild: true
+  '@parcel/watcher': true
+  lmdb: false
+  msgpackr-extract: false
+minimumReleaseAgeExclude:
+  - '@types/node@24.19.2'
+  - prettier@3.9.10
