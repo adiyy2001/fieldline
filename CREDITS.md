@@ -12,6 +12,7 @@ These ship in the production bundle.
 | @angular/compiler         | 22.2.2  | MIT        |
 | @angular/core             | 22.2.2  | MIT        |
 | @angular/platform-browser | 22.2.2  | MIT        |
+| @ngrx/signals             | 22.0.1  | MIT        |
 | rxjs                      | 7.8.2   | Apache-2.0 |
 | tslib                     | 2.8.1   | 0BSD       |
 
@@ -46,5 +47,7 @@ The favicon in `public/favicon.svg` was drawn for this project and is covered by
 ## Published data
 
 The 14 limit heights in `src/core/validation/published-reference.ts` and the tower and phasing cases behind them come from Bendík, Cenký and Eleschová, "Determination of Ground Clearance for EHV 400 kV Overhead Power Lines Based on Electromagnetic Field Limits", Electricity 2026, 7(2), 39, https://doi.org/10.3390/electricity7020039, licensed CC BY 4.0. The values were transcribed and the tower geometry was encoded from the paper for the validation tests, with the Portal tower marked as fitted.
+
+The 256 viridis colours in `src/core/color/viridis.ts` come from `colormaps.py` of the matplotlib colormaps project by Nathaniel J. Smith, Stefan van der Walt and Eric Firing (https://github.com/BIDS/colormap), released under CC0 1.0. `scripts/generate-viridis.ts` converts the file.
 
 Exposure reference levels (ICNIRP 1998 and 2010, Polish Dz.U. 2019 poz. 2448) are numerical limits cited in `docs/physics.md`. No text or table of those documents is reproduced.
