@@ -4,15 +4,7 @@ import { FIELD_COMPONENTS, type FieldSource, type PointLayout } from '../../core
 import { serializeChargeSystem } from '../../core/field3d/serialization';
 import type { FieldJobRequest, FieldJobResult } from '../../workers/field-protocol';
 import { PROTOCOL_VERSION } from '../../workers/protocol';
-
-export interface PoolWorker {
-  onmessage: ((event: MessageEvent<unknown>) => void) | null;
-  onerror: ((event: ErrorEvent) => void) | null;
-  postMessage(message: unknown): void;
-  terminate(): void;
-}
-
-export type PoolWorkerFactory = () => PoolWorker;
+import type { WorkerPort, WorkerPortFactory } from './worker-port';
 
 export const MAXIMUM_POOL_SIZE = 4;
 
@@ -22,7 +14,7 @@ interface PendingJob {
   readonly reject: (error: Error) => void;
 }
 
-export function defaultWorkerFactory(): PoolWorker {
+export function defaultWorkerFactory(): WorkerPort {
   return new Worker(new URL('../../workers/cpu-field.worker', import.meta.url), {
     type: 'module',
   });
@@ -43,9 +35,9 @@ function isFieldResult(value: unknown): value is FieldJobResult {
 
 export function createCpuWorkerPool(
   size: number = poolSizeFor(globalThis.navigator.hardwareConcurrency),
-  factory: PoolWorkerFactory = defaultWorkerFactory,
+  factory: WorkerPortFactory = defaultWorkerFactory,
 ): CpuExecutor {
-  const workers: PoolWorker[] = [];
+  const workers: WorkerPort[] = [];
   const pending = new Map<number, PendingJob>();
   let nextId = 1;
 
@@ -86,7 +78,7 @@ export function createCpuWorkerPool(
   }
 
   function submit(
-    worker: PoolWorker,
+    worker: WorkerPort,
     request: Omit<FieldJobRequest, 'id'>,
     start: number,
   ): Promise<{ start: number; values: Float32Array }> {

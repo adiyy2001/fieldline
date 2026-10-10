@@ -6,12 +6,8 @@ import { solveLine } from '../../core/field3d/solve-line';
 import { groupExcitation } from '../../core/model/excitation';
 import { defaultParameters } from '../../core/model/parameters';
 import { handleFieldMessage } from '../../workers/cpu-field-handler';
-import {
-  createCpuWorkerPool,
-  poolSizeFor,
-  type PoolWorker,
-  type PoolWorkerFactory,
-} from './cpu-worker-pool';
+import { createCpuWorkerPool, poolSizeFor } from './cpu-worker-pool';
+import type { WorkerPort, WorkerPortFactory } from './worker-port';
 
 const spec: GridSpec = { height: 1, xMin: -30, xMax: 30, zMin: 400, zMax: 500, nx: 6, nz: 7 };
 let source: FieldSource;
@@ -22,16 +18,16 @@ beforeAll(() => {
 });
 
 interface FakeWorkers {
-  readonly factory: PoolWorkerFactory;
-  readonly created: PoolWorker[];
+  readonly factory: WorkerPortFactory;
+  readonly created: WorkerPort[];
   readonly terminated: number[];
 }
 
 function fakeWorkers(respond: (message: unknown) => unknown = handleFieldMessage): FakeWorkers {
-  const created: PoolWorker[] = [];
+  const created: WorkerPort[] = [];
   const terminated: number[] = [];
-  const factory: PoolWorkerFactory = () => {
-    const worker: PoolWorker = {
+  const factory: WorkerPortFactory = () => {
+    const worker: WorkerPort = {
       onmessage: null,
       onerror: null,
       postMessage: (message) => {

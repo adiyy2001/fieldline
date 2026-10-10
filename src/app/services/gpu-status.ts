@@ -44,15 +44,16 @@ export class GpuStatus {
   private readonly gpuState = signal<GpuState>({ status: 'checking' });
   private readonly smokeState = signal<SmokeState>({ status: 'pending' });
 
+  readonly deviceResult: Promise<DeviceResult> = this.acquire();
   readonly state = this.gpuState.asReadonly();
   readonly smoke = this.smokeState.asReadonly();
 
   constructor() {
-    void this.start();
+    void this.start(this.deviceResult);
   }
 
-  private async start(): Promise<void> {
-    const result = await this.acquire();
+  private async start(pending: Promise<DeviceResult>): Promise<void> {
+    const result = await pending;
     if (result.status === 'unsupported') {
       this.gpuState.set(result);
       return;
