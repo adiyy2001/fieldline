@@ -1,0 +1,211 @@
+<section class="ground" id="fl-view-ground" role="tabpanel" aria-labelledby="fl-tab-ground">
+  <div class="heading">
+    <h2>Ground field map</h2>
+    <p class="caption" data-testid="ground-caption">{{ caption() }}</p>
+  </div>
+
+  <div
+    #stage
+    class="stage"
+    tabindex="0"
+    role="group"
+    aria-label="Ground field map. Use the arrow keys to move the probe, hold shift to move faster."
+    aria-describedby="fl-ground-probe"
+    (keydown)="moveProbeFromKey($event)"
+  >
+    @if (backends.kind() === 'gpu') {
+      <canvas
+        #gpuCanvas
+        class="heat"
+        [style.left.px]="plot().left"
+        [style.top.px]="plot().top"
+        [style.width.px]="plot().width"
+        [style.height.px]="plot().height"
+        aria-hidden="true"
+      ></canvas>
+    } @else if (backends.kind() === 'cpu') {
+      <canvas
+        #cpuCanvas
+        class="heat"
+        [style.left.px]="plot().left"
+        [style.top.px]="plot().top"
+        [style.width.px]="plot().width"
+        [style.height.px]="plot().height"
+        aria-hidden="true"
+      ></canvas>
+    }
+    <svg
+      class="overlay"
+      [attr.viewBox]="'0 0 ' + size().width + ' ' + size().height"
+      aria-hidden="true"
+      (pointermove)="moveProbeFromPointer($event)"
+      (pointerdown)="moveProbeFromPointer($event)"
+    >
+      <rect
+        class="frame"
+        [attr.x]="plot().left"
+        [attr.y]="plot().top"
+        [attr.width]="plot().width"
+        [attr.height]="plot().height"
+      />
+      @if (axes(); as ticks) {
+        @for (tick of ticks.along; track tick.value) {
+          <line
+            class="tick"
+            [attr.x1]="tick.position"
+            [attr.x2]="tick.position"
+            [attr.y1]="plot().top + plot().height"
+            [attr.y2]="plot().top + plot().height + 5"
+          />
+          <text
+            class="tick-label"
+            text-anchor="middle"
+            [attr.x]="tick.position"
+            [attr.y]="plot().top + plot().height + 19"
+          >
+            {{ tick.label }}
+          </text>
+        }
+        @for (tick of ticks.lateral; track tick.value) {
+          <line
+            class="tick"
+            [attr.x1]="plot().left - 5"
+            [attr.x2]="plot().left"
+            [attr.y1]="tick.position"
+            [attr.y2]="tick.position"
+          />
+          <text
+            class="tick-label"
+            text-anchor="end"
+            [attr.x]="plot().left - 9"
+            [attr.y]="tick.position + 4"
+          >
+            {{ tick.label }}
+          </text>
+        }
+        <text
+          class="axis-title"
+          text-anchor="middle"
+          [attr.x]="plot().left + plot().width / 2"
+          [attr.y]="plot().top + plot().height + 38"
+        >
+          Distance along the line z (m)
+        </text>
+        <text
+          class="axis-title"
+          text-anchor="middle"
+          [attr.transform]="'translate(14 ' + (plot().top + plot().height / 2) + ') rotate(-90)'"
+        >
+          Lateral position x (m)
+        </text>
+      }
+      @if (marks(); as shapes) {
+        @for (line of shapes.lines; track $index) {
+          <line
+            class="conductor-casing"
+            [attr.x1]="line.x1"
+            [attr.x2]="line.x2"
+            [attr.y1]="line.y"
+            [attr.y2]="line.y"
+          />
+          <line
+            class="conductor"
+            [class.shield]="line.role === 'shield'"
+            [attr.x1]="line.x1"
+            [attr.x2]="line.x2"
+            [attr.y1]="line.y"
+            [attr.y2]="line.y"
+          />
+        }
+        @for (tower of shapes.towers; track $index) {
+          <rect
+            class="tower"
+            [attr.x]="tower.x - 3"
+            [attr.y]="tower.y1 - 3"
+            width="6"
+            [attr.height]="tower.y2 - tower.y1 + 6"
+          />
+        }
+      }
+      @for (label of labels(); track $index) {
+        <text class="level-label" [attr.x]="label.x" [attr.y]="label.y">{{ label.text }}</text>
+      }
+      @if (probeMarker(); as marker) {
+        <g class="probe-marker">
+          <circle [attr.cx]="marker.x" [attr.cy]="marker.y" r="7" />
+          <line
+            [attr.x1]="marker.x - 12"
+            [attr.x2]="marker.x + 12"
+            [attr.y1]="marker.y"
+            [attr.y2]="marker.y"
+          />
+          <line
+            [attr.x1]="marker.x"
+            [attr.x2]="marker.x"
+            [attr.y1]="marker.y - 12"
+            [attr.y2]="marker.y + 12"
+          />
+        </g>
+      }
+    </svg>
+    @if (store.frame() === null) {
+      <p class="placeholder">Solving the line</p>
+    }
+  </div>
+
+  <p
+    id="fl-ground-probe"
+    class="probe"
+    data-testid="ground-probe"
+    [attr.aria-live]="store.animating() ? 'off' : 'polite'"
+  >
+    {{ probe()?.text }}
+  </p>
+
+  <div class="legend">
+    <div class="scale">
+      <p class="scale-title">{{ scaleLabel() }}</p>
+      <div
+        class="bar"
+        [style.background]="gradient"
+        role="img"
+        [attr.aria-label]="'Colour scale from 0 to ' + legendMax() + ' ' + unit()"
+      ></div>
+      <ol class="scale-ticks">
+        @for (tick of legendTickList(); track tick.value) {
+          <li [style.left.%]="tick.fraction * 100">{{ tick.label }}</li>
+        }
+      </ol>
+    </div>
+    <ul class="levels" aria-label="Contour levels">
+      @for (entry of legend(); track entry.text) {
+        <li [class.emphasised]="entry.emphasised">
+          <svg class="sample" width="52" height="12" viewBox="0 0 52 12" aria-hidden="true">
+            <rect width="52" height="12" rx="2" />
+            <line
+              x1="3"
+              x2="49"
+              y1="6"
+              y2="6"
+              [attr.stroke-dasharray]="entry.pattern.join(' ')"
+              [attr.stroke-width]="entry.emphasised ? 2.6 : 1.8"
+            />
+          </svg>
+          <span class="level-text">{{ entry.text }}</span>
+          <span class="level-note">{{ entry.sources }}, {{ entry.dashName }}</span>
+        </li>
+      }
+      <li class="footprint">
+        <svg class="sample" width="52" height="12" viewBox="0 0 52 12" aria-hidden="true">
+          <rect width="52" height="12" rx="2" />
+          <line class="conductor" x1="3" x2="49" y1="6" y2="6" />
+          <rect class="tower" x="24" y="1" width="4" height="10" />
+        </svg>
+        <span class="level-text">Line</span>
+        <span class="level-note">conductors and towers seen from above</span>
+      </li>
+    </ul>
+  </div>
+
+  <p class="summary" role="status" data-testid="ground-summary">{{ summary()?.text }}</p>
+</section>

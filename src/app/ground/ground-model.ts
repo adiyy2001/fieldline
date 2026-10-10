@@ -108,15 +108,15 @@ export function levelLabels(
   extent: GroundExtent,
   alongMetres: number,
 ): readonly LevelLabel[] {
-  return summary.reports.flatMap((report) =>
-    report.intervals.flatMap((interval) =>
-      [interval.from, interval.to]
-        .filter(
-          (x) =>
-            x > extent.xMin + LABEL_EDGE_MARGIN_METRES &&
-            x < extent.xMax - LABEL_EDGE_MARGIN_METRES,
-        )
-        .map((x) => ({ text: report.level.text, x, z: alongMetres })),
-    ),
-  );
+  return summary.reports.flatMap((report) => {
+    const first = report.intervals[0];
+    const last = report.intervals[report.intervals.length - 1];
+    const edges = first === undefined || last === undefined ? [] : [first.from, last.to];
+    return edges
+      .filter(
+        (x) =>
+          x > extent.xMin + LABEL_EDGE_MARGIN_METRES && x < extent.xMax - LABEL_EDGE_MARGIN_METRES,
+      )
+      .map((x) => ({ text: report.level.text, x, z: alongMetres }));
+  });
 }

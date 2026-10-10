@@ -85,6 +85,25 @@ describe('the ground view model', () => {
     }
   });
 
+  it('labels only the outermost crossing on each side', () => {
+    const summary = {
+      peakElectric: { x: 0, value: 1 },
+      peakMagnetic: { x: 0, value: 1 },
+      reports: [
+        {
+          level: contourLevels('electric', 'icnirp-2010')[0] ?? ({} as never),
+          reached: true,
+          intervals: [
+            { from: -30, to: -3 },
+            { from: 3, to: 30 },
+          ],
+        },
+      ],
+    };
+    const labels = levelLabels(summary, { xMin: -60, xMax: 60, zMin: 0, zMax: 1 }, 0.5);
+    expect(labels.map((label) => label.x)).toEqual([-30, 30]);
+  });
+
   it('drops labels that sit on the border of the grid', () => {
     const summary = {
       peakElectric: { x: 0, value: 1 },

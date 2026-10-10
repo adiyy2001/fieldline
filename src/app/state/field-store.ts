@@ -1,4 +1,4 @@
-import { effect, inject, signal } from '@angular/core';
+import { effect, inject, signal, untracked } from '@angular/core';
 import {
   patchState,
   signalStore,
@@ -52,9 +52,6 @@ export interface EditOptions {
 }
 
 interface EvaluationRequest {
-  readonly parameters: LineParameters;
-  readonly model: ViewSettings['model'];
-  readonly evaluationHeight: number;
   readonly interactive: boolean;
   readonly sequence: number;
 }
@@ -120,8 +117,6 @@ export const FieldStore = signalStore(
     frame: signal<FieldFrame | null>(null),
   })),
   withComputed((store) => {
-    const model = computed(() => store.settings().model);
-    const evaluationHeight = computed(() => store.settings().evaluationHeight);
     return {
       view: computed(() => store.settings().view),
       configuration: computed<Configuration>(() => ({
@@ -136,9 +131,6 @@ export const FieldStore = signalStore(
           store.settings().view === 'ground',
       ),
       request: computed<EvaluationRequest>(() => ({
-        parameters: store.parameters(),
-        model: model(),
-        evaluationHeight: evaluationHeight(),
         interactive: store.interactive(),
         sequence: store.sequence(),
       })),
@@ -273,9 +265,25 @@ export const FieldStore = signalStore(
         });
       },
       setSettings(patch: Partial<ViewSettings>): void {
-        const next = { ...store.settings(), ...patch };
+        const current = store.settings();
+        const next = { ...current, ...patch };
         const available = VIEW_AVAILABILITY.some((entry) => entry.id === next.view);
-        patchState(store, { settings: available ? next : { ...next, view: 'ground' } });
+        const reevaluate =
+          next.model !== current.model || next.evaluationHeight !== current.evaluationHeight;
+        patchState(store, {
+          settings: available ? next : { ...next, view: 'ground' },
+          ...(reevaluate ? touch(undefined) : {}),
+        });
+      },
+      _watchBackends(): void {
+        effect(() => {
+          const kind = backends.kind();
+          untracked(() => {
+            if (kind === 'cpu' && store.frame()?.backend === 'gpu') {
+              patchState(store, touch(undefined));
+            }
+          });
+        });
       },
       setView(view: ViewId): void {
         if (VIEW_AVAILABILITY.some((entry) => entry.id === view)) {
@@ -329,6 +337,7 @@ export const FieldStore = signalStore(
   withHooks({
     onInit(store) {
       store._evaluate(store.request);
+      store._watchBackends();
       effect(() => {
         store.configuration();
         if (!store.animating()) {

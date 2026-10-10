@@ -12,11 +12,17 @@ function recorder(): { surface: CanvasSurface; recorded: Recorded } {
   let image: Recorded['image'] = null;
   let points = 0;
   let dash: number[] = [];
+  const state = { strokeStyle: '' };
   const surface = {
     lineWidth: 1,
     lineJoin: 'miter',
     lineCap: 'butt',
-    strokeStyle: '',
+    get strokeStyle() {
+      return state.strokeStyle;
+    },
+    set strokeStyle(value: string) {
+      state.strokeStyle = value;
+    },
     createImageData: (width: number, height: number) => ({
       width,
       height,
@@ -39,7 +45,7 @@ function recorder(): { surface: CanvasSurface; recorded: Recorded } {
     },
     stroke: () => {
       strokes.push({
-        color: String(surface.strokeStyle),
+        color: state.strokeStyle,
         width: surface.lineWidth,
         dash,
         points,
