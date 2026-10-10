@@ -11,6 +11,7 @@ export const VOLUME_END_MARGIN = 20;
 export const GPU_GRID_SIZE = { nx: 512, nz: 1024 } as const;
 export const CPU_GRID_SIZE = { nx: 128, nz: 256 } as const;
 export const DRAFT_GRID_SIZE = { nx: 256, nz: 512 } as const;
+export const CPU_DRAFT_GRID_SIZE = { nx: 64, nz: 128 } as const;
 export const VOLUME_SIZE = { nx: 64, ny: 64, nz: 128 } as const;
 
 export interface GridSize {

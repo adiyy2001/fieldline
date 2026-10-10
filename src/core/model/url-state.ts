@@ -58,7 +58,7 @@ function withSettings(configuration: Configuration, settings: ViewSettings): Con
 
 function numberParameter(
   key: string,
-  field: keyof LineParameters & string,
+  field: string,
   read: (parameters: LineParameters) => number,
   write: (parameters: LineParameters, value: number) => LineParameters,
 ): UrlField {
@@ -86,7 +86,7 @@ const towerDimensionsField: UrlField = {
   apply: (configuration, raw) => {
     const values = parseNumberList(raw);
     const { tower } = configuration.parameters;
-    return values === undefined || values.length !== TOWER_FIELD_KEYS[tower.kind].length
+    return values?.length !== TOWER_FIELD_KEYS[tower.kind].length
       ? undefined
       : withParameters(configuration, {
           ...configuration.parameters,
@@ -113,7 +113,7 @@ const phasingField: UrlField = {
   encode: (configuration) =>
     configuration.parameters.phasing.map((phase) => PHASE_LETTERS[phase] ?? 'a').join(''),
   apply: (configuration, raw) => {
-    const indexes = [...raw].map((letter) => PHASE_LETTERS.indexOf(letter));
+    const indexes = Array.from(raw).map((letter) => PHASE_LETTERS.indexOf(letter));
     return indexes.some((index) => index < 0)
       ? undefined
       : withParameters(configuration, { ...configuration.parameters, phasing: indexes });
@@ -311,7 +311,7 @@ export function encodeConfiguration(configuration: Configuration): string {
       entries.push([field.key, encoded]);
     }
   }
-  return new URLSearchParams(entries).toString();
+  return entries.map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
 }
 
 function acceptable(candidate: Configuration, field: UrlField): boolean {
@@ -324,8 +324,30 @@ function acceptable(candidate: Configuration, field: UrlField): boolean {
   );
 }
 
+function decodePart(part: string): string {
+  const spaced = part.replaceAll('+', ' ');
+  try {
+    return decodeURIComponent(spaced);
+  } catch {
+    return spaced;
+  }
+}
+
+function parseQuery(search: string): Map<string, string> {
+  const query = new Map<string, string>();
+  const text = search.startsWith('?') ? search.slice(1) : search;
+  for (const pair of text.split('&')) {
+    const separator = pair.indexOf('=');
+    const key = decodePart(separator < 0 ? pair : pair.slice(0, separator));
+    if (key !== '' && !query.has(key)) {
+      query.set(key, separator < 0 ? '' : decodePart(pair.slice(separator + 1)));
+    }
+  }
+  return query;
+}
+
 export function decodeConfiguration(search: string): Configuration {
-  const query = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
+  const query = parseQuery(search);
   if (query.get('v') !== String(URL_STATE_VERSION)) {
     return defaultConfiguration();
   }
@@ -333,7 +355,7 @@ export function decodeConfiguration(search: string): Configuration {
   let configuration = baselineFor(kind);
   for (const field of FIELDS) {
     const raw = query.get(field.key);
-    const candidate = raw === null ? undefined : field.apply(configuration, raw);
+    const candidate = raw === undefined ? undefined : field.apply(configuration, raw);
     if (candidate !== undefined && acceptable(candidate, field)) {
       configuration = candidate;
     }
