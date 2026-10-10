@@ -20,8 +20,8 @@
     "test:coverage": "ng test --no-watch --coverage && vitest run --config vitest.scripts.config.ts",
     "build": "ng build",
     "serve:dist": "tsx scripts/serve-dist.ts",
-    "e2e": "playwright test",
-    "verify": "pnpm format:check && pnpm lint && pnpm check:style && pnpm typecheck && pnpm test:coverage && pnpm build && pnpm e2e"
+    "e2e": "pnpm build && playwright test",
+    "verify": "pnpm format:check && pnpm lint && pnpm check:style && pnpm typecheck && pnpm test:coverage && pnpm build && playwright test"
   },
   "dependencies": {
     "@angular/common": "22.2.2",
