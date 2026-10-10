@@ -5,6 +5,8 @@ import { limitHeight, peakField, publishedCrossSection } from './published-limit
 import { maximumOf, maximumRelativeError, relativeError } from './metrics';
 import {
   lineCharge,
+  complexPenetrationDepth,
+  earthReturnFluxDensity,
   longConductorFluxDensity,
   singleConductorField,
   singleConductorPotential,
@@ -55,6 +57,26 @@ describe('analytic formulas', () => {
 
   it('gives 20 microtesla for 1000 A at 10 m', () => {
     expect(longConductorFluxDensity(1000, 10) * 1e6).toBeCloseTo(20, 7);
+  });
+});
+
+describe('earth return estimate', () => {
+  it('gives a complex penetration depth of about 500 m for 100 ohm metres at 50 Hz', () => {
+    expect(complexPenetrationDepth(100)).toBeCloseTo(503.29, 1);
+    expect(complexPenetrationDepth(400)).toBeCloseTo(2 * complexPenetrationDepth(100), 9);
+  });
+
+  it('puts the image of a return current about one kilometre below the line', () => {
+    const flux = earthReturnFluxDensity(1000, 12, 100);
+    expect(flux * 1e6).toBeGreaterThan(0.19);
+    expect(flux * 1e6).toBeLessThan(0.21);
+  });
+
+  it('shrinks in proportion to the returning current', () => {
+    expect(earthReturnFluxDensity(100, 12, 100) * 10).toBeCloseTo(
+      earthReturnFluxDensity(1000, 12, 100),
+      15,
+    );
   });
 });
 

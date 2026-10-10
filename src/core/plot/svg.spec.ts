@@ -43,7 +43,7 @@ describe('SVG output', () => {
   });
 
   it('contains no dashes of the long kind and no unescaped angle brackets in text', () => {
-    expect(/[–—]/.test(svg)).toBe(false);
+    expect(new RegExp(String.fromCharCode(91, 0x2013, 0x2014, 93)).test(svg)).toBe(false);
     expect(svg).not.toContain('<E>');
   });
 

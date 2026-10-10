@@ -26,7 +26,7 @@ export interface PublishedCase {
 export type PublishedBundleMode = 'explicit' | 'equivalent';
 
 export const PUBLISHED_CITATION =
-  'Bendik, Cenky, Elesova, Determination of Ground Clearance for EHV 400 kV Overhead Power Lines Based on Electromagnetic Field Limits, Electricity 2026, 7(2), 39, https://doi.org/10.3390/electricity7020039, CC BY 4.0';
+  'Bendík, Cenký, Eleschová, Determination of Ground Clearance for EHV 400 kV Overhead Power Lines Based on Electromagnetic Field Limits, Electricity 2026, 7(2), 39, https://doi.org/10.3390/electricity7020039, CC BY 4.0';
 
 export const PUBLISHED_LINE_TO_LINE_VOLTS = 420e3;
 export const PUBLISHED_CURRENT_AMPERES = 2715;

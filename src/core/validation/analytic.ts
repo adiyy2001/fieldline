@@ -1,5 +1,11 @@
-import { LINE_CHARGE_FIELD_CONSTANT, LINE_CURRENT_FIELD_CONSTANT, TWO_PI } from '../constants';
-import { VACUUM_PERMITTIVITY } from '../constants';
+import {
+  DEFAULT_FREQUENCY_HZ,
+  LINE_CHARGE_FIELD_CONSTANT,
+  LINE_CURRENT_FIELD_CONSTANT,
+  TWO_PI,
+  VACUUM_PERMEABILITY,
+  VACUUM_PERMITTIVITY,
+} from '../constants';
 
 export interface SingleConductor {
   readonly voltage: number;
@@ -39,4 +45,25 @@ export function singleConductorField(
 
 export function longConductorFluxDensity(current: number, distance: number): number {
   return (LINE_CURRENT_FIELD_CONSTANT * current) / distance;
+}
+
+export function complexPenetrationDepth(
+  resistivity: number,
+  frequency: number = DEFAULT_FREQUENCY_HZ,
+): number {
+  return Math.sqrt(resistivity / (TWO_PI * frequency * VACUUM_PERMEABILITY));
+}
+
+export function earthReturnFluxDensity(
+  returnCurrent: number,
+  conductorHeight: number,
+  resistivity: number,
+  frequency: number = DEFAULT_FREQUENCY_HZ,
+): number {
+  const depth = complexPenetrationDepth(resistivity, frequency);
+  const imageDepth = Math.hypot(
+    conductorHeight + 2 * depth * Math.SQRT1_2,
+    2 * depth * Math.SQRT1_2,
+  );
+  return longConductorFluxDensity(returnCurrent, imageDepth);
 }

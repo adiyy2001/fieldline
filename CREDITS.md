@@ -31,6 +31,7 @@ These build, check and test the project. They are not shipped.
 | @webgpu/types         | 0.1.74  | BSD-3-Clause |
 | angular-eslint        | 22.5.0  | MIT          |
 | eslint                | 10.12.0 | MIT          |
+| fast-check            | 4.10.2  | MIT          |
 | jsdom                 | 30.1.2  | MIT          |
 | prettier              | 3.9.10  | MIT          |
 | tsx                   | 4.23.15 | MIT          |
@@ -41,3 +42,9 @@ These build, check and test the project. They are not shipped.
 ## Own work
 
 The favicon in `public/favicon.svg` was drawn for this project and is covered by the project licence (MIT).
+
+## Published data
+
+The 14 limit heights in `src/core/validation/published-reference.ts` and the tower and phasing cases behind them come from Bendík, Cenký and Eleschová, "Determination of Ground Clearance for EHV 400 kV Overhead Power Lines Based on Electromagnetic Field Limits", Electricity 2026, 7(2), 39, https://doi.org/10.3390/electricity7020039, licensed CC BY 4.0. The values were transcribed and the tower geometry was encoded from the paper for the validation tests, with the Portal tower marked as fitted.
+
+Exposure reference levels (ICNIRP 1998 and 2010, Polish Dz.U. 2019 poz. 2448) are numerical limits cited in `docs/physics.md`. No text or table of those documents is reproduced.

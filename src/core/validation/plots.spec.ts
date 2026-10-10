@@ -34,7 +34,7 @@ describe('validation charts', () => {
     charts.forEach((chart) => {
       const svg = renderChartSvg(buildChart(chart.spec));
       expect(svg.length).toBeGreaterThan(1000);
-      expect(/[–—]/.test(svg)).toBe(false);
+      expect(new RegExp(String.fromCharCode(91, 0x2013, 0x2014, 93)).test(svg)).toBe(false);
     });
   });
 });
