@@ -153,7 +153,7 @@ test.describe('the 3D views on a software adapter', () => {
   test('the cross-section model shows the notice instead of a 3D view', async ({ page }) => {
     await openScene(page, 'v=1&w=volume');
     await callAutomation(page, 'setSettings', { model: 'cross-section-2d' });
-    await expect(page.getByTestId('scene-unavailable')).toContainText('need WebGPU');
+    await expect(page.getByTestId('scene-unavailable')).toContainText('not available');
     await expect(page.getByTestId('views3d-notice')).toBeVisible();
     await expect(page.getByRole('tab', { name: /Volume/ })).toHaveAttribute(
       'aria-disabled',

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, effect, inject } from '@angular/core';
 import type { ViewId } from '../../core/model/settings';
 import { FieldStore } from '../state/field-store';
 import { VIEW_AVAILABILITY, isThreeDView } from '../state/views';
@@ -28,6 +28,18 @@ export class ViewTabs {
   protected readonly store = inject(FieldStore);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   protected readonly tabs = VIEW_AVAILABILITY;
+
+  constructor() {
+    effect(() => {
+      const selected = this.store.view();
+      queueMicrotask(() => {
+        const tab = this.host.nativeElement.querySelector<HTMLElement>(`#fl-tab-${selected}`);
+        if (tab !== null && 'scrollIntoView' in tab) {
+          tab.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+        }
+      });
+    });
+  }
 
   protected disabled(view: ViewId): boolean {
     return isThreeDView(view) && !this.store.threeDAvailable();
