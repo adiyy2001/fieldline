@@ -11,11 +11,11 @@ The brief asks for contours at configurable reference levels, with the ICNIRP 20
 - Default preset: ICNIRP 2010, general public, unperturbed rms values at 50 Hz. The guidelines give 5 kV/m for the electric field and 200 µT for the magnetic flux density (H = 160 A/m). Source: ICNIRP, Guidelines for limiting exposure to time-varying electric and magnetic fields (1 Hz to 100 kHz), Health Physics 99(6):818-836, 2010, Table 4.
 - Further presets in the interface:
 
-| Preset | E at 50 Hz | B at 50 Hz | Source |
-| --- | --- | --- | --- |
-| ICNIRP 1998 and Council Recommendation 1999/519/EC | 5 kV/m | 100 µT | ICNIRP, Health Physics 74(4):494-522, 1998, Table 7 |
-| Poland, places accessible to the public | 10 kV/m | 75.4 µT (H = 60 A/m) | Regulation of the Minister of Health of 17 December 2019, Dz.U. 2019 poz. 2448, Table 2 |
-| Poland, residential development areas | 1 kV/m | 75.4 µT (H = 60 A/m) | Same regulation, Table 1 |
+| Preset                                             | E at 50 Hz | B at 50 Hz           | Source                                                                                  |
+| -------------------------------------------------- | ---------- | -------------------- | --------------------------------------------------------------------------------------- |
+| ICNIRP 1998 and Council Recommendation 1999/519/EC | 5 kV/m     | 100 µT               | ICNIRP, Health Physics 74(4):494-522, 1998, Table 7                                     |
+| Poland, places accessible to the public            | 10 kV/m    | 75.4 µT (H = 60 A/m) | Regulation of the Minister of Health of 17 December 2019, Dz.U. 2019 poz. 2448, Table 2 |
+| Poland, residential development areas              | 1 kV/m     | 75.4 µT (H = 60 A/m) | Same regulation, Table 1                                                                |
 
 - Where a regulation states H, the preset converts it with B = μ0·H.
 - Users add custom levels with a value, a unit and a label. Every level gets a distinct dash pattern and a text label next to its contour, so colour is never the only signal.
