@@ -1,6 +1,6 @@
 # Physics of fieldline
 
-This file derives every equation the field model uses and points each one at the test that checks it. Part 1 (sections 1 to 5) covers conventions, phasors, the 2D cross-section model, exposure levels, the phasing optimizer and the validation of the 2D model. Part 2 (sections 6 to 12) covers the 3D charge simulation and its convergence to the 2D model. A later part adds the GPU evaluation.
+This file derives every equation the field model uses and points each one at the test that checks it. Part 1 (sections 1 to 5) covers conventions, phasors, the 2D cross-section model, exposure levels, the phasing optimizer and the validation of the 2D model. Part 2 (sections 6 to 12) covers the 3D charge simulation and its convergence to the 2D model. Part 3 (sections 13 to 16) covers the float32 evaluation on the GPU and its measured error.
 
 Test paths are relative to `src/core`. A test is named by the file and the wording of its `it(...)` description.
 
@@ -355,3 +355,62 @@ Checks: `validation/convergence.spec.ts`, "matches the 2D peak E within 2e-4 for
 ### What the charge simulation leaves out
 
 The model has the limits of section 2 and ADR 19. In addition, the conductor ends are free. Charge piles up at the end of a finite conductor, and a current needs a closed path, so the run-outs only approximate a line that continues. They matter near the outer towers and change the mid-span value of the middle span by less than 0.1 percent in B.
+
+## 13. Float32 evaluation on the GPU
+
+The GPU kernels evaluate the closed forms of section 6 with the same clamp (section 8) and the same ground image (section 7), in float32 and in different units. A kernel handles one point per invocation and loops over all segments. Each segment adds
+
+$$\mathbf{E} \mathrel{+}= \lambda\,\frac{1}{4\pi\varepsilon_0}\left[\mathbf{F}(a,\hat{u}) - \mathbf{F}(a',\hat{u}')\right], \qquad \mathbf{B} \mathrel{+}= I\,\frac{\mu_0}{4\pi}\,k\,\hat{u}\times\hat{\rho}$$
+
+where F(a, û) = k ρ/ρ_c + (1/R2 − 1/R1) û is the bracket of section 6 for the segment starting at a, and the primed quantities belong to the image. The image of the start point is a′ = (a_x, −a_y, a_z) and its direction is û′ = (û_x, −û_y, û_z). Because the evaluation uses coordinates relative to an origin (below), the plane of the image is y = −o_y, and the kernel mirrors about the ground height it receives in the uniform buffer instead of about 0. Forgetting this gave a mean error of 9 percent in E while B, which has no image, agreed to 1e-5. The mirrored phasing test in section 15 and the profile scenario catch it.
+
+Three decisions keep float32 usable.
+
+- Relative coordinates. A world coordinate on a 900 m line has a float32 spacing of 3e-5 m, which is 0.02 percent of the 0.134 m clamp radius. Segment ends and evaluation points are therefore subtracted from the centre of the evaluated region in float64 on the CPU, and only the differences go to the GPU. The same origin applies to the segments and to the points, so every difference the shader forms is exact up to the float32 spacing of values of the size of the region. Check: `gpu/segment-pack.spec.ts`, "keeps coordinates small by subtracting the origin in double precision".
+- Units. Charge goes to the GPU in µC/m and B comes back in µT, so that the values stay near 1 for the range of interest. The constants 1/(4πε0) and μ0/(4π) are scaled to match and written into the shader header from the same core constants that the CPU path uses. Checks: `gpu/segment-pack.spec.ts`, "converts charge density to microcoulombs per metre and keeps currents in amperes"; `gpu/shader-modules.spec.ts`, "takes the physical constants from the core in microcoulomb and microtesla units".
+- The clamp. ρ is replaced by max(ρ, r) and ρ/ρ_c is used as the direction, exactly as in section 8, so no branch depends on a value that is close to 0. The radius travels in the segment record.
+
+The tiled variant copies 64 segments at a time into workgroup memory with barriers in uniform control flow, and the untiled variant reads the storage buffer directly. Both give the same values, and the benchmark records which one is faster on each adapter. The workgroup shape (8 × 8 for the ground grid, 4 × 4 × 4 for the volume, 64 for point lists) and the tiling switch are constants in a generated header, so one source file serves every variant. Check: `gpu/shader-modules.spec.ts`, "writes the workgroup shape and the tiling switch into the header".
+
+## 14. The error metric
+
+For a candidate field f and a reference g, both with the 12 floats per point of ADR 7, the error at a point is the norm of the difference over the norm of the reference, taken separately for E (the real and imaginary parts together) and for B:
+
+$$\varepsilon_p = \frac{\lVert f_p - g_p\rVert}{\lVert g_p\rVert}$$
+
+A point whose reference norm is below 1 percent of the largest reference norm in the set is left out, because the ratio of two rounding errors is not a statement about the field there (the field changes sign across a null and the ratio explodes). The report gives the maximum, the mean, the index of the worst point and the number of points that were compared. The target is a maximum below 1e-3. A buffer with a non finite value fails regardless of the numbers. Checks: `validation/parity.spec.ts`, "measures the norm of the difference over the norm of the reference per point", "leaves out reference points below the floor", "flags non finite candidates".
+
+The mirror check compares the field magnitude at node (i, j) of a grid with the one at node (nx − 1 − i, j) of the grid for the mirrored phasing. For a mirror-symmetric tower the two must agree, so the result also shows that nothing in the kernel depends on the side of the line. Check: `validation/parity.spec.ts`, "reports the relative difference of the magnitudes at mirrored nodes".
+
+## 15. Measured error
+
+`pnpm bench:gpu` runs the production build in Chromium, evaluates four scenarios for each of the three towers on the GPU and on the float64 reference, and writes `bench/results/gpu-parity-<adapter>.json`. The scenarios are the ground grid at 1 m (512 × 1024 nodes), the volume (64 × 64 × 128 nodes), a lateral profile of 241 points at mid-span and a probe of 20 points that starts on the axis of a mid-span conductor and moves out to 100 radii.
+
+Three adapters were measured: SwiftShader (software), the NVIDIA GeForce RTX 3070 Ti Laptop GPU and the Intel Iris Xe Graphics. The clamp probe gives the same maximum on all three to two or three digits and the other scenarios differ by at most a factor of 2 (the ground grid and volume maxima are below 2.1e-4 on every adapter), so the error is a property of the float32 arithmetic and the formulation and not of one driver.
+
+| Tower          | Scenario    | Maximum E, worst adapter | Maximum B, worst adapter |
+| -------------- | ----------- | ------------------------ | ------------------------ |
+| Horizontal     | ground grid | 2.0e-04                  | 2.5e-05                  |
+| Horizontal     | volume      | 1.6e-05                  | 1.3e-05                  |
+| Horizontal     | profile     | 9.0e-06                  | 3.8e-06                  |
+| Horizontal     | clamp probe | 6.5e-04                  | 1.6e-04                  |
+| Delta          | ground grid | 3.0e-05                  | 3.6e-05                  |
+| Delta          | volume      | 1.4e-05                  | 9.8e-06                  |
+| Delta          | profile     | 7.3e-06                  | 4.7e-06                  |
+| Delta          | clamp probe | 4.2e-04                  | 9.4e-05                  |
+| Double circuit | ground grid | 4.7e-05                  | 2.5e-05                  |
+| Double circuit | volume      | 1.0e-04                  | 1.0e-05                  |
+| Double circuit | profile     | 2.3e-05                  | 2.6e-06                  |
+| Double circuit | clamp probe | 4.0e-04                  | 8.5e-05                  |
+
+The table lists the largest value of the three adapters for each row. The mean E error over the ground grid and the volume is between 6e-7 and 4e-6 on SwiftShader, and the mean over the 20 clamp probe points is at most 7.4e-5. The mirror check gives at most 3.4e-5 for E and 4.5e-6 for B on any adapter.
+
+Checks: `e2e/gpu-parity.spec.ts`, "ground, volume, profile and clamp zone agree within 0.001" for each tower and "mirrored phasing gives the mirrored grid" for each tower.
+
+## 16. Where the error comes from
+
+Away from the conductors the error is a few parts in 1e5. Near a conductor it grows because the position error of the float32 coordinates is divided by the distance to the axis. A coordinate of size up to 450 m (half of the 900 m line) has a spacing of 3e-5 m, so the direction ρ/ρ_c and the factor 1/ρ in k change by about 3e-5/ρ in relative terms. At ρ = 0.134 m, the clamp radius, that is 2e-4 per coordinate, and the sum over a few coordinates and the rounding in the near and far distances give the 4e-4 to 6.5e-4 seen in the clamp probe. At ρ = 10 m it is 3e-6. The probe point on the axis is the worst case. The ground grid and the volume stay clear of the conductors.
+
+This is also why the target of 1e-3 is not met by a wide margin everywhere: inside the clamp zone the margin is a factor of 1.5. The exposure contours depend on the field outside the clamp zone, where the error is below 1.2e-4.
+
+Both results rest on the segment charge densities, which come from the float64 solve. The GPU does not solve; it only evaluates. The error of the charge system itself is in section 11.
