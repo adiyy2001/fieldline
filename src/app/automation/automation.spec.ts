@@ -1,12 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
 import { DEVICE_ACQUIRER } from '../services/gpu-status';
-import {
-  Automation,
-  type AutomationHost,
-  installAutomation,
-  isAutomationRequested,
-} from './automation';
+import { Automation, type AutomationHost, installAutomation } from './automation';
+import { isAutomationRequested } from './automation-query';
 import type { FieldlineAutomation } from './automation-types';
 
 const stub = {} as FieldlineAutomation;

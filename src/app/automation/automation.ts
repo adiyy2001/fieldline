@@ -9,9 +9,8 @@ import { HeatmapCapture } from '../services/heatmap-capture';
 import { Scene3dState } from '../scene3d/scene3d-state';
 import { FieldStore } from '../state/field-store';
 import { createAutomationApi } from './automation-api';
+import { isAutomationRequested } from './automation-query';
 import type { AppBridge, FieldlineAutomation } from './automation-types';
-
-export const AUTOMATION_QUERY_PARAMETER = 'automation';
 
 declare global {
   interface Window {
@@ -36,10 +35,6 @@ export async function waitForSettled(
 }
 
 export type AutomationHost = Pick<Window, 'fieldline'>;
-
-export function isAutomationRequested(search: string): boolean {
-  return new URLSearchParams(search).has(AUTOMATION_QUERY_PARAMETER);
-}
 
 export function installAutomation(
   host: AutomationHost,
