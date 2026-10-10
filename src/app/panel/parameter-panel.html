@@ -72,10 +72,10 @@
           type="button"
           class="play"
           [disabled]="!instantaneous()"
-          [attr.aria-pressed]="store.playing()"
+          [attr.aria-pressed]="store.animating()"
           (click)="store.togglePlaying()"
         >
-          {{ store.playing() ? 'Pause' : 'Play' }}
+          {{ store.animating() ? 'Pause' : 'Play' }}
         </button>
       </div>
     </div>

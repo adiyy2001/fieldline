@@ -117,6 +117,23 @@ describe('the field store', () => {
     await until(() => writes.join(' ').includes('kv=500'));
   });
 
+  it('keeps the mode in the URL while animating but leaves the moving phase out', async () => {
+    const writes: string[] = [];
+    const store = createStore({ writes });
+    await until(() => store.status() === 'ready');
+    TestBed.tick();
+    store.setSettings({ mode: 'instantaneous' });
+    store.setPlaying(true);
+    TestBed.tick();
+    await until(() => writes.some((query) => query.includes('r=inst')));
+    store.advancePhase(1000);
+    TestBed.tick();
+    expect(store.urlQuery()).not.toContain('ang=');
+    store.setPlaying(false);
+    TestBed.tick();
+    expect(store.urlQuery()).toContain('ang=');
+  });
+
   it('steps the phase in 15 degree steps and stops the animation', () => {
     const store = createStore();
     store.setPlaying(true);

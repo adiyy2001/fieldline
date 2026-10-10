@@ -67,6 +67,7 @@ export class Automation {
         store.setSettings(patch);
       },
       setPhase: (degrees) => {
+        store.setPlaying(false);
         store.setPhase(degrees);
       },
       settled: () => waitForSettled(() => store.status() !== 'solving'),

@@ -25,11 +25,20 @@ describe('scalar raster painting', () => {
         scalars[ix + nx * iz] = iz + 10 * ix;
       }
     }
-    const pixels = paintScalarRaster({ scalars, nx, nz, width: 4, height: 3, maximum: 23 });
-    expect(pixelAt(pixels, 4, 0, 2)).toEqual([...viridisBytes(0), 255]);
-    expect(pixelAt(pixels, 4, 3, 2)).toEqual([...viridisBytes(3 / 23), 255]);
-    expect(pixelAt(pixels, 4, 0, 0)).toEqual([...viridisBytes(20 / 23), 255]);
-    expect(pixelAt(pixels, 4, 3, 0)).toEqual([...viridisBytes(1), 255]);
+    const width = 4;
+    const height = 3;
+    const pixels = paintScalarRaster({ scalars, nx, nz, width, height, maximum: 23 });
+    const expectedAt = (column: number, row: number) => {
+      const along = ((column + 0.5) / width) * (nz - 1);
+      const lateral = (1 - (row + 0.5) / height) * (nx - 1);
+      return [...viridisBytes((along + 10 * lateral) / 23), 255];
+    };
+    expect(pixelAt(pixels, width, 0, 2)).toEqual(expectedAt(0, 2));
+    expect(pixelAt(pixels, width, 3, 2)).toEqual(expectedAt(3, 2));
+    expect(pixelAt(pixels, width, 0, 0)).toEqual(expectedAt(0, 0));
+    expect(pixelAt(pixels, width, 3, 0)).toEqual(expectedAt(3, 0));
+    expect(expectedAt(3, 0)).not.toEqual(expectedAt(0, 0));
+    expect(expectedAt(0, 0)).not.toEqual(expectedAt(0, 2));
   });
 
   it('interpolates bilinearly between grid nodes', () => {

@@ -117,19 +117,26 @@ export const FieldStore = signalStore(
     frame: signal<FieldFrame | null>(null),
   })),
   withComputed((store) => {
+    const animating = computed(
+      () =>
+        store.playing() &&
+        store.settings().mode === 'instantaneous' &&
+        store.settings().view === 'ground',
+    );
     return {
       view: computed(() => store.settings().view),
+      urlQuery: computed(() =>
+        encodeConfiguration({
+          parameters: store.parameters(),
+          settings: animating() ? { ...store.settings(), phaseDegrees: 0 } : store.settings(),
+        }),
+      ),
       configuration: computed<Configuration>(() => ({
         parameters: store.parameters(),
         settings: store.settings(),
       })),
       levels: computed(() => contourLevels(store.settings().quantity, store.settings().presetId)),
-      animating: computed(
-        () =>
-          store.playing() &&
-          store.settings().mode === 'instantaneous' &&
-          store.settings().view === 'ground',
-      ),
+      animating,
       request: computed<EvaluationRequest>(() => ({
         interactive: store.interactive(),
         sequence: store.sequence(),
@@ -210,9 +217,7 @@ export const FieldStore = signalStore(
     return {
       _evaluate: evaluate,
       _syncUrl(): void {
-        sync.write(
-          encodeConfiguration({ parameters: store.parameters(), settings: store.settings() }),
-        );
+        sync.write(store.urlQuery());
       },
       setParameters(patch: Partial<LineParameters>, options?: EditOptions): void {
         patchState(store, { parameters: { ...store.parameters(), ...patch }, ...touch(options) });
@@ -339,10 +344,8 @@ export const FieldStore = signalStore(
       store._evaluate(store.request);
       store._watchBackends();
       effect(() => {
-        store.configuration();
-        if (!store.animating()) {
-          store._syncUrl();
-        }
+        store.urlQuery();
+        store._syncUrl();
       });
     },
   }),

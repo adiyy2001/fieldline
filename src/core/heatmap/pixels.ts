@@ -38,9 +38,9 @@ export function paintScalarRaster(raster: ScalarRaster): Uint8ClampedArray {
   const pixels = new Uint8ClampedArray(width * height * 4);
   const scale = maximum > 0 ? 1 / maximum : 0;
   for (let row = 0; row < height; row += 1) {
-    const lateral = height > 1 ? 1 - row / (height - 1) : 0.5;
+    const lateral = 1 - (row + 0.5) / height;
     for (let column = 0; column < width; column += 1) {
-      const along = width > 1 ? column / (width - 1) : 0.5;
+      const along = (column + 0.5) / width;
       const value = sampleBilinear(scalars, nx, nz, lateral, along);
       const [red, green, blue] = viridisBytes(value * scale);
       const offset = (row * width + column) * 4;
