@@ -1,0 +1,11 @@
+export const VACUUM_PERMITTIVITY = 8.8541878188e-12;
+export const VACUUM_PERMEABILITY = 1.25663706127e-6;
+export const TWO_PI = 2 * Math.PI;
+export const ELECTRIC_CONSTANT = 1 / (4 * Math.PI * VACUUM_PERMITTIVITY);
+export const MAGNETIC_CONSTANT = VACUUM_PERMEABILITY / (4 * Math.PI);
+export const LINE_CHARGE_FIELD_CONSTANT = 1 / (TWO_PI * VACUUM_PERMITTIVITY);
+export const LINE_CURRENT_FIELD_CONSTANT = VACUUM_PERMEABILITY / TWO_PI;
+export const DEFAULT_FREQUENCY_HZ = 50;
+export const SQRT3 = Math.sqrt(3);
+export const SQRT2 = Math.SQRT2;
+export const DEGREES_TO_RADIANS = Math.PI / 180;
