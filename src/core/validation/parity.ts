@@ -133,7 +133,7 @@ export function mirrorDifference(
 ): MirrorDifference {
   const first = resultantMagnitudes(original, range);
   const second = resultantMagnitudes(mirrored, range);
-  const floor = floorFraction * Math.max(...first);
+  const floor = floorFraction * first.reduce((largest, value) => Math.max(largest, value), 0);
   let comparedPoints = 0;
   let maximum = 0;
   first.forEach((magnitude, index) => {
