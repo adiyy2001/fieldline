@@ -178,7 +178,7 @@ function clearanceIssues(parameters: LineParameters): readonly ValidationIssue[]
     : [];
 }
 
-export function validateParameters(parameters: LineParameters): readonly ValidationIssue[] {
+export function structuralIssues(parameters: LineParameters): readonly ValidationIssue[] {
   const ranges: readonly (readonly [string, number, NumberRange])[] = [
     ['lineToLineKilovolts', parameters.lineToLineKilovolts, ELECTRICAL_RANGES.lineToLineKilovolts],
     ['currentAmperes', parameters.currentAmperes, ELECTRICAL_RANGES.currentAmperes],
@@ -209,7 +209,7 @@ export function validateParameters(parameters: LineParameters): readonly Validat
   const rangeIssues = ranges.flatMap(
     ([field, value, range]) => rangeIssue(field, value, range) ?? [],
   );
-  const structural = [
+  return [
     ...rangeIssues,
     ...frequencyIssue,
     ...integerIssues(parameters),
@@ -217,6 +217,10 @@ export function validateParameters(parameters: LineParameters): readonly Validat
     ...phasingIssues(parameters),
     ...spanIssues(parameters),
   ];
+}
+
+export function validateParameters(parameters: LineParameters): readonly ValidationIssue[] {
+  const structural = structuralIssues(parameters);
   return structural.length > 0 ? structural : clearanceIssues(parameters);
 }
 
