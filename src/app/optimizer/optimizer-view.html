@@ -1,0 +1,152 @@
+<section
+  class="optimizer"
+  id="fl-view-optimizer"
+  role="tabpanel"
+  aria-labelledby="fl-tab-optimizer"
+>
+  <div class="heading">
+    <h2>Phasing optimizer</h2>
+    <p class="caption" data-testid="optimizer-caption">
+      {{ data.height() }} m above ground, {{ data.sectionText() }}
+    </p>
+  </div>
+
+  @if (!data.towerSupported()) {
+    <div class="notice" data-testid="optimizer-unsupported">
+      <p>
+        The optimizer compares the six distinct ways to assign phases A, B and C to the two circuits
+        of a double circuit tower. The current tower has a single circuit.
+      </p>
+      <button type="button" (click)="useDoubleCircuit()">Switch to a double circuit tower</button>
+    </div>
+  } @else if (!data.available()) {
+    <p class="placeholder">Solving the line</p>
+  } @else {
+    <div class="controls">
+      <div class="row">
+        <label for="fl-rank-criterion">Rank by</label>
+        <select id="fl-rank-criterion" (change)="setCriterion($event)">
+          @for (entry of criteria; track entry.criterion) {
+            <option [value]="entry.criterion" [selected]="entry.criterion === data.criterion()">
+              {{ entry.label }}
+            </option>
+          }
+        </select>
+      </div>
+      <fl-number-field
+        label="Distance from the axis"
+        [value]="data.distance()"
+        [min]="distanceRange.min"
+        [max]="distanceRange.max"
+        [step]="distanceRange.step"
+        unit="m"
+        [slider]="false"
+        (edited)="setDistance($event)"
+      />
+    </div>
+
+    <div class="table-frame" role="region" aria-label="Phase arrangements" tabindex="-1">
+      <table data-testid="optimizer-table">
+        <caption>
+          Six arrangements, each row is a symmetry class. Use the up and down arrow keys to move
+          between rows and Enter to apply the arrangement.
+        </caption>
+        <thead>
+          <tr>
+            @for (header of columns; track header.column) {
+              <th scope="col" [attr.aria-sort]="ariaSort(header.column)">
+                <button type="button" class="sort" (click)="sortBy(header.column)">
+                  {{ header.label }}
+                </button>
+              </th>
+            }
+            <th scope="col">Mirror</th>
+            <th scope="col"><span class="sr-only">Apply</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of sortedRows(); track row.key) {
+            <tr
+              [tabindex]="row.key === focusKey() ? 0 : -1"
+              [attr.aria-label]="rowLabel(row)"
+              [attr.data-class]="row.key"
+              [class.best]="row.best"
+              [class.worst]="row.worst"
+              [class.current]="row.current"
+              (keydown)="rowKey($event, row)"
+              (focus)="rowFocused(row)"
+            >
+              <td>{{ row.rank }}</td>
+              <th scope="row">
+                <span class="name">
+                  <span class="letters">{{ row.label }}</span>
+                  <span class="symbols" aria-hidden="true">{{ row.symbols }}</span>
+                </span>
+                <span class="tags">
+                  @if (row.best) {
+                    <span class="tag">best</span>
+                  }
+                  @if (row.worst) {
+                    <span class="tag">worst</span>
+                  }
+                  @if (row.current) {
+                    <span class="tag">current</span>
+                  }
+                </span>
+              </th>
+              <td [class.ranked]="data.criterion() === 'peak-electric'">
+                {{ row.peakElectric.toFixed(3) }}
+              </td>
+              <td [class.ranked]="data.criterion() === 'peak-magnetic'">
+                {{ row.peakMagnetic.toFixed(3) }}
+              </td>
+              <td [class.ranked]="data.criterion() === 'electric-at-distance'">
+                {{ row.electricAtDistance.toFixed(3) }}
+              </td>
+              <td [class.ranked]="data.criterion() === 'magnetic-at-distance'">
+                {{ row.magneticAtDistance.toFixed(3) }}
+              </td>
+              <td>{{ row.mirror === null ? 'self-mirrored' : 'mirror of ' + row.mirror }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="apply"
+                  tabindex="-1"
+                  [attr.aria-label]="'Apply ' + row.label"
+                  [disabled]="row.current"
+                  (click)="apply(row)"
+                >
+                  Apply
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (data.chartSpec(); as spec) {
+      <div class="chart">
+        <fl-line-chart [spec]="spec" />
+      </div>
+    }
+
+    @if (data.explanation(); as explanation) {
+      <div class="explanation" data-testid="optimizer-explanation">
+        <h3>Why the best arrangement wins</h3>
+        <ul>
+          @for (sentence of explanation.sentences; track $index) {
+            <li>{{ sentence }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <p class="summary" role="status" aria-label="Optimizer summary" data-testid="optimizer-summary">
+      {{ summary() }}
+    </p>
+    <p class="sr-only" role="status" aria-live="polite" data-testid="optimizer-announcement">
+      {{ announcement() }}
+    </p>
+  }
+</section>

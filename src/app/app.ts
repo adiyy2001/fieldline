@@ -9,6 +9,7 @@ import {
   smokeOutcome,
 } from './gpu-status-text';
 import { GroundView } from './ground/ground-view';
+import { OptimizerView } from './optimizer/optimizer-view';
 import { ParameterPanel } from './panel/parameter-panel';
 import { ProfileView } from './profile/profile-view';
 import { FieldBackends } from './services/field-backends';
@@ -24,7 +25,7 @@ type ChipState = 'solving' | 'ready' | 'invalid' | 'failed';
 
 @Component({
   selector: 'fl-root',
-  imports: [GroundView, ParameterPanel, ProfileView, ViewTabs, HelpDialog],
+  imports: [GroundView, OptimizerView, ParameterPanel, ProfileView, ViewTabs, HelpDialog],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.css',

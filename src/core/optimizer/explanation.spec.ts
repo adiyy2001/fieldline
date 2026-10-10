@@ -90,6 +90,25 @@ describe('explanation', () => {
     expect(explanation.sentences[0]).toContain('peak magnetic flux density at 1.8 m above ground');
   });
 
+  it('writes a numerically zero moment as zero', () => {
+    const cancelled = ranked(
+      1,
+      'ABC | CBA',
+      { left: [0, 1, 2], right: [2, 1, 0] },
+      1000,
+      2e-11,
+      1e-18,
+      true,
+    );
+    const explanation = explainBestAgainstWorst(cancelled, worst, {
+      criterion: 'peak-electric',
+      height: 1,
+      distance: 30,
+    });
+    expect(explanation.sentences[1]).toContain('summed) of 0 A·m, against 24000 A·m');
+    expect(explanation.sentences[2]).toContain('is 0 µC for the best');
+  });
+
   it('names the distance criteria', () => {
     const electric = explainBestAgainstWorst(best, worst, {
       criterion: 'electric-at-distance',
