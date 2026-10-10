@@ -18,14 +18,24 @@ import { PhaseClock } from './services/phase-clock';
 import { Shortcuts } from './services/shortcuts';
 import { UiState } from './services/ui-state';
 import { HelpDialog } from './shell/help-dialog';
+import { Scene3dViewComponent } from './scene3d/scene3d-view';
 import { ViewTabs } from './shell/view-tabs';
 import { FieldStore } from './state/field-store';
+import { THREE_D_NOTICE, isThreeDView } from './state/views';
 
 type ChipState = 'solving' | 'ready' | 'invalid' | 'failed';
 
 @Component({
   selector: 'fl-root',
-  imports: [GroundView, OptimizerView, ParameterPanel, ProfileView, ViewTabs, HelpDialog],
+  imports: [
+    GroundView,
+    OptimizerView,
+    ParameterPanel,
+    ProfileView,
+    Scene3dViewComponent,
+    ViewTabs,
+    HelpDialog,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -61,6 +71,14 @@ export class App {
           : `Ready in ${formatNumber(frame.timings.totalMilliseconds)} ms`;
     }
   });
+  protected readonly threeDNotice = THREE_D_NOTICE;
+  protected readonly sceneView = computed(() => {
+    const view = this.store.view();
+    return isThreeDView(view) ? view : null;
+  });
+  protected readonly threeDNoticeVisible = computed(
+    () => !this.store.threeDAvailable() && this.backends.kind() !== 'pending',
+  );
   protected readonly fallbackVisible = computed(() => this.backends.kind() === 'cpu');
   protected readonly fallbackText = computed(() => {
     const reason = this.backends.fallbackReason();

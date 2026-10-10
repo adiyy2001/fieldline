@@ -3,6 +3,7 @@ import { createGpuFieldBackend } from '../../gpu/field-evaluator';
 import { CPU_EXECUTOR_FACTORY, SOLVER_CLIENT } from '../services/tokens';
 import { GpuStatus } from '../services/gpu-status';
 import { HeatmapCapture } from '../services/heatmap-capture';
+import { Scene3dState } from '../scene3d/scene3d-state';
 import { FieldStore } from '../state/field-store';
 import { createAutomationApi } from './automation-api';
 import type { AppBridge, FieldlineAutomation } from './automation-types';
@@ -54,6 +55,7 @@ export class Automation {
   private readonly gpu = inject(GpuStatus);
   private readonly store = inject(FieldStore);
   private readonly capture = inject(HeatmapCapture);
+  private readonly scene = inject(Scene3dState);
   private readonly solver = inject(SOLVER_CLIENT);
   private readonly cpuExecutor = inject(CPU_EXECUTOR_FACTORY);
 
@@ -69,6 +71,9 @@ export class Automation {
       setPhase: (degrees) => {
         store.setPlaying(false);
         store.setPhase(degrees);
+      },
+      setCamera: (request) => {
+        this.scene.setOrbit(request.view, request);
       },
       settled: () => waitForSettled(() => store.status() !== 'solving'),
       snapshot: () => {

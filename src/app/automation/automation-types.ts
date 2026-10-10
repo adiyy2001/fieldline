@@ -138,10 +138,18 @@ export interface FrameCapture {
   readonly pixels: Uint8Array;
 }
 
+export interface CameraRequest {
+  readonly view: 'volume' | 'isosurface' | 'lines';
+  readonly yaw?: number;
+  readonly pitch?: number;
+  readonly distance?: number;
+}
+
 export interface AppBridge {
   setParameters(patch: Partial<LineParameters>): void;
   setSettings(patch: Partial<ViewSettings>): void;
   setPhase(degrees: number): void;
+  setCamera(request: CameraRequest): void;
   snapshot(): AppSnapshot;
   settled(): Promise<void>;
   groundFrame(): GroundFrame | null;
@@ -160,6 +168,7 @@ export interface FieldlineAutomation {
   setSettings(patch: Partial<ViewSettings>): Promise<void>;
   setView(view: ViewSettings['view']): Promise<void>;
   setPhase(degrees: number): Promise<void>;
+  setCamera(request: CameraRequest): Promise<void>;
   captureFrame(request?: FrameCaptureRequest): Promise<FrameCapture | null>;
   runParity(request: ParityRequest): Promise<ParityRun>;
   runMirror(request: MirrorRequest): Promise<MirrorRun>;

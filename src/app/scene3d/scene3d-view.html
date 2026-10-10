@@ -1,0 +1,182 @@
+<section
+  class="scene"
+  [id]="'fl-view-' + view()"
+  role="tabpanel"
+  [attr.aria-labelledby]="'fl-tab-' + view()"
+>
+  <div class="heading">
+    <h2>{{ title() }}</h2>
+    <p class="caption" data-testid="scene-caption">{{ caption() }}</p>
+  </div>
+
+  <div
+    #stage
+    class="stage"
+    tabindex="0"
+    role="group"
+    [attr.aria-label]="stageLabel()"
+    aria-describedby="fl-scene-summary"
+    (keydown)="onKey($event)"
+    (wheel)="onWheel($event)"
+    (pointerdown)="onPointerDown($event)"
+    (pointermove)="onPointerMove($event)"
+    (pointerup)="onPointerEnd($event)"
+    (pointercancel)="onPointerEnd($event)"
+  >
+    <canvas #canvas class="canvas" aria-hidden="true"></canvas>
+    @if (failure(); as message) {
+      <p class="placeholder" role="alert" data-testid="scene-failure">{{ message }}</p>
+    } @else if (preparing()) {
+      <p class="placeholder">Preparing the 3D scene</p>
+    }
+  </div>
+
+  <div class="toolbar">
+    <button
+      type="button"
+      class="action"
+      data-testid="scene-pause"
+      [attr.aria-pressed]="!playing()"
+      (click)="store.togglePlaying()"
+    >
+      {{ playing() ? 'Pause animation' : 'Play animation' }}
+    </button>
+    <button type="button" class="action" data-testid="scene-reset" (click)="resetCamera()">
+      Reset camera
+    </button>
+    <p class="pose" data-testid="scene-pose">Camera: {{ poseText() }}</p>
+  </div>
+
+  @switch (view()) {
+    @case ('volume') {
+      <div class="controls" aria-label="Volume settings" role="group">
+        <fieldset class="presets">
+          <legend>Colour mapping</legend>
+          @for (preset of presets; track preset.id) {
+            <label class="choice">
+              <input
+                type="radio"
+                name="fl-transfer-preset"
+                [value]="preset.id"
+                [checked]="scene.transfer().preset === preset.id"
+                (change)="selectPreset($event)"
+              />
+              {{ preset.label }}
+            </label>
+          }
+        </fieldset>
+        <label class="slider">
+          <span class="slider-name">Opacity</span>
+          <input
+            type="range"
+            [min]="opacityRange.min"
+            [max]="opacityRange.max"
+            [step]="opacityRange.step"
+            [value]="scene.transfer().opacity"
+            (input)="scene.setOpacity(readNumber($event))"
+          />
+          <output data-testid="opacity-value">{{ formatPercent(scene.transfer().opacity) }}</output>
+        </label>
+        <label class="slider">
+          <span class="slider-name">Threshold</span>
+          <input
+            type="range"
+            [min]="thresholdRange.min"
+            [max]="thresholdRange.max"
+            [step]="thresholdRange.step"
+            [value]="scene.transfer().threshold"
+            (input)="scene.setThreshold(readNumber($event))"
+          />
+          <output data-testid="threshold-value">{{
+            formatPercent(scene.transfer().threshold)
+          }}</output>
+        </label>
+      </div>
+      @if (volumeScale(); as scale) {
+        <div class="legend">
+          <p class="scale-title">
+            {{ quantity() === 'electric' ? 'Electric field' : 'Magnetic flux density' }},
+            {{ mode() === 'rms' ? 'rms' : 'instantaneous' }}, in {{ unit() }}, square root scale
+          </p>
+          <div
+            class="bar"
+            [style.background]="scale.gradient"
+            role="img"
+            aria-label="Colour scale"
+          ></div>
+          <ol class="scale-ticks">
+            @for (tick of scale.ticks; track tick.fraction) {
+              <li [style.left.%]="tick.fraction * 100">{{ tick.label }}</li>
+            }
+          </ol>
+        </div>
+      }
+    }
+    @case ('isosurface') {
+      <ul class="levels" aria-label="Isosurface levels">
+        @for (entry of surfaceLegend(); track entry.text) {
+          <li [class.unreached]="!entry.reached">
+            <span class="swatch" [style.background]="entry.swatch" aria-hidden="true"></span>
+            <span class="level-text">{{ entry.text }}</span>
+            <span class="level-note">
+              {{ entry.sources }}{{ entry.reached ? '' : ', not reached in this volume' }}
+            </span>
+          </li>
+        }
+      </ul>
+    }
+    @case ('lines') {
+      <div class="controls" aria-label="Field line settings" role="group">
+        <label class="slider">
+          <span class="slider-name">Lines</span>
+          <input
+            type="range"
+            [min]="lineCountRange.min"
+            [max]="lineCountRange.max"
+            [step]="lineCountRange.step"
+            [value]="scene.lineCount()"
+            (input)="scene.setLineCount(readNumber($event))"
+          />
+          <output data-testid="line-count-value">{{ scene.lineCount() }}</output>
+        </label>
+        <label class="slider">
+          <span class="slider-name">Steps per line</span>
+          <input
+            type="range"
+            [min]="stepCountRange.min"
+            [max]="stepCountRange.max"
+            [step]="stepCountRange.step"
+            [value]="scene.stepCount()"
+            (input)="scene.setStepCount(readNumber($event))"
+          />
+          <output data-testid="step-count-value">{{ scene.stepCount() }}</output>
+        </label>
+      </div>
+      <div class="legend">
+        <p class="scale-title">
+          Colour shows the field strength along each line, square root scale
+        </p>
+        <div
+          class="bar"
+          [style.background]="lineGradient"
+          role="img"
+          aria-label="From weak to strong"
+        ></div>
+        <ol class="scale-ends">
+          <li>weak</li>
+          <li>strong</li>
+        </ol>
+      </div>
+    }
+  }
+
+  <p
+    id="fl-scene-summary"
+    class="summary"
+    role="status"
+    data-testid="scene-summary"
+    [attr.aria-live]="store.animating() ? 'off' : 'polite'"
+  >
+    {{ summary() }}
+  </p>
+</section>

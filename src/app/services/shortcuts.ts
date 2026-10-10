@@ -1,7 +1,7 @@
 import { DestroyRef, DOCUMENT, Injectable, inject } from '@angular/core';
 import { PHASE_STEP_DEGREES, VIEW_DEFINITIONS } from '../../core/model/settings';
 import { FieldStore } from '../state/field-store';
-import { VIEW_AVAILABILITY } from '../state/views';
+import { VIEW_AVAILABILITY, isThreeDView } from '../state/views';
 import { UiState } from './ui-state';
 
 export interface ShortcutDescription {
@@ -16,6 +16,10 @@ export const SHORTCUT_DESCRIPTIONS: readonly ShortcutDescription[] = [
   { keys: 'Space', action: 'Play or pause the animation' },
   { keys: '[  ]', action: `Step the phase by ${String(PHASE_STEP_DEGREES)} degrees` },
   { keys: 'Arrow keys', action: 'Move the probe while the heatmap has focus' },
+  {
+    keys: 'Arrow keys  + -  0',
+    action: 'Orbit, zoom and reset the camera while a 3D view has focus',
+  },
   { keys: 'E  B', action: 'Show the electric or the magnetic field' },
   { keys: 'R', action: 'Switch between rms and instantaneous values' },
   { keys: '?', action: 'Show or hide this help' },
@@ -85,6 +89,9 @@ export class Shortcuts {
   private run(event: KeyboardEvent): boolean {
     const view = VIEW_AVAILABILITY.find((definition) => definition.key === event.key);
     if (view !== undefined) {
+      if (isThreeDView(view.id) && !this.store.threeDAvailable()) {
+        return false;
+      }
       this.store.setView(view.id);
       return true;
     }

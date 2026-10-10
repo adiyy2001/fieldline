@@ -24,12 +24,7 @@ import { clampProbe, profilePoints } from '../../core/validation/parity-scenario
 import type { DeviceResult, ReadyDevice } from '../../gpu/device';
 import type { GpuBackendOptions, GpuFieldBackend } from '../../gpu/field-evaluator';
 import type { SolverClient } from '../services/solver-client';
-import {
-  type ScenarioDependencies,
-  runFieldLines,
-  runIsosurface,
-  runVolumeImage,
-} from './scene3d-scenarios';
+import type { ScenarioDependencies } from './scene3d-scenarios';
 import type {
   AdapterReport,
   AppBridge,
@@ -407,6 +402,10 @@ export function createAutomationApi(dependencies: AutomationDependencies): Field
       bridge().setPhase(degrees);
       await settle();
     },
+    setCamera: async (request) => {
+      bridge().setCamera(request);
+      await settle();
+    },
     captureFrame: async (request) => {
       await settle();
       return bridge().capture({
@@ -419,10 +418,22 @@ export function createAutomationApi(dependencies: AutomationDependencies): Field
     runKernelBench: (request) => track(runKernelBench(request)),
     runCpuPool: (request) => track(runCpuPool(request)),
     runIsosurface: (request) =>
-      track(scenario((scenarioDependencies) => runIsosurface(scenarioDependencies, request))),
+      track(
+        scenario(async (dependencies) =>
+          (await import('./scene3d-scenarios')).runIsosurface(dependencies, request),
+        ),
+      ),
     runVolumeImage: (request) =>
-      track(scenario((scenarioDependencies) => runVolumeImage(scenarioDependencies, request))),
+      track(
+        scenario(async (dependencies) =>
+          (await import('./scene3d-scenarios')).runVolumeImage(dependencies, request),
+        ),
+      ),
     runFieldLines: (request) =>
-      track(scenario((scenarioDependencies) => runFieldLines(scenarioDependencies, request))),
+      track(
+        scenario(async (dependencies) =>
+          (await import('./scene3d-scenarios')).runFieldLines(dependencies, request),
+        ),
+      ),
   };
 }

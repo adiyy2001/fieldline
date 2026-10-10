@@ -38,7 +38,7 @@ import {
 } from '../services/field-pipeline';
 import { PREFERS_REDUCED_MOTION, SOLVER_CLIENT } from '../services/tokens';
 import { UrlSync } from '../services/url-sync';
-import { VIEW_AVAILABILITY } from './views';
+import { VIEW_AVAILABILITY, isThreeDView, threeDAvailable } from './views';
 
 export type FieldStatus = 'solving' | 'ready' | 'invalid' | 'failed';
 
@@ -117,13 +117,25 @@ export const FieldStore = signalStore(
     frame: signal<FieldFrame | null>(null),
   })),
   withComputed((store) => {
-    const animating = computed(
-      () =>
-        store.playing() &&
-        store.settings().mode === 'instantaneous' &&
-        store.settings().view === 'ground',
-    );
+    const backends = inject(FieldBackends);
+    const threeD = computed(() => threeDAvailable(backends.kind(), store.settings().model));
+    const animating = computed(() => {
+      const { view, mode } = store.settings();
+      if (!store.playing()) {
+        return false;
+      }
+      switch (view) {
+        case 'ground':
+        case 'volume':
+          return mode === 'instantaneous' && (view === 'ground' || threeD());
+        case 'lines':
+          return threeD();
+        default:
+          return false;
+      }
+    });
     return {
+      threeDAvailable: threeD,
       view: computed(() => store.settings().view),
       urlQuery: computed(() =>
         encodeConfiguration({
@@ -275,11 +287,13 @@ export const FieldStore = signalStore(
       setSettings(patch: Partial<ViewSettings>): void {
         const current = store.settings();
         const next = { ...current, ...patch };
-        const available = VIEW_AVAILABILITY.some((entry) => entry.id === next.view);
+        const available =
+          VIEW_AVAILABILITY.some((entry) => entry.id === next.view) &&
+          (!isThreeDView(next.view) || next.view === current.view || store.threeDAvailable());
         const reevaluate =
           next.model !== current.model || next.evaluationHeight !== current.evaluationHeight;
         patchState(store, {
-          settings: available ? next : { ...next, view: 'ground' },
+          settings: available ? next : { ...next, view: current.view },
           ...(reevaluate ? touch(undefined) : {}),
         });
       },
@@ -294,7 +308,8 @@ export const FieldStore = signalStore(
         });
       },
       setView(view: ViewId): void {
-        if (VIEW_AVAILABILITY.some((entry) => entry.id === view)) {
+        const known = VIEW_AVAILABILITY.some((entry) => entry.id === view);
+        if (known && (!isThreeDView(view) || store.threeDAvailable())) {
           patchState(store, { settings: { ...store.settings(), view } });
         }
       },

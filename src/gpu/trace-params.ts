@@ -10,7 +10,7 @@ export const POINT_FLOATS = 4;
 export const INFO_WORDS = 2;
 export const DASH_LENGTH_METRES = 6;
 export const FLOW_METRES_PER_SECOND = 18;
-export const LINE_PIXEL_WIDTH = 2.2;
+export const LINE_PIXEL_WIDTH = 3;
 
 export interface TraceUniforms {
   readonly box: TraceBox;

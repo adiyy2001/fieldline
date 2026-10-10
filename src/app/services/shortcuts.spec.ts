@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { afterEach, describe, expect, it } from 'vitest';
+import { until } from '../testing/doubles';
 import { FieldStore } from '../state/field-store';
 import { storeProviders } from '../testing/store-providers';
 import { Shortcuts } from './shortcuts';
 import { UiState } from './ui-state';
 
-function setup() {
-  TestBed.configureTestingModule({ providers: storeProviders() });
+function setup(gpu = false) {
+  TestBed.configureTestingModule({ providers: storeProviders({ gpu }) });
   return {
     store: TestBed.inject(FieldStore),
     shortcuts: TestBed.inject(Shortcuts),
@@ -70,7 +71,18 @@ describe('keyboard shortcuts', () => {
     expect(store.settings().mode).toBe('instantaneous');
   });
 
-  it('selects the ground view with 1 and ignores views that are not built', () => {
+  it('opens the 3D views with 4, 5 and 6 on a WebGPU device only', async () => {
+    const { store, shortcuts } = setup(true);
+    await until(() => store.status() === 'ready');
+    expect(shortcuts.handle(press('4'))).toBe(true);
+    expect(store.view()).toBe('volume');
+    shortcuts.handle(press('5'));
+    expect(store.view()).toBe('isosurface');
+    shortcuts.handle(press('6'));
+    expect(store.view()).toBe('lines');
+  });
+
+  it('selects the ground view with 1 and ignores the 3D views without WebGPU', () => {
     const { store, shortcuts } = setup();
     expect(shortcuts.handle(press('1'))).toBe(true);
     expect(shortcuts.handle(press('4'))).toBe(false);

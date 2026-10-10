@@ -152,10 +152,54 @@ describe('the field store', () => {
     expect(store.probe()).toEqual({ lateral: 0, along: 1 });
   });
 
-  it('ignores views that are not built yet', () => {
+  it('ignores the 3D views while WebGPU is not available', async () => {
     const store = createStore();
+    await until(() => store.status() === 'ready');
+    expect(store.threeDAvailable()).toBe(false);
     store.setView('volume');
+    store.setSettings({ view: 'lines' });
     expect(store.view()).toBe('ground');
+    store.setView('profile');
+    expect(store.view()).toBe('profile');
+  });
+
+  it('opens the 3D views on a WebGPU device with the 3D model only', async () => {
+    const store = createStore({ gpu: true });
+    await until(() => store.status() === 'ready');
+    expect(store.threeDAvailable()).toBe(true);
+    store.setView('volume');
+    expect(store.view()).toBe('volume');
+    store.setSettings({ view: 'isosurface' });
+    expect(store.view()).toBe('isosurface');
+    store.setSettings({ model: 'cross-section-2d' });
+    expect(store.threeDAvailable()).toBe(false);
+    store.setSettings({ view: 'lines' });
+    expect(store.view()).toBe('isosurface');
+  });
+
+  it('animates the lines always and the volume only for instantaneous values', async () => {
+    const store = createStore({ gpu: true });
+    await until(() => store.status() === 'ready');
+    store.setPlaying(true);
+    store.setView('lines');
+    expect(store.animating()).toBe(true);
+    store.setPlaying(false);
+    expect(store.animating()).toBe(false);
+    store.setPlaying(true);
+    store.setView('volume');
+    expect(store.animating()).toBe(false);
+    store.setSettings({ mode: 'instantaneous' });
+    expect(store.animating()).toBe(true);
+    store.setView('isosurface');
+    expect(store.animating()).toBe(false);
+  });
+
+  it('does not animate the 3D views without WebGPU', async () => {
+    const store = createStore({ search: '?v=1&w=lines' });
+    await until(() => store.status() === 'ready');
+    store.setPlaying(true);
+    expect(store.view()).toBe('lines');
+    expect(store.animating()).toBe(false);
   });
 
   it('animates only for the instantaneous mode on the ground view', () => {

@@ -33,7 +33,9 @@ export function inlineCpuBackend(): FieldBackend {
 }
 
 export interface FakeGpuBackend extends FieldBackend {
+  readonly kind: 'gpu';
   readonly released: GPUBuffer[];
+  lastTimings(): null;
 }
 
 export function fakeGpuBackend(): FakeGpuBackend {
@@ -42,6 +44,7 @@ export function fakeGpuBackend(): FakeGpuBackend {
   return {
     kind: 'gpu',
     released,
+    lastTimings: () => null,
     load: (source: FieldSource) => {
       cpu.load(source);
     },

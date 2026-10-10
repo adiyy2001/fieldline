@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject } from '@angular/core';
 import type { ViewId } from '../../core/model/settings';
 import { FieldStore } from '../state/field-store';
-import { VIEW_AVAILABILITY } from '../state/views';
+import { VIEW_AVAILABILITY, isThreeDView } from '../state/views';
 
 export function nextTabIndex(key: string, current: number, count: number): number | null {
   switch (key) {
@@ -29,6 +29,10 @@ export class ViewTabs {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   protected readonly tabs = VIEW_AVAILABILITY;
 
+  protected disabled(view: ViewId): boolean {
+    return isThreeDView(view) && !this.store.threeDAvailable();
+  }
+
   protected select(view: ViewId): void {
     this.store.setView(view);
   }
@@ -40,7 +44,9 @@ export class ViewTabs {
       return;
     }
     event.preventDefault();
-    this.store.setView(definition.id);
+    if (!this.disabled(definition.id)) {
+      this.store.setView(definition.id);
+    }
     this.host.nativeElement.querySelectorAll<HTMLElement>('[role="tab"]')[target]?.focus();
   }
 }

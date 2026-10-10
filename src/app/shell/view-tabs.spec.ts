@@ -1,15 +1,16 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
+import { until } from '../testing/doubles';
 import { FieldStore } from '../state/field-store';
 import { storeProviders } from '../testing/store-providers';
 import { ViewTabs, nextTabIndex } from './view-tabs';
 
-function mount(): {
+function mount(gpu = false): {
   fixture: ComponentFixture<ViewTabs>;
   root: HTMLElement;
   store: InstanceType<typeof FieldStore>;
 } {
-  TestBed.configureTestingModule({ providers: storeProviders() });
+  TestBed.configureTestingModule({ providers: storeProviders({ gpu }) });
   const fixture = TestBed.createComponent(ViewTabs);
   fixture.detectChanges();
   return {
@@ -24,7 +25,7 @@ describe('view tabs', () => {
     const { root } = mount();
     expect(root.querySelector('[role="tablist"]')?.getAttribute('aria-label')).toBe('Views');
     const tabs = root.querySelectorAll('[role="tab"]');
-    expect(tabs).toHaveLength(3);
+    expect(tabs).toHaveLength(6);
     expect(tabs[0]?.getAttribute('aria-selected')).toBe('true');
     expect(tabs[0]?.getAttribute('aria-controls')).toBe('fl-view-ground');
     expect(tabs[0]?.getAttribute('tabindex')).toBe('0');
@@ -33,6 +34,9 @@ describe('view tabs', () => {
       'fl-view-ground',
       'fl-view-profile',
       'fl-view-optimizer',
+      'fl-view-volume',
+      'fl-view-isosurface',
+      'fl-view-lines',
     ]);
     expect(tabs[1]?.getAttribute('aria-selected')).toBe('false');
     expect(tabs[1]?.getAttribute('tabindex')).toBe('-1');
@@ -65,5 +69,38 @@ describe('view tabs', () => {
     expect(store.view()).toBe('optimizer');
     tabs[2]?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', cancelable: true }));
     expect(store.view()).toBe('ground');
+  });
+
+  it('disables the 3D tabs and points them to the notice without WebGPU', async () => {
+    const { root, store, fixture } = mount();
+    await until(() => store.status() === 'ready');
+    fixture.detectChanges();
+    const tabs = Array.from(root.querySelectorAll<HTMLElement>('[role="tab"]'));
+    expect(tabs.slice(0, 3).map((tab) => tab.getAttribute('aria-disabled'))).toEqual([
+      null,
+      null,
+      null,
+    ]);
+    for (const tab of tabs.slice(3)) {
+      expect(tab.getAttribute('aria-disabled')).toBe('true');
+      expect(tab.getAttribute('aria-describedby')).toBe('fl-views3d-notice');
+    }
+    tabs[3]?.click();
+    tabs[2]?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+    fixture.detectChanges();
+    expect(store.view()).toBe('ground');
+  });
+
+  it('enables the 3D tabs on a WebGPU device', async () => {
+    const { root, store, fixture } = mount(true);
+    await until(() => store.status() === 'ready');
+    fixture.detectChanges();
+    const tabs = Array.from(root.querySelectorAll<HTMLElement>('[role="tab"]'));
+    expect(tabs.every((tab) => tab.getAttribute('aria-disabled') === null)).toBe(true);
+    tabs[4]?.click();
+    fixture.detectChanges();
+    expect(store.view()).toBe('isosurface');
+    tabs[4]?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+    expect(store.view()).toBe('lines');
   });
 });

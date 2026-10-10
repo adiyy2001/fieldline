@@ -48,7 +48,7 @@ fn vertexMain(
   let side = select(-1.0, 1.0, (corner & 1u) == 1u);
   let base = select(first, second, useSecond);
   let offset = normal * side * params.viewport.w * 0.5 / (size * 0.5);
-  let fraction = sqrt(clamp(magnitudes[slot] / params.range.x, 0.0, 1.0));
+  let fraction = 0.4 + 0.6 * sqrt(clamp(magnitudes[slot] / params.range.x, 0.0, 1.0));
   let color = palette[u32(fraction * 255.0)].rgb;
   return VertexOut(
     vec4f(base.xy + offset * base.w, base.z, base.w),

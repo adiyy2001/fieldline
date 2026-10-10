@@ -17,6 +17,8 @@ interface Shot {
   readonly name: string;
   readonly search: string;
   readonly prepare?: (page: Page) => Promise<void>;
+  readonly scene?: boolean;
+  readonly cpuOnly?: boolean;
 }
 
 const VIEWPORTS: readonly Viewport[] = [
@@ -38,6 +40,19 @@ const SHOTS: readonly Shot[] = [
   { name: 'optimizer', search: '?v=1&w=optimizer&t=dc' },
   { name: 'optimizer-magnetic', search: '?v=1&w=optimizer&t=dc&rk=pb' },
   { name: 'optimizer-single-circuit', search: '?v=1&w=optimizer' },
+  { name: 'volume-electric', search: '?v=1&w=volume', scene: true },
+  { name: 'volume-bands', search: '?v=1&w=volume', scene: true, prepare: chooseBands },
+  { name: 'volume-magnetic', search: '?v=1&w=volume&q=b', scene: true },
+  { name: 'volume-instantaneous', search: '?v=1&w=volume&r=inst&ang=90', scene: true },
+  { name: 'volume-orbited', search: '?v=1&w=volume&t=dc', scene: true, prepare: orbitAround },
+  { name: 'isosurface-electric', search: '?v=1&w=isosurface', scene: true },
+  { name: 'isosurface-magnetic', search: '?v=1&w=isosurface&q=b', scene: true },
+  { name: 'isosurface-delta-tower', search: '?v=1&w=isosurface&t=d', scene: true },
+  { name: 'lines-electric', search: '?v=1&w=lines&ang=30', scene: true },
+  { name: 'lines-magnetic', search: '?v=1&w=lines&q=b&ang=30', scene: true },
+  { name: 'lines-double-circuit', search: '?v=1&w=lines&t=dc&ang=60', scene: true },
+  { name: 'lines-orbited', search: '?v=1&w=lines&ang=30', scene: true, prepare: orbitAround },
+  { name: 'scene-unavailable', search: '?v=1&w=volume', cpuOnly: true },
   {
     name: 'help',
     search: '',
@@ -48,6 +63,41 @@ const SHOTS: readonly Shot[] = [
   },
 ];
 
+async function pauseAnimation(page: Page): Promise<void> {
+  const pause = page.getByTestId('scene-pause');
+  if ((await pause.getAttribute('aria-pressed')) === 'false') {
+    await pause.click();
+  }
+  await page.waitForTimeout(400);
+}
+
+async function chooseBands(page: Page): Promise<void> {
+  await page.getByLabel('Exposure bands').check();
+  await page.waitForTimeout(400);
+}
+
+async function orbitAround(page: Page): Promise<void> {
+  await page.getByRole('group', { name: /Arrow keys orbit/ }).focus();
+  for (let press = 0; press < 6; press += 1) {
+    await page.keyboard.press('ArrowRight');
+  }
+  for (let press = 0; press < 3; press += 1) {
+    await page.keyboard.press('ArrowUp');
+  }
+  await page.waitForTimeout(400);
+}
+
+async function waitForScene(page: Page): Promise<void> {
+  await page.waitForFunction(
+    () =>
+      (document.querySelector('[data-testid="scene-summary"]')?.textContent ?? '').trim().length >
+      0,
+    undefined,
+    { timeout: 60_000 },
+  );
+  await pauseAnimation(page);
+}
+
 async function showTable(page: Page): Promise<void> {
   await page.getByRole('button', { name: 'Data table' }).click();
   await page.getByTestId('profile-table').waitFor();
@@ -55,7 +105,12 @@ async function showTable(page: Page): Promise<void> {
 
 const READBACK = { width: 512, height: 192 };
 
-async function readbackPng(page: Page): Promise<Buffer | null> {
+const SCENE_READBACK = { width: 800, height: 500 };
+
+async function readbackPng(
+  page: Page,
+  size: { width: number; height: number },
+): Promise<Buffer | null> {
   const dataUrl = await page.evaluate(async (size) => {
     const api = (
       window as unknown as {
@@ -81,7 +136,7 @@ async function readbackPng(page: Page): Promise<Buffer | null> {
       0,
     );
     return canvas.toDataURL('image/png');
-  }, READBACK);
+  }, size);
   return dataUrl === null ? null : Buffer.from(dataUrl.split(',')[1] ?? '', 'base64');
 }
 
@@ -100,13 +155,18 @@ async function capture(
     (window as unknown as { fieldline: { settle(): Promise<void> } }).fieldline.settle(),
   );
   await page.waitForTimeout(400);
+  if (shot.scene === true) {
+    await waitForScene(page);
+  }
   await shot.prepare?.(page);
   await page.screenshot({
     path: join(outputDirectory, `${group}-${viewport.name}-${shot.name}.png`),
     fullPage: true,
   });
-  if (viewport.name === 'desktop' && shot.prepare === undefined && !shot.search.includes('w=')) {
-    const png = await readbackPng(page);
+  const readsBack =
+    shot.scene === true || (shot.prepare === undefined && !shot.search.includes('w='));
+  if (viewport.name === 'desktop' && readsBack) {
+    const png = await readbackPng(page, shot.scene === true ? SCENE_READBACK : READBACK);
     if (png !== null) {
       writeFileSync(join(outputDirectory, `${group}-readback-${shot.name}.png`), png);
     }
@@ -133,6 +193,10 @@ async function run(): Promise<void> {
       const context = await browser.newContext();
       for (const viewport of VIEWPORTS) {
         for (const shot of SHOTS) {
+          const skip = group === 'cpu' ? shot.scene === true : shot.cpuOnly === true;
+          if (skip) {
+            continue;
+          }
           await capture(context, origin, group, viewport, shot);
         }
       }

@@ -10,7 +10,7 @@ import {
   type GridSize,
   defaultGridSpec,
 } from '../../core/backend/regions';
-import type { FieldBackend, FieldBuffer, GridSpec } from '../../core/backend/types';
+import type { FieldBackend, FieldBuffer, FieldSource, GridSpec } from '../../core/backend/types';
 import type { FieldEvaluator } from '../../core/field-types';
 import { type RmsMaxima, rmsMaxima } from '../../core/heatmap/scalar';
 import { createBasisFieldSource3D } from '../../core/field3d/basis-source';
@@ -47,6 +47,7 @@ export interface FieldFrame {
   readonly values: Float32Array;
   readonly maxima: RmsMaxima;
   readonly evaluator: FieldEvaluator;
+  readonly fieldSource: FieldSource | null;
   readonly basisSource: () => BasisFieldSource;
   readonly profile: Profile;
   readonly geometry: LineGeometry;
@@ -150,6 +151,7 @@ export function createFieldPipeline(dependencies: PipelineDependencies): FieldPi
         values,
         maxima: rmsMaxima(values),
         evaluator: field.evaluator,
+        fieldSource: null,
         basisSource: memoized(() => field.basisSource()),
         profile: profileFor(field.evaluator, request.quality, settings.evaluationHeight, 0),
         geometry,
@@ -214,6 +216,7 @@ export function createFieldPipeline(dependencies: PipelineDependencies): FieldPi
         values,
         maxima: rmsMaxima(values),
         evaluator,
+        fieldSource: { system: solved.system, excitation },
         basisSource: memoized(() => createBasisFieldSource3D(solved.system)),
         profile: profileFor(evaluator, request.quality, settings.evaluationHeight, midZ),
         geometry,

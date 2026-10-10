@@ -18,6 +18,9 @@
   @if (fallbackVisible()) {
     <p class="notice" data-testid="fallback-notice">{{ fallbackText() }}</p>
   }
+  @if (threeDNoticeVisible()) {
+    <p class="notice" id="fl-views3d-notice" data-testid="views3d-notice">{{ threeDNotice }}</p>
+  }
   <div class="view">
     @if (store.view() === 'ground') {
       <fl-ground-view />
@@ -25,6 +28,16 @@
       <fl-profile-view />
     } @else if (store.view() === 'optimizer') {
       <fl-optimizer-view />
+    } @else if (sceneView(); as scene) {
+      @if (store.threeDAvailable()) {
+        @defer (on immediate) {
+          <fl-scene3d-view [view]="scene" />
+        } @placeholder {
+          <p class="unavailable">Loading the 3D view</p>
+        }
+      } @else {
+        <p class="unavailable" data-testid="scene-unavailable">{{ threeDNotice }}</p>
+      }
     }
   </div>
   <aside class="sidebar" aria-label="Parameters">

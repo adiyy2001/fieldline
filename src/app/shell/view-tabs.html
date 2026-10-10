@@ -5,6 +5,8 @@
       role="tab"
       [id]="'fl-tab-' + tab.id"
       [attr.aria-selected]="store.view() === tab.id"
+      [attr.aria-disabled]="disabled(tab.id) ? 'true' : null"
+      [attr.aria-describedby]="disabled(tab.id) ? 'fl-views3d-notice' : null"
       [attr.aria-controls]="'fl-view-' + tab.id"
       [attr.aria-keyshortcuts]="tab.key"
       [tabindex]="store.view() === tab.id ? 0 : -1"

@@ -228,3 +228,11 @@ kbd {
     display: none;
   }
 }
+
+.unavailable {
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 0.5rem;
+  color: var(--text-muted);
+}
