@@ -145,3 +145,18 @@ export function lowestPhaseHeight(tower: TowerDimensions): number {
       .map((attachment) => attachment.height),
   );
 }
+
+export function mirrorPositions(kind: TowerKind): readonly number[] {
+  switch (kind) {
+    case 'horizontal':
+      return [2, 1, 0];
+    case 'delta':
+      return [1, 0, 2];
+    case 'double-circuit':
+      return [3, 4, 5, 0, 1, 2];
+  }
+}
+
+export function mirrorPhasing(kind: TowerKind, phasing: readonly number[]): readonly number[] {
+  return mirrorPositions(kind).map((position) => phasing[position] ?? 0);
+}

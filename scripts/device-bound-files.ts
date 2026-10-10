@@ -1,4 +1,7 @@
-export const deviceBoundFiles: readonly string[] = ['src/gpu/smoke.ts'];
+export const deviceBoundFiles: readonly string[] = [
+  'src/gpu/smoke.ts',
+  'src/gpu/field-evaluator.ts',
+];
 
 export const workerEntryFiles: readonly string[] = [
   'src/workers/solver.worker.ts',

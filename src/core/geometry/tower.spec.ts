@@ -3,6 +3,8 @@ import {
   TOWER_KINDS,
   TOWER_LABELS,
   lowestPhaseHeight,
+  mirrorPhasing,
+  mirrorPositions,
   phasePositionCount,
   towerAttachments,
 } from './tower';
@@ -63,5 +65,40 @@ describe('tower presets', () => {
     expect(TOWER_KINDS.map((kind) => TOWER_LABELS[kind].length > 0)).toEqual([true, true, true]);
     expect(lowestPhaseHeight(DEFAULT_TOWERS['double-circuit'])).toBe(24);
     expect(lowestPhaseHeight(DEFAULT_TOWERS.delta)).toBe(26);
+  });
+});
+
+describe('mirrored phasing', () => {
+  it('swaps the outer positions of the horizontal tower and keeps the middle', () => {
+    expect(mirrorPhasing('horizontal', [0, 1, 2])).toEqual([2, 1, 0]);
+  });
+
+  it('swaps the two lower positions of the delta tower and keeps the apex', () => {
+    expect(mirrorPhasing('delta', [0, 1, 2])).toEqual([1, 0, 2]);
+  });
+
+  it('swaps the two circuits of the double circuit tower', () => {
+    expect(mirrorPhasing('double-circuit', [0, 1, 2, 2, 1, 0])).toEqual([2, 1, 0, 0, 1, 2]);
+  });
+
+  it('maps every position to the position at the opposite x and the same height', () => {
+    for (const kind of TOWER_KINDS) {
+      const attachments = towerAttachments(DEFAULT_TOWERS[kind]).filter(
+        (attachment) => attachment.role === 'phase',
+      );
+      mirrorPositions(kind).forEach((target, position) => {
+        const source = attachments.find((attachment) => attachment.index === position);
+        const mirrored = attachments.find((attachment) => attachment.index === target);
+        expect(mirrored?.x).toBeCloseTo(-(source?.x ?? 0), 12);
+        expect(mirrored?.height).toBeCloseTo(source?.height ?? 0, 12);
+      });
+    }
+  });
+
+  it('is an involution', () => {
+    for (const kind of TOWER_KINDS) {
+      const phasing = [0, 1, 2, 1, 2, 0].slice(0, phasePositionCount(kind));
+      expect(mirrorPhasing(kind, mirrorPhasing(kind, phasing))).toEqual(phasing);
+    }
   });
 });

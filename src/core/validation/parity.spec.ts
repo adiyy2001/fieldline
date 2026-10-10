@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compareFields } from './parity';
+import { compareFields, mirrorDifference } from './parity';
 
 function field(values: readonly number[][]): Float32Array {
   return Float32Array.from(values.flat());
@@ -51,5 +51,24 @@ describe('field parity metrics', () => {
     const report = compareFields(new Float32Array(12), new Float32Array(12));
     expect(report.electric.comparedPoints).toBe(0);
     expect(report.electric.worstIndex).toBe(-1);
+  });
+});
+
+describe('mirror difference', () => {
+  const columns = 3;
+  const row = (value: number) => [value, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+  it('is zero when the second grid is the mirror image of the first', () => {
+    const original = field([row(1), row(2), row(3)]);
+    const mirrored = field([row(3), row(2), row(1)]);
+    expect(mirrorDifference(original, mirrored, columns).maximum).toBe(0);
+  });
+
+  it('reports the relative difference of the magnitudes at mirrored nodes', () => {
+    const original = field([row(1), row(2), row(4)]);
+    const mirrored = field([row(4), row(2), row(1.5)]);
+    const difference = mirrorDifference(original, mirrored, columns);
+    expect(difference.maximum).toBeCloseTo(0.5, 12);
+    expect(difference.comparedPoints).toBe(3);
   });
 });

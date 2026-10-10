@@ -111,3 +111,38 @@ export function compareFields(
     finite: allFinite(candidate),
   };
 }
+
+export interface MirrorDifference {
+  readonly comparedPoints: number;
+  readonly maximum: number;
+}
+
+function resultantMagnitudes(values: ArrayLike<number>, range: ComponentRange): Float64Array {
+  const count = Math.floor(values.length / FIELD_COMPONENTS);
+  return Float64Array.from({ length: count }, (_, point) =>
+    norm(values, point * FIELD_COMPONENTS, range),
+  );
+}
+
+export function mirrorDifference(
+  original: ArrayLike<number>,
+  mirrored: ArrayLike<number>,
+  columns: number,
+  range: ComponentRange = ELECTRIC_COMPONENTS,
+  floorFraction = PARITY_FLOOR_FRACTION,
+): MirrorDifference {
+  const first = resultantMagnitudes(original, range);
+  const second = resultantMagnitudes(mirrored, range);
+  const floor = floorFraction * Math.max(...first);
+  let comparedPoints = 0;
+  let maximum = 0;
+  first.forEach((magnitude, index) => {
+    const row = Math.floor(index / columns);
+    const mirroredIndex = row * columns + (columns - 1 - (index % columns));
+    if (magnitude > 0 && magnitude >= floor) {
+      comparedPoints += 1;
+      maximum = Math.max(maximum, Math.abs((second[mirroredIndex] ?? 0) - magnitude) / magnitude);
+    }
+  });
+  return { comparedPoints, maximum };
+}
