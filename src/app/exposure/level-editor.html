@@ -1,0 +1,93 @@
+<fieldset class="group">
+  <legend>Exposure limits</legend>
+  <div class="row">
+    <label for="fl-preset">Emphasised standard</label>
+    <select id="fl-preset" (change)="setPreset($event)">
+      @for (preset of presets; track preset.id) {
+        <option [value]="preset.id" [selected]="preset.id === store.settings().presetId">
+          {{ preset.label }}
+        </option>
+      }
+    </select>
+  </div>
+
+  @for (section of sections(); track section.quantity) {
+    <section class="levels" [attr.aria-label]="section.heading + ' levels'">
+      <h3>{{ section.heading }}</h3>
+      <ul>
+        @for (level of section.levels; track level.key) {
+          <li [class.emphasised]="level.emphasised">
+            <svg width="36" height="10" viewBox="0 0 36 10" aria-hidden="true">
+              <line x1="1" x2="35" y1="5" y2="5" [attr.stroke-dasharray]="dash(level) || null" />
+            </svg>
+            <span class="value"
+              >{{ level.text }}
+              @if (level.emphasised) {
+                <span class="mark" aria-hidden="true"> *</span
+                ><span class="sr-only"> (selected standard)</span>
+              }
+            </span>
+            <span class="name">{{ level.name }}</span>
+            <span class="crossing">{{ level.crossingText }}</span>
+            <button
+              type="button"
+              class="remove"
+              [attr.aria-label]="actionLabel(level)"
+              (click)="removeOrHide(level)"
+            >
+              {{ level.custom ? 'Remove' : 'Hide' }}
+            </button>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  <div class="add" role="group" aria-label="Add a level">
+    <div class="row">
+      <label for="fl-level-quantity">Field</label>
+      <select id="fl-level-quantity" (change)="setQuantity($event)">
+        <option value="electric" [selected]="quantity() === 'electric'">Electric (E)</option>
+        <option value="magnetic" [selected]="quantity() === 'magnetic'">Magnetic (B)</option>
+      </select>
+    </div>
+    <div class="row">
+      <label for="fl-level-value">Level</label>
+      <div class="entry">
+        <input
+          id="fl-level-value"
+          type="text"
+          inputmode="decimal"
+          autocomplete="off"
+          [value]="valueText()"
+          (input)="setValue($event)"
+          (keydown)="submitOnEnter($event)"
+        />
+        <span class="unit" aria-hidden="true">{{ unit() }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <label for="fl-level-label">Name</label>
+      <input
+        id="fl-level-label"
+        type="text"
+        autocomplete="off"
+        [maxLength]="labelLimit"
+        [placeholder]="defaultLabel"
+        [value]="labelText()"
+        (input)="setLabel($event)"
+        (keydown)="submitOnEnter($event)"
+      />
+    </div>
+    <div class="actions">
+      <button type="button" (click)="add()">Add level</button>
+      <button type="button" [disabled]="!edited()" (click)="reset()">Reset levels</button>
+    </div>
+    <p class="message" role="status" aria-live="polite" data-testid="level-message">
+      {{ message() }}
+    </p>
+    @if (hiddenCount() > 0) {
+      <p class="hint">{{ hiddenCount() }} built-in levels hidden. Reset levels restores them.</p>
+    }
+  </div>
+</fieldset>

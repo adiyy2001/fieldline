@@ -60,6 +60,7 @@ describe('the parameter panel', () => {
     );
     expect(groups).toEqual([
       'Display',
+      'Exposure limits',
       'Tower',
       'Spans and sag',
       'Electrical',

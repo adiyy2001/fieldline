@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { describeCrossings } from '../../core/exposure/summary';
 import { MODEL_LABELS, SECTION_RANGE } from '../../core/model/settings';
 import { profileToCsv } from '../../core/profile/csv';
 import { LineChart } from '../charts/line-chart';
@@ -73,7 +72,7 @@ export class ProfileView {
       text: level.text,
       name: level.name,
       reached: level.crossings?.reached ?? false,
-      description: level.crossings === null ? '' : describeCrossings(level.crossings),
+      description: level.crossingText,
     })),
   );
 

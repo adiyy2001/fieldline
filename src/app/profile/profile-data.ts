@@ -1,7 +1,11 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { type LevelEntry, levelEntries } from '../../core/exposure/contour-levels';
 import type { FieldQuantity } from '../../core/exposure/levels';
-import { type LevelCrossings, levelCrossings } from '../../core/exposure/summary';
+import {
+  type LevelCrossings,
+  describeCrossings,
+  levelCrossings,
+} from '../../core/exposure/summary';
 import type { LevelEdits } from '../../core/exposure/level-edits';
 import type { Profile } from '../../core/profile/sampler';
 import { FieldStore } from '../state/field-store';
@@ -25,6 +29,7 @@ export interface LevelReadout {
   readonly value: number;
   readonly quantity: FieldQuantity;
   readonly crossings: LevelCrossings | null;
+  readonly crossingText: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -97,17 +102,21 @@ export class ProfileData {
     entries: readonly LevelEntry[],
   ): readonly LevelReadout[] {
     const profile = this.profile();
-    return entries.map((entry) => ({
-      key: entry.key,
-      text: entry.text,
-      name: entry.name,
-      custom: entry.custom,
-      dashIndex: entry.dashIndex,
-      emphasised: entry.emphasised,
-      value: entry.value,
-      quantity,
-      crossings: profile === null ? null : levelCrossings(profile, quantity, entry),
-    }));
+    return entries.map((entry) => {
+      const crossings = profile === null ? null : levelCrossings(profile, quantity, entry);
+      return {
+        key: entry.key,
+        text: entry.text,
+        name: entry.name,
+        custom: entry.custom,
+        dashIndex: entry.dashIndex,
+        emphasised: entry.emphasised,
+        value: entry.value,
+        quantity,
+        crossings,
+        crossingText: crossings === null ? '' : describeCrossings(crossings),
+      };
+    });
   }
 
   readonly electricLevels = computed(() => this.readouts('electric', this.electricEntries()));

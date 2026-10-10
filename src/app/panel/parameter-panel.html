@@ -89,17 +89,9 @@
         }
       </select>
     </div>
-    <div class="row">
-      <label for="fl-preset">Exposure limits</label>
-      <select id="fl-preset" (change)="setPreset($event)">
-        @for (preset of presets; track preset.id) {
-          <option [value]="preset.id" [selected]="preset.id === store.settings().presetId">
-            {{ preset.label }}
-          </option>
-        }
-      </select>
-    </div>
   </fieldset>
+
+  <fl-level-editor />
 
   <fieldset class="group">
     <legend>Tower</legend>

@@ -5,7 +5,7 @@ import {
   type NumberRange,
   TOWER_RANGES,
 } from '../../core/model/parameters';
-import { EXPOSURE_PRESETS, type FieldQuantity } from '../../core/exposure/levels';
+import type { FieldQuantity } from '../../core/exposure/levels';
 import { TOWER_KINDS, TOWER_LABELS } from '../../core/geometry/tower';
 import {
   type DisplayMode,
@@ -18,6 +18,7 @@ import {
 import { PHASE_NAMES, phasePositionLabels } from '../../core/model/phase-labels';
 import { TOWER_FIELD_KEYS, towerFieldValues } from '../../core/model/tower-fields';
 import { FieldStore } from '../state/field-store';
+import { LevelEditor } from '../exposure/level-editor';
 import { type FieldEdit, NumberField } from './number-field';
 import { selectedValue } from './form-events';
 
@@ -43,7 +44,7 @@ const FREQUENCIES: readonly number[] = [50, 60];
 
 @Component({
   selector: 'fl-parameter-panel',
-  imports: [NumberField],
+  imports: [LevelEditor, NumberField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './parameter-panel.html',
   styleUrl: './parameter-panel.css',
@@ -59,7 +60,6 @@ export class ParameterPanel {
     model,
     label: MODEL_LABELS[model],
   }));
-  protected readonly presets = EXPOSURE_PRESETS;
   protected readonly heights = EVALUATION_HEIGHTS;
   protected readonly spanCounts = SPAN_COUNTS;
   protected readonly frequencies = FREQUENCIES;
@@ -129,13 +129,6 @@ export class ParameterPanel {
     const height = this.heights.find((candidate) => String(candidate) === selectedValue(event));
     if (height !== undefined) {
       this.store.setSettings({ evaluationHeight: height });
-    }
-  }
-
-  protected setPreset(event: Event): void {
-    const preset = this.presets.find((candidate) => candidate.id === selectedValue(event));
-    if (preset !== undefined) {
-      this.store.setSettings({ presetId: preset.id });
     }
   }
 
