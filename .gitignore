@@ -1,0 +1,17 @@
+BRIEF.md
+NOTES_FOR_ADRIAN.md
+
+node_modules/
+dist/
+.angular/
+coverage/
+playwright-report/
+test-results/
+.artifacts/
+*.tsbuildinfo
+*.log
+.env
+.env.*
+.DS_Store
+.idea/
+.vscode/
