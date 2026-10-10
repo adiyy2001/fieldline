@@ -13,7 +13,9 @@ import {
 import type { FieldBackend, FieldBuffer, GridSpec } from '../../core/backend/types';
 import type { FieldEvaluator } from '../../core/field-types';
 import { type RmsMaxima, rmsMaxima } from '../../core/heatmap/scalar';
+import { createBasisFieldSource3D } from '../../core/field3d/basis-source';
 import { createFieldEvaluator3D } from '../../core/field3d/evaluate';
+import type { BasisFieldSource } from '../../core/optimizer/basis-field-source';
 import type { LineGeometry } from '../../core/geometry/line-geometry';
 import { groupExcitation } from '../../core/model/excitation';
 import {
@@ -45,6 +47,7 @@ export interface FieldFrame {
   readonly values: Float32Array;
   readonly maxima: RmsMaxima;
   readonly evaluator: FieldEvaluator;
+  readonly basisSource: () => BasisFieldSource;
   readonly profile: Profile;
   readonly geometry: LineGeometry;
   readonly referenceMidZ: number;
@@ -89,6 +92,14 @@ export function gridSizeFor(kind: 'gpu' | 'cpu', quality: Quality): GridSize {
 
 function hasDeviceBuffer(buffer: FieldBuffer): buffer is FieldBuffer & { buffer: GPUBuffer } {
   return 'buffer' in buffer;
+}
+
+function memoized<T>(create: () => T): () => T {
+  let cached: { readonly value: T } | null = null;
+  return () => {
+    cached ??= { value: create() };
+    return cached.value;
+  };
 }
 
 function describeError(error: unknown): string {
@@ -139,6 +150,7 @@ export function createFieldPipeline(dependencies: PipelineDependencies): FieldPi
         values,
         maxima: rmsMaxima(values),
         evaluator: field.evaluator,
+        basisSource: memoized(() => field.basisSource()),
         profile: profileFor(field.evaluator, request.quality, settings.evaluationHeight, 0),
         geometry,
         referenceMidZ: reference.midZ,
@@ -202,6 +214,7 @@ export function createFieldPipeline(dependencies: PipelineDependencies): FieldPi
         values,
         maxima: rmsMaxima(values),
         evaluator,
+        basisSource: memoized(() => createBasisFieldSource3D(solved.system)),
         profile: profileFor(evaluator, request.quality, settings.evaluationHeight, midZ),
         geometry,
         referenceMidZ: midZ,

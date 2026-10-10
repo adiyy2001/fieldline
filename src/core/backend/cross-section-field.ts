@@ -1,8 +1,10 @@
 import { crossSectionFromLine } from '../field2d/cross-section';
 import { createFieldEvaluator2D } from '../field2d/evaluator';
+import { createBasisFieldSource2D } from '../field2d/basis-source';
 import { createCrossSectionSolver } from '../field2d/solver';
 import type { FieldEvaluator } from '../field-types';
 import { referenceSpan } from '../geometry/discretize';
+import type { BasisFieldSource } from '../optimizer/basis-field-source';
 import { groupExcitation } from '../model/excitation';
 import { type LineParameters, lineGeometryFromParameters } from '../model/parameters';
 import { gridSpacing } from './layout';
@@ -12,6 +14,7 @@ export const CROSS_SECTION_ROWS = 2;
 
 export interface CrossSectionField {
   readonly evaluator: FieldEvaluator;
+  basisSource(): BasisFieldSource;
   gridValues(spec: GridSpec): Float32Array;
 }
 
@@ -26,6 +29,7 @@ export function createCrossSectionField(parameters: LineParameters): CrossSectio
   const evaluator = createFieldEvaluator2D(solver, excitation.voltages, excitation.currents);
   return {
     evaluator,
+    basisSource: () => createBasisFieldSource2D(solver),
     gridValues(spec) {
       const { dx } = gridSpacing(spec);
       const values = new Float32Array(spec.nx * spec.nz * FIELD_COMPONENTS);
