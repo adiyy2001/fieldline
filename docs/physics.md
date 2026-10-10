@@ -1,6 +1,6 @@
 # Physics of fieldline
 
-This file derives every equation the field model uses and points each one at the test that checks it. Part 1 covers conventions, phasors, the 2D cross-section model, exposure levels and the phasing optimizer. Later parts add the 3D charge simulation and the GPU evaluation.
+This file derives every equation the field model uses and points each one at the test that checks it. Part 1 (sections 1 to 5) covers conventions, phasors, the 2D cross-section model, exposure levels, the phasing optimizer and the validation of the 2D model. Part 2 (sections 6 to 12) covers the 3D charge simulation and its convergence to the 2D model. A later part adds the GPU evaluation.
 
 Test paths are relative to `src/core`. A test is named by the file and the wording of its `it(...)` description.
 
@@ -219,3 +219,139 @@ Replacing each bundle by its equivalent conductor moves the limit heights by at 
 ![Equivalent conductor against explicit subconductors](img/validation-bundle-equivalent.svg)
 
 The deviation of 0.01 to 0.03 m below the published values has the same sign in every case. Its cause was not isolated.
+
+## 6. Finite straight segments
+
+The 3D model cuts every conductor into straight segments. A segment runs from the point a to the point b. Write ℓ = |b − a| for its length and û = (b − a)/ℓ for its direction. For an evaluation point P let
+
+$$\mathbf{s} = P - a, \qquad t = \mathbf{s}\cdot\hat{u}, \qquad \boldsymbol{\rho} = \mathbf{s} - t\,\hat{u}, \qquad \rho = |\boldsymbol{\rho}|$$
+
+so t is the position of the foot of the perpendicular along the segment and ρ is the distance to the axis. The distances to the two ends are
+
+$$R_1 = \sqrt{t^2 + \rho^2}, \qquad R_2 = \sqrt{(\ell - t)^2 + \rho^2}$$
+
+A point on the segment at the position t′ is at the distance √((t − t′)² + ρ²) from P.
+
+### Potential of a uniform line charge
+
+A uniform line charge density λ gives the potential
+
+$$\varphi = \frac{\lambda}{4\pi\varepsilon_0}\int_0^{\ell}\frac{dt'}{\sqrt{(t - t')^2 + \rho^2}} = \frac{\lambda}{4\pi\varepsilon_0}\left[\operatorname{asinh}\frac{\ell - t}{\rho} + \operatorname{asinh}\frac{t}{\rho}\right]$$
+
+The antiderivative of 1/√(u² + ρ²) is asinh(u/ρ). With u = t′ − t the limits are −t and ℓ − t, and asinh is odd. The code uses `Math.asinh`, which stays accurate for negative arguments. Checks: `field3d/segment-kernel.spec.ts`, "matches Gauss-Legendre quadrature for the potential of a unit density".
+
+### Electric field
+
+The field is E = −∇φ. The two components follow from integrating Coulomb's law along the segment, which gives closed forms for both:
+
+$$E_{\rho} = \frac{\lambda}{4\pi\varepsilon_0}\int_0^{\ell}\frac{\rho\,dt'}{R^3} = \frac{\lambda}{4\pi\varepsilon_0\,\rho}\left[\frac{\ell - t}{R_2} + \frac{t}{R_1}\right]$$
+
+$$E_{u} = \frac{\lambda}{4\pi\varepsilon_0}\int_0^{\ell}\frac{(t - t')\,dt'}{R^3} = \frac{\lambda}{4\pi\varepsilon_0}\left[\frac{1}{R_2} - \frac{1}{R_1}\right]$$
+
+with R = √((t − t′)² + ρ²) inside the integrals. The first integral uses ∫ ρ dt′/R³ = (t′ − t)/(ρR), the second uses d(1/R)/dt′ = (t − t′)/R³. Together
+
+$$\mathbf{E} = \frac{\lambda}{4\pi\varepsilon_0}\left[k\,\hat{\rho} + \left(\frac{1}{R_2} - \frac{1}{R_1}\right)\hat{u}\right], \qquad k = \frac{1}{\rho}\left[\frac{\ell - t}{R_2} + \frac{t}{R_1}\right]$$
+
+Checks: `field3d/segment-kernel.spec.ts`, "matches quadrature for the electric field of a unit density", "is the potential gradient: a central difference of the potential gives the field".
+
+### Magnetic field
+
+The Biot-Savart law for a current I along the segment is dB = (μ0 I/4π)·û × (P − Q)/R³ dt′, where Q is the source point. The component of P − Q along û drops out of the cross product, so only ρ remains and the integral is the same one as for E_ρ:
+
+$$\mathbf{B} = \frac{\mu_0 I}{4\pi}\,k\,\hat{u}\times\hat{\rho}$$
+
+The current of a conductor flows along +z in every segment. Checks: "matches quadrature for the magnetic field of a unit current", "follows the right hand rule for a current along +z".
+
+### The infinite line
+
+Let the segment grow symmetrically around the foot of the perpendicular, with t = ℓ/2 and ℓ → ∞. Then R1 = R2 → ℓ/2, the axial term vanishes and k → 2/ρ. This gives E = λ/(2πε0ρ) and B = μ0 I/(2πρ), the 2D results of section 2. Checks: "gives the field of an infinite line charge, 1 over 2 pi epsilon0 rho", "gives mu0 I over 2 pi rho for the magnetic field".
+
+## 7. The ground plane
+
+The ground is a perfect conductor at zero potential, as in 2D. The image of a segment from a to b is the segment from a′ to b′ with y mirrored: a′ = (a_x, −a_y, a_z). It carries the opposite charge density, so
+
+$$\varphi = \varphi_{direct}(\lambda) - \varphi_{direct}(\text{mirrored segment}, \lambda), \qquad \mathbf{E} = \mathbf{E}_{direct} - \mathbf{E}_{mirrored}$$
+
+On y = 0 the two potentials are equal, so φ = 0. The tangential components of the two fields are equal and cancel, and the normal components add. Checks: `field3d/segment-kernel.spec.ts`, "gives zero potential at the ground", "leaves no tangential electric field at the ground", "adds the image with the opposite sign and a mirrored position"; `field3d/evaluate.spec.ts`, "has no tangential electric field at the ground" for the whole line.
+
+The soil is non-magnetic, so the magnetic field has no image, as in 2D (section 2).
+
+## 8. The singularity clamp
+
+The closed forms diverge on the axis. A real conductor has a radius r, and inside it the field of its own charge is zero. The code replaces ρ by ρ_c = max(ρ, r) in every formula and uses the vector ρ/ρ_c instead of the unit vector ρ̂. Outside the conductor nothing changes. Inside, the direction vector shrinks linearly to zero on the axis, so the field is continuous at the surface, finite everywhere and has no undefined direction on the axis. The potential is constant inside, equal to its surface value.
+
+This is the same clamp as in 2D, where d² is replaced by max(d², r²). The earlier plan used the unit vector ρ̂, which needs an arbitrary perpendicular direction when ρ is 0. The vector form avoids that case and matches the 2D code. Checks: `field3d/segment-kernel.spec.ts`, "keeps the field continuous across the conductor radius", "shrinks linearly to zero on the axis and stays finite there", "keeps the potential finite and equal to the surface value inside the radius".
+
+The radius is the equivalent radius of the bundle (section 2), so a three-conductor bundle is one conductor of radius 0.134 m for this step.
+
+## 9. The charge simulation method
+
+Cut every conductor into N segments in total, counting all phase conductors and the shield wires. Segment j carries an unknown uniform density λ_j. The potential at a point is the sum over all segments and their images. Matching it at one collocation point per segment, the segment midpoint M_i, gives N equations:
+
+$$\sum_{j=1}^{N} P_{ij}\,\lambda_j = V_i, \qquad P_{ij} = \varphi_{unit}(M_i;\ \text{segment } j) - \varphi_{unit}(M_i;\ \text{image of segment } j)$$
+
+V_i is the voltage of the conductor that segment i belongs to, and 0 V for shield wires. The matrix P is real because the geometry is real. The clamp radius used in P_ij is the radius of the source segment j, so the diagonal and the collinear neighbours need no special case: a midpoint lies on the axis, and the clamp puts it on the surface.
+
+P depends on the geometry only. ADR 2 explains the use of one real LU factorization, kept until the geometry changes. The right-hand side is solved once per phase position g with 1 V on that conductor and 0 V everywhere else, which gives the basis densities λ^(g). For any voltage phasors V_g the densities are the complex combination
+
+$$\lambda_j = \sum_g V_g\,\lambda_j^{(g)}$$
+
+so changing the voltage, the angle or the phasing needs no new factorization. The same basis feeds the optimizer (section 4). The currents are simpler: segment j carries the phasor current of its conductor, and shield wire segments carry none (ADR 19).
+
+E and B at a point are then the sums of the segment forms of section 6 with these densities and currents, plus the images for E. Units follow ADR 3: the core uses coulombs per metre, volts per metre and tesla, and the factors 1/(4πε0) = 8.98755178617e9 and μ0/4π = 9.99999999868e-8 appear once in `segment-kernel.ts`.
+
+Checks: `field3d/charge-system.spec.ts`, "reproduces the conductor voltages at the collocation points" (1e-9 allowed, about 4e-15 measured), "holds the shield wires at 0 V while they carry induced charge", "combines the basis linearly for complex voltage phasors", "mirrors the basis charges of the outer phases of a symmetric tower", "agrees with the line charge of a very long single conductor" (within 0.2 percent of the 1.7414 µC/m of section 2), "gives the full phase current to every segment of a phase conductor and none to shield wires". `field3d/evaluate.spec.ts`: "matches the analytic electric field of an infinite line charge at 1 m and at the ground", "matches mu0 I over 2 pi r for the magnetic field", "gives a symmetric field for equal voltages on a symmetric tower", "mirrors the profile when the phasing is mirrored", "adds up in the voltage phasors: scaling every voltage and current scales the field", "superposes: the field of the sum of two voltage sets is the sum of the fields".
+
+## 10. Discretization
+
+ADR 4 holds the decisions. In short, a span of length L with sag s is cut into N_s segments of equal length along z (12 by default, 4 to 24 selectable). The end points lie on the catenary y(z) = y_low + a(cosh((z − z_mid)/a) − 1). A segment is a chord of that convex curve and lies above it by at most ℓ²/(8a), which is 6.9 cm for a 25 m chord on the reference span (a = 1126.66 m). Beyond the outer towers each conductor continues with three horizontal run-outs of 0.5, 1 and 2 spans, so the outer spans see a line that continues. A default line of three spans has 5 conductors × (36 + 6) = 210 unknowns for a single circuit and 8 × 42 = 336 for the stacked double circuit.
+
+The reference span is the middle span of three, and the first span of two. Profiles and the optimizer read the field at the middle of it. Checks: `geometry/discretize.spec.ts`, "cuts every conductor into 12 segments per span plus three run-outs per side", "puts the end points on the catenary and the attachments at the tower height", "continues with horizontal run-outs of 0.5, 1 and 2 spans at the attachment height", "takes the middle span of three as the reference".
+
+## 11. Accuracy of the charge system
+
+Three measures are reported.
+
+The collocation residual is the potential error at the midpoints after the solve. It checks the linear algebra and sits at rounding level (about 4e-15 of 1 V).
+
+The potential residual at check points is the honest measure of the discretization. A check point lies on the conductor surface at a joint between two segments, halfway between two collocation points. The potential of each basis solution is evaluated there and compared with the target (1 V on the own conductor and 0 V elsewhere). Uniform segments cannot make the potential exactly constant, because the true density varies along the conductor and the potential has a ripple between the collocation points. `potentialResidual` reports the largest ripple by the kind of joint. At the default size, over the three tower types:
+
+| Joint                               | Largest deviation from the target |
+| ----------------------------------- | --------------------------------- |
+| inside a span                       | 0.27 to 0.42 percent of 1 V       |
+| at a tower (the conductor kinks)    | 0.7 to 1.8 percent                |
+| between run-out segments (far away) | 0.4 to 1.0 percent                |
+
+In the horizontal tower the worst joints sit on the shield wires at the towers. In the stacked double circuit they sit on phase conductors with a close neighbour at the same tower. The deviation does not shrink quickly with more segments: inside the spans it stays near 0.27 percent from 12 to 24 segments for the horizontal tower. The 0.3 percent target in the plan holds inside the spans for the horizontal and the double circuit towers (0.27 and 0.29 percent) and fails for the delta tower (0.42 percent). It does not hold at the towers. The residual is a worst case of a surface quantity. What matters for the result is the field at 1 m, and section 12 measures that directly: 12 segments per span against 48 changes the mid-span peaks by 0.36 percent.
+
+The third measure is the cost. `pnpm bench:solve` times assembly, factorization and substitution in Node for 4 to 24 segments per span and writes `bench/results/solve-timing.json` with the hardware. On the 12th Gen Intel Core i7-12700H, Node 24.21.0, with other processes running, the whole solve takes 26 ms at 210 unknowns and 55 ms at 336, and 93 ms at 390 and 221 ms at 624 for 24 segments per span. The 8 segments per span used while a slider moves take 6 and 40 ms.
+
+Checks: `field3d/charge-system.spec.ts`, "stays below 0.6 percent inside the spans at the default size", "stays below 2.5 percent at the towers and the run-outs", "places one check point at every joint of a conductor, on its surface", "does not worsen when segments are refined inside the spans", "assembles and factors the default system in under 100 ms".
+
+## 12. Convergence to the 2D model
+
+At mid-span of a long straight line the 3D model has to give the 2D answer. `pnpm plot:convergence` compares the peak resultant rms of E and B on the profile at 1 m (x from −60 to 60 m) at the middle of the reference span with the 2D cross-section built from the mid-span heights. It writes `bench/results/convergence.json` and three plots. The default horizontal tower, 400 kV, 1000 A and three spans of 300 m are the base case.
+
+![Convergence with the number of segments per span](img/convergence-segments.svg)
+
+![Convergence to the 2D model as the span grows](img/convergence-span-length.svg)
+
+![Convergence to the 2D model as the sag goes to zero](img/convergence-sag.svg)
+
+What the numbers say:
+
+- With no sag the 3D peak E is within 7.2e-6 of the 2D value for 300 m spans and within 7.2e-5 for 100 m spans. The peak B is within 2.0e-4 and 1.8e-3. The remaining difference is the finite length of the line, and it falls as the span grows. On a straight line the result hardly depends on the segment count: it changes by less than 1e-8 between 4 and 24 segments per span.
+- The ratio of 3D to 2D rises monotonically towards 1 as the sag goes to zero and as the span grows at a fixed sag. The sag lifts the conductor away from mid-span, so the 3D field is lower than the 2D field of the mid-span cross-section. At 10 m sag and 300 m spans the ratio is 0.9936 for E and 0.9873 for B at the default 12 segments.
+- Chords lie above the catenary, so a coarse discretization lowers the field slightly. The ratio approaches its limit from below: 0.9972 (E) and 0.9909 (B) at 48 segments per span. Twelve segments differ from 48 by 0.36 percent in E and 0.37 percent in B.
+- Removing the run-outs changes the mid-span peak E by 3e-5 and the peak B by 9.6e-4, relative.
+- The other two towers give E ratios of 0.9952 (delta) and 0.9972 (double circuit) at the default geometry, and B ratios of 0.9884 and 0.9890.
+
+Checks: `validation/convergence.spec.ts`, "matches the 2D peak E within 2e-4 for a straight line with 100 m spans", "matches the 2D peak E within 2e-5 and peak B within 5e-4 for a straight line with 300 m spans", "converges to 1 from below as the span grows, at fixed sag", "converges to 1 from below as the sag goes to zero", "approaches its limit from below as the segments get shorter", "does not depend on the segment count when the line is straight", "changes the mid-span value by less than 1e-4 for E and 2e-3 for B when the run-outs go".
+
+### The optimizer on the 3D basis
+
+`field3d/basis-source.ts` gives the optimizer the same interface as the 2D source (section 4): the basis fields at the profile points, the group positions and the electric dipole per volt. The group position is the length-weighted centroid of the conductor inside the reference span. The dipole per volt is Σ λ_j ℓ_j y_j over all segments in the reference span, divided by the span length, which is the 3D counterpart of Σ q y per metre. Checks: `field3d/basis-source.spec.ts`, "reproduces the field of the direct evaluation for the optimizer arrangements", "gives the same metrics to all members of a symmetry class", "agrees on a straight line with long spans" (the order of the six classes by peak E and by peak B is the same as in 2D), "agrees on the default catenary line", "agrees on the peak values to within a few thousandths on a straight line", "agrees on the dipole per volt and the group positions on a straight line".
+
+### What the charge simulation leaves out
+
+The model has the limits of section 2 and ADR 19. In addition, the conductor ends are free. Charge piles up at the end of a finite conductor, and a current needs a closed path, so the run-outs only approximate a line that continues. They matter near the outer towers and change the mid-span value of the middle span by less than 0.1 percent in B.
