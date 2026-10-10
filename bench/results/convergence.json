@@ -1,0 +1,381 @@
+{
+  "environment": {
+    "date": "2026-10-10T19:18:09.283Z",
+    "commit": "4562688",
+    "node": "v24.21.0",
+    "os": "linux 6.6.87.2-microsoft-standard-WSL2",
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+    "logicalCpus": 20
+  },
+  "report": {
+    "grid": {
+      "segmentCounts": [
+        4,
+        6,
+        8,
+        10,
+        12,
+        16,
+        20,
+        24,
+        32,
+        48
+      ],
+      "spanLengths": [
+        50,
+        75,
+        100,
+        150,
+        200,
+        300,
+        400,
+        600,
+        800
+      ],
+      "sags": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        15,
+        20,
+        25
+      ],
+      "referenceSegments": 48
+    },
+    "baseSag": 10,
+    "baseSpanLength": 300,
+    "segments": {
+      "catenary": [
+        {
+          "value": 4,
+          "electricRatio": 0.9781526657004681,
+          "magneticRatio": 0.969112589633082,
+          "segmentCount": 90
+        },
+        {
+          "value": 6,
+          "electricRatio": 0.9860465881475818,
+          "magneticRatio": 0.9787339870705251,
+          "segmentCount": 120
+        },
+        {
+          "value": 8,
+          "electricRatio": 0.9899090367345914,
+          "magneticRatio": 0.9832864404098182,
+          "segmentCount": 150
+        },
+        {
+          "value": 10,
+          "electricRatio": 0.9921504783704146,
+          "magneticRatio": 0.9858044429826568,
+          "segmentCount": 180
+        },
+        {
+          "value": 12,
+          "electricRatio": 0.993565049795988,
+          "magneticRatio": 0.987326145082181,
+          "segmentCount": 210
+        },
+        {
+          "value": 16,
+          "electricRatio": 0.9951490056913169,
+          "magneticRatio": 0.9889609526713844,
+          "segmentCount": 270
+        },
+        {
+          "value": 20,
+          "electricRatio": 0.9959461545551137,
+          "magneticRatio": 0.9897541482537677,
+          "segmentCount": 330
+        },
+        {
+          "value": 24,
+          "electricRatio": 0.9963921050973469,
+          "magneticRatio": 0.9901911848970953,
+          "segmentCount": 390
+        },
+        {
+          "value": 32,
+          "electricRatio": 0.9968380601226395,
+          "magneticRatio": 0.9906277524086436,
+          "segmentCount": 510
+        },
+        {
+          "value": 48,
+          "electricRatio": 0.997157717785124,
+          "magneticRatio": 0.9909400291545388,
+          "segmentCount": 750
+        }
+      ],
+      "straight": [
+        {
+          "value": 4,
+          "electricRatio": 0.9999925850745678,
+          "magneticRatio": 0.9997989227366769,
+          "segmentCount": 90
+        },
+        {
+          "value": 6,
+          "electricRatio": 0.9999925804988441,
+          "magneticRatio": 0.9997989227366771,
+          "segmentCount": 120
+        },
+        {
+          "value": 8,
+          "electricRatio": 0.9999925794282379,
+          "magneticRatio": 0.999798922736677,
+          "segmentCount": 150
+        },
+        {
+          "value": 10,
+          "electricRatio": 0.999992579066698,
+          "magneticRatio": 0.9997989227366768,
+          "segmentCount": 180
+        },
+        {
+          "value": 12,
+          "electricRatio": 0.9999925789083296,
+          "magneticRatio": 0.9997989227366769,
+          "segmentCount": 210
+        },
+        {
+          "value": 16,
+          "electricRatio": 0.9999925787769485,
+          "magneticRatio": 0.9997989227366768,
+          "segmentCount": 270
+        },
+        {
+          "value": 20,
+          "electricRatio": 0.9999925787251089,
+          "magneticRatio": 0.9997989227366768,
+          "segmentCount": 330
+        },
+        {
+          "value": 24,
+          "electricRatio": 0.9999925786995688,
+          "magneticRatio": 0.9997989227366764,
+          "segmentCount": 390
+        },
+        {
+          "value": 32,
+          "electricRatio": 0.9999925786761986,
+          "magneticRatio": 0.9997989227366767,
+          "segmentCount": 510
+        },
+        {
+          "value": 48,
+          "electricRatio": 0.9999925786608723,
+          "magneticRatio": 0.9997989227366778,
+          "segmentCount": 750
+        }
+      ]
+    },
+    "spanLength": {
+      "catenary": [
+        {
+          "value": 50,
+          "electricRatio": 0.9194222231189554,
+          "magneticRatio": 0.8451775567430894,
+          "segmentCount": 210
+        },
+        {
+          "value": 75,
+          "electricRatio": 0.9496372044187511,
+          "magneticRatio": 0.8984446202869155,
+          "segmentCount": 210
+        },
+        {
+          "value": 100,
+          "electricRatio": 0.9685113973583328,
+          "magneticRatio": 0.9313085468307908,
+          "segmentCount": 210
+        },
+        {
+          "value": 150,
+          "electricRatio": 0.9842517398186007,
+          "magneticRatio": 0.963323725147713,
+          "segmentCount": 210
+        },
+        {
+          "value": 200,
+          "electricRatio": 0.9897369259152361,
+          "magneticRatio": 0.9767965488899479,
+          "segmentCount": 210
+        },
+        {
+          "value": 300,
+          "electricRatio": 0.993565049795988,
+          "magneticRatio": 0.987326145082181,
+          "segmentCount": 210
+        },
+        {
+          "value": 400,
+          "electricRatio": 0.9950646464655121,
+          "magneticRatio": 0.9913402124628733,
+          "segmentCount": 210
+        },
+        {
+          "value": 600,
+          "electricRatio": 0.9965157002452238,
+          "magneticRatio": 0.9946162544722744,
+          "segmentCount": 210
+        },
+        {
+          "value": 800,
+          "electricRatio": 0.9972757824032519,
+          "magneticRatio": 0.9960496641037383,
+          "segmentCount": 210
+        }
+      ],
+      "straight": [
+        {
+          "value": 50,
+          "electricRatio": 0.9996320768046751,
+          "magneticRatio": 0.9928379266631233,
+          "segmentCount": 210
+        },
+        {
+          "value": 75,
+          "electricRatio": 0.9998631425774823,
+          "magneticRatio": 0.9967974751629191,
+          "segmentCount": 210
+        },
+        {
+          "value": 100,
+          "electricRatio": 0.9999280525154662,
+          "magneticRatio": 0.9981947286785668,
+          "segmentCount": 210
+        },
+        {
+          "value": 150,
+          "electricRatio": 0.9999695149415869,
+          "magneticRatio": 0.999196429559839,
+          "segmentCount": 210
+        },
+        {
+          "value": 200,
+          "electricRatio": 0.9999831226086252,
+          "magneticRatio": 0.9995477493745548,
+          "segmentCount": 210
+        },
+        {
+          "value": 300,
+          "electricRatio": 0.9999925789083296,
+          "magneticRatio": 0.9997989227366769,
+          "segmentCount": 210
+        },
+        {
+          "value": 400,
+          "electricRatio": 0.9999958403438808,
+          "magneticRatio": 0.9998868788740558,
+          "segmentCount": 210
+        },
+        {
+          "value": 600,
+          "electricRatio": 0.9999981556995343,
+          "magneticRatio": 0.9999497191283885,
+          "segmentCount": 210
+        },
+        {
+          "value": 800,
+          "electricRatio": 0.9999989634215705,
+          "magneticRatio": 0.9999717160615021,
+          "segmentCount": 210
+        }
+      ]
+    },
+    "sag": [
+      {
+        "value": 0,
+        "electricRatio": 0.9999925789083296,
+        "magneticRatio": 0.9997989227366769,
+        "segmentCount": 210
+      },
+      {
+        "value": 2,
+        "electricRatio": 0.9985697120918525,
+        "magneticRatio": 0.9968440524065281,
+        "segmentCount": 210
+      },
+      {
+        "value": 4,
+        "electricRatio": 0.9972123872867064,
+        "magneticRatio": 0.9941242043212254,
+        "segmentCount": 210
+      },
+      {
+        "value": 6,
+        "electricRatio": 0.995907288132724,
+        "magneticRatio": 0.9916349356004026,
+        "segmentCount": 210
+      },
+      {
+        "value": 8,
+        "electricRatio": 0.9946380667751444,
+        "magneticRatio": 0.9893708583180165,
+        "segmentCount": 210
+      },
+      {
+        "value": 10,
+        "electricRatio": 0.993565049795988,
+        "magneticRatio": 0.987326145082181,
+        "segmentCount": 210
+      },
+      {
+        "value": 12,
+        "electricRatio": 0.9923450323666044,
+        "magneticRatio": 0.9854951810839222,
+        "segmentCount": 210
+      },
+      {
+        "value": 15,
+        "electricRatio": 0.9904537125710604,
+        "magneticRatio": 0.9831379259878366,
+        "segmentCount": 210
+      },
+      {
+        "value": 20,
+        "electricRatio": 0.9874234080550619,
+        "magneticRatio": 0.9800966229162809,
+        "segmentCount": 210
+      },
+      {
+        "value": 25,
+        "electricRatio": 0.9809037651440428,
+        "magneticRatio": 0.9758506285832722,
+        "segmentCount": 210
+      }
+    ],
+    "runOuts": {
+      "electricChange": 0.00003246062436364819,
+      "magneticChange": 0.000957497251724815
+    },
+    "discretization": {
+      "segmentsPerSpan": 12,
+      "referenceSegments": 48,
+      "electric": 0.0036029084718071772,
+      "magnetic": 0.0036469251075074514
+    },
+    "towers": [
+      {
+        "tower": "Single circuit, horizontal",
+        "electricRatio": 0.993565049795988,
+        "magneticRatio": 0.987326145082181
+      },
+      {
+        "tower": "Single circuit, delta",
+        "electricRatio": 0.9951580515295815,
+        "magneticRatio": 0.9883982580605849
+      },
+      {
+        "tower": "Double circuit, stacked",
+        "electricRatio": 0.9971923672869949,
+        "magneticRatio": 0.9890240078883833
+      }
+    ]
+  }
+}

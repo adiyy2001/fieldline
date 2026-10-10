@@ -1,0 +1,139 @@
+{
+  "environment": {
+    "date": "2026-10-10T19:17:05.641Z",
+    "commit": "4562688",
+    "node": "v24.21.0",
+    "os": "linux 6.6.87.2-microsoft-standard-WSL2",
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+    "logicalCpus": 20
+  },
+  "repeats": 7,
+  "referenceSpan": {
+    "index": 1,
+    "startZ": 300,
+    "length": 300,
+    "midZ": 450
+  },
+  "rows": [
+    {
+      "tower": "horizontal",
+      "segmentsPerSpan": 4,
+      "unknowns": 90,
+      "assemblyMilliseconds": 1.8171109999999828,
+      "factorizationMilliseconds": 0.576217000000014,
+      "solveMilliseconds": 0.08719000000002097,
+      "totalMilliseconds": 2.633855000000011,
+      "interiorResidual": 0.005478975828805698
+    },
+    {
+      "tower": "horizontal",
+      "segmentsPerSpan": 6,
+      "unknowns": 120,
+      "assemblyMilliseconds": 2.5495840000000385,
+      "factorizationMilliseconds": 1.138623999999993,
+      "solveMilliseconds": 0.1330379999999991,
+      "totalMilliseconds": 3.9214640000000145,
+      "interiorResidual": 0.0035320718423690104
+    },
+    {
+      "tower": "horizontal",
+      "segmentsPerSpan": 8,
+      "unknowns": 150,
+      "assemblyMilliseconds": 3.8369349999999827,
+      "factorizationMilliseconds": 2.1019979999999805,
+      "solveMilliseconds": 0.1747930000000224,
+      "totalMilliseconds": 6.061149999999998,
+      "interiorResidual": 0.0029455937895808493
+    },
+    {
+      "tower": "horizontal",
+      "segmentsPerSpan": 12,
+      "unknowns": 210,
+      "assemblyMilliseconds": 12.38423499999999,
+      "factorizationMilliseconds": 9.881201000000033,
+      "solveMilliseconds": 0.38090600000009545,
+      "totalMilliseconds": 26.28082500000005,
+      "interiorResidual": 0.002727385351710147
+    },
+    {
+      "tower": "horizontal",
+      "segmentsPerSpan": 16,
+      "unknowns": 270,
+      "assemblyMilliseconds": 24.88951699999984,
+      "factorizationMilliseconds": 27.069877000000133,
+      "solveMilliseconds": 1.357635000000073,
+      "totalMilliseconds": 48.52597999999989,
+      "interiorResidual": 0.00273541566442484
+    },
+    {
+      "tower": "horizontal",
+      "segmentsPerSpan": 24,
+      "unknowns": 390,
+      "assemblyMilliseconds": 33.439350000000104,
+      "factorizationMilliseconds": 51.74649499999987,
+      "solveMilliseconds": 1.803117999999813,
+      "totalMilliseconds": 92.582445,
+      "interiorResidual": 0.0027557279784408265
+    },
+    {
+      "tower": "double-circuit",
+      "segmentsPerSpan": 4,
+      "unknowns": 144,
+      "assemblyMilliseconds": 6.975795999999718,
+      "factorizationMilliseconds": 4.518938000000162,
+      "solveMilliseconds": 0.7017759999998816,
+      "totalMilliseconds": 12.76192600000013,
+      "interiorResidual": 0.007725434788368531
+    },
+    {
+      "tower": "double-circuit",
+      "segmentsPerSpan": 6,
+      "unknowns": 192,
+      "assemblyMilliseconds": 12.525591000000077,
+      "factorizationMilliseconds": 11.043134999999438,
+      "solveMilliseconds": 1.272790000000441,
+      "totalMilliseconds": 25.973793999999998,
+      "interiorResidual": 0.004477003220726001
+    },
+    {
+      "tower": "double-circuit",
+      "segmentsPerSpan": 8,
+      "unknowns": 240,
+      "assemblyMilliseconds": 11.642031999999745,
+      "factorizationMilliseconds": 13.467510000000402,
+      "solveMilliseconds": 1.0654989999993631,
+      "totalMilliseconds": 39.91083200000048,
+      "interiorResidual": 0.0035928749793703025
+    },
+    {
+      "tower": "double-circuit",
+      "segmentsPerSpan": 12,
+      "unknowns": 336,
+      "assemblyMilliseconds": 31.545802999999978,
+      "factorizationMilliseconds": 25.537218000000394,
+      "solveMilliseconds": 1.783155999999508,
+      "totalMilliseconds": 55.084851999999955,
+      "interiorResidual": 0.0028657319479406867
+    },
+    {
+      "tower": "double-circuit",
+      "segmentsPerSpan": 16,
+      "unknowns": 432,
+      "assemblyMilliseconds": 42.38551800000005,
+      "factorizationMilliseconds": 55.324015999999574,
+      "solveMilliseconds": 6.338590999999724,
+      "totalMilliseconds": 159.18239500000072,
+      "interiorResidual": 0.0026562929620748002
+    },
+    {
+      "tower": "double-circuit",
+      "segmentsPerSpan": 24,
+      "unknowns": 624,
+      "assemblyMilliseconds": 68.80462299999999,
+      "factorizationMilliseconds": 174.68299599999955,
+      "solveMilliseconds": 5.812101999999868,
+      "totalMilliseconds": 220.89279700000043,
+      "interiorResidual": 0.002504642157942439
+    }
+  ]
+}
