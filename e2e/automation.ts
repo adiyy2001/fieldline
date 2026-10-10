@@ -16,6 +16,7 @@ export type AutomationMethod =
   | 'setSettings'
   | 'setView'
   | 'setPhase'
+  | 'setCamera'
   | 'captureFrame'
   | 'settle';
 

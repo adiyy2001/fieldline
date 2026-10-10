@@ -181,7 +181,7 @@ test.describe('the ground view on WebGPU', () => {
     await expect(page.getByRole('main')).toBeVisible();
     await expect(page.getByRole('complementary', { name: 'Parameters' })).toBeVisible();
     const tabs = page.getByRole('tab');
-    await expect(tabs).toHaveCount(3);
+    await expect(tabs).toHaveCount(6);
     await expect(tabs.first()).toHaveAttribute('aria-selected', 'true');
     await expect(tabs.first()).toHaveAttribute('tabindex', '0');
     await expect(tabs.nth(1)).toHaveAttribute('tabindex', '-1');
