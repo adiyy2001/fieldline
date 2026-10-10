@@ -1,3 +1,4 @@
+import { Script } from 'node:vm';
 import { describe, expect, it } from 'vitest';
 import { SOLVE_CACHE_ENTRIES } from '../src/app/services/cached-solver';
 import { validateParameters } from '../src/core/model/parameters';
@@ -63,7 +64,7 @@ describe('the latency cases', () => {
   });
 
   it('ship an in-page script that parses', () => {
-    expect(() => new Function(`return (${LATENCY_SOURCE})`)).not.toThrow();
+    expect(() => new Script(`(${LATENCY_SOURCE})`)).not.toThrow();
   });
 });
 

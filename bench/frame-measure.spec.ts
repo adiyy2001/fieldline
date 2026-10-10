@@ -1,3 +1,4 @@
+import { Script } from 'node:vm';
 import { describe, expect, it } from 'vitest';
 import { FRAME_SOURCE, FRAME_VIEWPORT, FRAME_VIEW_SPECS, summarizeFrames } from './frame-measure';
 
@@ -10,7 +11,7 @@ describe('the frame time views', () => {
   });
 
   it('ship an in-page script that parses', () => {
-    expect(() => new Function(`return (${FRAME_SOURCE})`)).not.toThrow();
+    expect(() => new Script(`(${FRAME_SOURCE})`)).not.toThrow();
   });
 });
 
