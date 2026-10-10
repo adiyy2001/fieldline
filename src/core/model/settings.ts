@@ -1,4 +1,6 @@
+import { type LevelEdits, levelEditsAreValid } from '../exposure/level-edits';
 import { DEFAULT_PRESET_ID, type FieldQuantity, findPreset } from '../exposure/levels';
+import type { RankCriterion } from '../optimizer/ranking';
 import { type LineParameters, defaultParameters } from './parameters';
 
 export type ModelKind = 'charge-3d' | 'cross-section-2d';
@@ -30,7 +32,13 @@ export const PHASE_STEP_DEGREES = 15;
 export const FULL_CYCLE_DEGREES = 360;
 export const DEFAULT_CYCLE_SECONDS = 10;
 
-export interface ViewSettings {
+export const SECTION_RANGE = { min: 0, max: 1, step: 0.05 } as const;
+export const DEFAULT_SECTION_FRACTION = 0.5;
+export const RANK_DISTANCE_RANGE = { min: 5, max: 60, step: 5 } as const;
+export const DEFAULT_RANK_DISTANCE = 30;
+export const DEFAULT_RANK_CRITERION: RankCriterion = 'peak-electric';
+
+export interface ViewSettings extends LevelEdits {
   readonly model: ModelKind;
   readonly quantity: FieldQuantity;
   readonly mode: DisplayMode;
@@ -38,6 +46,10 @@ export interface ViewSettings {
   readonly evaluationHeight: number;
   readonly presetId: string;
   readonly view: ViewId;
+  readonly sectionFraction: number;
+  readonly overlay2d: boolean;
+  readonly rankCriterion: RankCriterion;
+  readonly rankDistance: number;
 }
 
 export interface Configuration {
@@ -54,6 +66,12 @@ export function defaultSettings(): ViewSettings {
     evaluationHeight: EVALUATION_HEIGHTS[0] ?? 1,
     presetId: DEFAULT_PRESET_ID,
     view: 'ground',
+    customLevels: [],
+    hiddenLevels: [],
+    sectionFraction: DEFAULT_SECTION_FRACTION,
+    overlay2d: false,
+    rankCriterion: DEFAULT_RANK_CRITERION,
+    rankDistance: DEFAULT_RANK_DISTANCE,
   };
 }
 
@@ -88,6 +106,13 @@ export function settingsAreValid(settings: ViewSettings): boolean {
     settings.phaseDegrees >= 0 &&
     settings.phaseDegrees < FULL_CYCLE_DEGREES &&
     EVALUATION_HEIGHTS.includes(settings.evaluationHeight) &&
-    isKnownPreset(settings.presetId)
+    isKnownPreset(settings.presetId) &&
+    levelEditsAreValid(settings) &&
+    Number.isFinite(settings.sectionFraction) &&
+    settings.sectionFraction >= SECTION_RANGE.min &&
+    settings.sectionFraction <= SECTION_RANGE.max &&
+    Number.isFinite(settings.rankDistance) &&
+    settings.rankDistance >= RANK_DISTANCE_RANGE.min &&
+    settings.rankDistance <= RANK_DISTANCE_RANGE.max
   );
 }

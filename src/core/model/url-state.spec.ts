@@ -1,5 +1,6 @@
 import * as fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
+import type { CustomLevel } from '../exposure/level-edits';
 import { TOWER_KINDS } from '../geometry/tower';
 import { type LineParameters, defaultParameters, validateParameters } from './parameters';
 import {
@@ -62,6 +63,28 @@ const parametersArbitrary: fc.Arbitrary<LineParameters> = fc
   }))
   .filter((parameters) => validateParameters(parameters).length === 0);
 
+const labelArbitrary = fc.stringMatching(/^[A-Za-z0-9:;,&%=]{1,10}$/);
+
+const customLevelsArbitrary: fc.Arbitrary<CustomLevel[]> = fc
+  .tuple(
+    fc.uniqueArray(fc.tuple(fc.integer({ min: 1, max: 1000 }), labelArbitrary), {
+      maxLength: 3,
+      selector: ([tenths]) => tenths,
+    }),
+    fc.uniqueArray(fc.tuple(fc.integer({ min: 1, max: 10000 }), labelArbitrary), {
+      maxLength: 3,
+      selector: ([micro]) => micro,
+    }),
+  )
+  .map(([electric, magnetic]) => [
+    ...electric.map(([tenths, label]) => ({
+      quantity: 'electric' as const,
+      value: tenths / 10,
+      label,
+    })),
+    ...magnetic.map(([value, label]) => ({ quantity: 'magnetic' as const, value, label })),
+  ]);
+
 const configurationArbitrary: fc.Arbitrary<Configuration> = fc
   .record({
     parameters: parametersArbitrary,
@@ -72,6 +95,17 @@ const configurationArbitrary: fc.Arbitrary<Configuration> = fc
     evaluationHeight: fc.constantFrom(...EVALUATION_HEIGHTS),
     presetId: fc.constantFrom('icnirp-2010', 'icnirp-1998', 'poland-public', 'poland-residential'),
     view: fc.constantFrom(...VIEW_DEFINITIONS.map((definition) => definition.id)),
+    customLevels: customLevelsArbitrary,
+    hiddenLevels: fc.uniqueArray(fc.constantFrom('e:1', 'e:5', 'e:10', 'b:75.4', 'b:100', 'b:200')),
+    sectionFraction: fc.integer({ min: 0, max: 20 }).map((step) => step / 20),
+    overlay2d: fc.boolean(),
+    rankCriterion: fc.constantFrom(
+      'peak-electric' as const,
+      'peak-magnetic' as const,
+      'electric-at-distance' as const,
+      'magnetic-at-distance' as const,
+    ),
+    rankDistance: fc.integer({ min: 1, max: 12 }).map((step) => step * 5),
   })
   .map(({ parameters, ...settings }) => ({ parameters, settings }));
 
@@ -129,6 +163,20 @@ describe('configuration URL codec', () => {
     ['ang=400'],
     ['ht=3'],
     ['lv=none'],
+    ['cl=e:0:Zero'],
+    ['cl=e:5'],
+    ['cl=x:5:Label'],
+    ['cl=e:5:A:B'],
+    ['cl=e:abc:Label'],
+    ['cl=e:1:A;e:2:B;e:3:C;e:4:D'],
+    ['hl=e5'],
+    ['hl=x:5'],
+    ['sec=1.5'],
+    ['sec=-0.1'],
+    ['o2=yes'],
+    ['rk=zz'],
+    ['rd=2'],
+    ['rd=500'],
     ['t=zz'],
     ['sag=500'],
   ])('keeps the default for the invalid value %s', (pair) => {
@@ -151,6 +199,25 @@ describe('configuration URL codec', () => {
 
   it('rejects a phasing with the wrong length for the tower', () => {
     expect(decodeConfiguration('v=1&ph=abccba').parameters.phasing).toEqual([0, 1, 2]);
+  });
+
+  it('keeps custom levels with reserved characters in the label', () => {
+    const configuration: Configuration = {
+      ...defaultConfiguration(),
+      settings: {
+        ...defaultConfiguration().settings,
+        customLevels: [{ quantity: 'electric', value: 3.5, label: 'a;b:c,d&e' }],
+      },
+    };
+    const query = encodeConfiguration(configuration);
+    expect(query).toContain('cl=');
+    expect(decodeConfiguration(query)).toEqual(configuration);
+  });
+
+  it('writes the section, overlay and ranking only when they differ from the defaults', () => {
+    const settings = { ...defaultConfiguration().settings, sectionFraction: 0.25, overlay2d: true };
+    const query = encodeConfiguration({ ...defaultConfiguration(), settings });
+    expect(query).toBe('v=1&sec=0.25&o2=1');
   });
 
   it('rejects a sag that leaves less than the minimum clearance', () => {

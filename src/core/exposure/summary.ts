@@ -112,3 +112,50 @@ export function describeSummary(
   const subject = quantity === 'electric' ? 'electric field' : 'magnetic field';
   return `Mid-span, ${formatNumber(height)} m above ground: peak E ${electric}, peak B ${magnetic}. Contours for the ${subject}. ${reports}.`;
 }
+
+export interface LevelCrossings {
+  readonly reached: boolean;
+  readonly left: number | null;
+  readonly right: number | null;
+  readonly leftOpen: boolean;
+  readonly rightOpen: boolean;
+}
+
+const EDGE_TOLERANCE = 1e-9;
+
+export function levelCrossings(
+  profile: Profile,
+  quantity: FieldQuantity,
+  level: Pick<ContourLevel, 'value'>,
+): LevelCrossings {
+  const positions = profile.samples.map((sample) => sample.x);
+  const intervals = exceedanceIntervals(positions, displayedValues(profile, quantity), level.value);
+  const first = intervals[0];
+  const last = intervals[intervals.length - 1];
+  const start = positions[0] ?? 0;
+  const end = positions[positions.length - 1] ?? 0;
+  if (first === undefined || last === undefined) {
+    return { reached: false, left: null, right: null, leftOpen: false, rightOpen: false };
+  }
+  return {
+    reached: true,
+    left: first.from,
+    right: last.to,
+    leftOpen: first.from <= start + EDGE_TOLERANCE,
+    rightOpen: last.to >= end - EDGE_TOLERANCE,
+  };
+}
+
+function describeSide(position: number | null, open: boolean): string {
+  if (position === null) {
+    return 'none';
+  }
+  return open ? `beyond ${formatNumber(position)} m` : `${formatNumber(position)} m`;
+}
+
+export function describeCrossings(crossings: LevelCrossings): string {
+  if (!crossings.reached) {
+    return 'not reached';
+  }
+  return `left ${describeSide(crossings.left, crossings.leftOpen)}, right ${describeSide(crossings.right, crossings.rightOpen)}`;
+}

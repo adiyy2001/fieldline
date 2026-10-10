@@ -1,3 +1,4 @@
+import { type LevelEdits, NO_LEVEL_EDITS, referenceKey, sameValue } from './level-edits';
 import {
   EXPOSURE_PRESETS,
   type ExposurePreset,
@@ -37,28 +38,84 @@ export function formatQuantity(value: number, quantity: FieldQuantity): string {
   return `${formatNumber(value)} ${quantityUnit(quantity)}`;
 }
 
-export function contourLevels(quantity: FieldQuantity, presetId: string): readonly ContourLevel[] {
+export interface LevelEntry extends ContourLevel {
+  readonly key: string;
+  readonly custom: boolean;
+  readonly name: string;
+}
+
+interface Candidate {
+  readonly value: number;
+  readonly sources: string[];
+  readonly emphasised: boolean;
+  readonly custom: boolean;
+}
+
+function referenceCandidates(
+  quantity: FieldQuantity,
+  presetId: string,
+  edits: LevelEdits,
+): readonly Candidate[] {
   const selected = findPreset(presetId);
   const grouped = new Map<number, ExposurePreset[]>();
   for (const preset of EXPOSURE_PRESETS) {
     const value = levelOf(preset, quantity);
     grouped.set(value, [...(grouped.get(value) ?? []), preset]);
   }
-  const unit = quantityUnit(quantity);
   return [...grouped.entries()]
-    .sort(([first], [second]) => first - second)
-    .slice(0, MAXIMUM_CONTOUR_LEVELS)
-    .map(([value, presets], index) => {
-      const sources = presets.map((preset) => preset.shortLabel);
-      return {
-        value,
-        unit,
-        sources,
-        emphasised: selected !== undefined && presets.some((preset) => preset.id === selected.id),
-        dashIndex: index,
-        text: `${formatNumber(value)} ${unit}`,
-      };
-    });
+    .filter(([value]) => !edits.hiddenLevels.includes(referenceKey(quantity, value)))
+    .map(([value, presets]) => ({
+      value,
+      sources: presets.map((preset) => preset.shortLabel),
+      emphasised: selected !== undefined && presets.some((preset) => preset.id === selected.id),
+      custom: false,
+    }));
+}
+
+function mergeCandidates(
+  references: readonly Candidate[],
+  edits: LevelEdits,
+  quantity: FieldQuantity,
+): readonly Candidate[] {
+  const merged: Candidate[] = references.map((candidate) => ({ ...candidate }));
+  for (const level of edits.customLevels.filter((entry) => entry.quantity === quantity)) {
+    const existing = merged.find((candidate) => sameValue(candidate.value, level.value));
+    if (existing === undefined) {
+      merged.push({ value: level.value, sources: [level.label], emphasised: false, custom: true });
+    } else {
+      existing.sources.push(level.label);
+    }
+  }
+  return merged;
+}
+
+export function levelEntries(
+  quantity: FieldQuantity,
+  presetId: string,
+  edits: LevelEdits = NO_LEVEL_EDITS,
+): readonly LevelEntry[] {
+  const unit = quantityUnit(quantity);
+  return [...mergeCandidates(referenceCandidates(quantity, presetId, edits), edits, quantity)]
+    .sort((first, second) => first.value - second.value)
+    .map((candidate, index) => ({
+      key: `${candidate.custom ? 'custom' : 'reference'}:${referenceKey(quantity, candidate.value)}`,
+      custom: candidate.custom,
+      name: candidate.sources.join(', '),
+      value: candidate.value,
+      unit,
+      sources: candidate.sources,
+      emphasised: candidate.emphasised,
+      dashIndex: index,
+      text: `${formatNumber(candidate.value)} ${unit}`,
+    }));
+}
+
+export function contourLevels(
+  quantity: FieldQuantity,
+  presetId: string,
+  edits: LevelEdits = NO_LEVEL_EDITS,
+): readonly ContourLevel[] {
+  return levelEntries(quantity, presetId, edits).slice(0, MAXIMUM_CONTOUR_LEVELS);
 }
 
 export function dashDescription(level: ContourLevel): string {

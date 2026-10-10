@@ -17,6 +17,13 @@ import {
 } from './settings';
 import { TOWER_FIELD_KEYS, towerFieldValues, towerFromFieldValues } from './tower-fields';
 import type { FieldQuantity } from '../exposure/levels';
+import {
+  decodeCustomLevels,
+  decodeHiddenLevels,
+  encodeCustomLevels,
+  encodeHiddenLevels,
+} from '../exposure/level-edits';
+import type { RankCriterion } from '../optimizer/ranking';
 
 export const URL_STATE_VERSION = 1;
 
@@ -197,6 +204,47 @@ const modeCodes: readonly (readonly [DisplayMode, string])[] = [
   ['instantaneous', 'inst'],
 ];
 
+const customLevelsField: UrlField = {
+  key: 'cl',
+  touches: [],
+  encode: (configuration) => encodeCustomLevels(configuration.settings.customLevels),
+  apply: (configuration, raw) => {
+    const customLevels = decodeCustomLevels(raw);
+    return customLevels === undefined
+      ? undefined
+      : withSettings(configuration, { ...configuration.settings, customLevels });
+  },
+};
+
+const hiddenLevelsField: UrlField = {
+  key: 'hl',
+  touches: [],
+  encode: (configuration) => encodeHiddenLevels(configuration.settings.hiddenLevels),
+  apply: (configuration, raw) => {
+    const hiddenLevels = decodeHiddenLevels(raw);
+    return hiddenLevels === undefined
+      ? undefined
+      : withSettings(configuration, { ...configuration.settings, hiddenLevels });
+  },
+};
+
+const overlayField: UrlField = {
+  key: 'o2',
+  touches: [],
+  encode: (configuration) => (configuration.settings.overlay2d ? '1' : '0'),
+  apply: (configuration, raw) =>
+    raw === '0' || raw === '1'
+      ? withSettings(configuration, { ...configuration.settings, overlay2d: raw === '1' })
+      : undefined,
+};
+
+const criterionCodes: readonly (readonly [RankCriterion, string])[] = [
+  ['peak-electric', 'pe'],
+  ['peak-magnetic', 'pb'],
+  ['electric-at-distance', 'de'],
+  ['magnetic-at-distance', 'db'],
+];
+
 const FIELDS: readonly UrlField[] = [
   towerDimensionsField,
   numberParameter(
@@ -291,6 +339,25 @@ const FIELDS: readonly UrlField[] = [
     (s, evaluationHeight) => ({ ...s, evaluationHeight }),
   ),
   presetField,
+  customLevelsField,
+  hiddenLevelsField,
+  numberSetting(
+    'sec',
+    (s) => s.sectionFraction,
+    (s, sectionFraction) => ({ ...s, sectionFraction }),
+  ),
+  overlayField,
+  enumSetting(
+    'rk',
+    (s) => s.rankCriterion,
+    (s, rankCriterion) => ({ ...s, rankCriterion }),
+    criterionCodes,
+  ),
+  numberSetting(
+    'rd',
+    (s) => s.rankDistance,
+    (s, rankDistance) => ({ ...s, rankDistance }),
+  ),
   viewField,
 ];
 

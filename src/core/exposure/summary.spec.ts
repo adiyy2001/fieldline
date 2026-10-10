@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import type { Profile, ProfileSample } from '../profile/sampler';
 import { contourLevels } from './contour-levels';
-import { describeReport, describeSummary, exceedanceIntervals, summarizeProfile } from './summary';
+import {
+  describeCrossings,
+  describeReport,
+  describeSummary,
+  exceedanceIntervals,
+  levelCrossings,
+  summarizeProfile,
+} from './summary';
 
 const ZERO = { re: 0, im: 0 };
 const ZERO_VECTOR = { x: ZERO, y: ZERO, z: ZERO };
@@ -70,5 +77,36 @@ describe('profile summary', () => {
     expect(text).toContain('peak E 6 kV/m at x = 0 m');
     expect(text).toContain('peak B 60 µT at x = 0 m');
     expect(text).toContain('10 kV/m (Poland public): not reached');
+  });
+});
+
+describe('level crossings', () => {
+  it('gives the outermost crossing on each side', () => {
+    const crossings = levelCrossings(profileOf([0, 4, 0, 4, 0]), 'electric', { value: 2 });
+    expect(crossings.left).toBeCloseTo(-1.5, 9);
+    expect(crossings.right).toBeCloseTo(1.5, 9);
+    expect(crossings.leftOpen).toBe(false);
+    expect(crossings.rightOpen).toBe(false);
+    expect(describeCrossings(crossings)).toBe('left -1.5 m, right 1.5 m');
+  });
+
+  it('marks a level that is still exceeded at the edge of the profile', () => {
+    const crossings = levelCrossings(profileOf([5, 5, 5, 5, 0]), 'electric', { value: 2 });
+    expect(crossings.leftOpen).toBe(true);
+    expect(crossings.rightOpen).toBe(false);
+    expect(describeCrossings(crossings)).toContain('left beyond -2 m');
+  });
+
+  it('reports a level that is not reached', () => {
+    const crossings = levelCrossings(profileOf([1, 1, 1, 1, 1]), 'electric', { value: 2 });
+    expect(crossings.reached).toBe(false);
+    expect(crossings.left).toBeNull();
+    expect(describeCrossings(crossings)).toBe('not reached');
+  });
+
+  it('reads the magnetic values in microtesla', () => {
+    const crossings = levelCrossings(profileOf([0, 3, 6, 3, 0]), 'magnetic', { value: 45 });
+    expect(crossings.reached).toBe(true);
+    expect(crossings.left).toBeCloseTo(-0.5, 9);
   });
 });

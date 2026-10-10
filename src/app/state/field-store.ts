@@ -135,7 +135,10 @@ export const FieldStore = signalStore(
         parameters: store.parameters(),
         settings: store.settings(),
       })),
-      levels: computed(() => contourLevels(store.settings().quantity, store.settings().presetId)),
+      levels: computed(() => {
+        const settings = store.settings();
+        return contourLevels(settings.quantity, settings.presetId, settings);
+      }),
       animating,
       request: computed<EvaluationRequest>(() => ({
         interactive: store.interactive(),
