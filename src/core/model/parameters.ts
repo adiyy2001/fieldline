@@ -25,6 +25,7 @@ export interface LineParameters {
   readonly spanLengths: readonly number[];
   readonly phaseSag: number;
   readonly shieldSagRatio: number;
+  readonly segmentsPerSpan: number;
   readonly bundleCount: number;
   readonly bundleSpacingMetres: number;
   readonly subconductorDiameterMillimetres: number;
@@ -38,6 +39,8 @@ export interface ValidationIssue {
 }
 
 export const MINIMUM_GROUND_CLEARANCE = 2;
+export const DEFAULT_SEGMENTS_PER_SPAN = 12;
+export const DRAFT_SEGMENTS_PER_SPAN = 8;
 
 export const ELECTRICAL_RANGES = {
   lineToLineKilovolts: { label: 'Line voltage', unit: 'kV', min: 10, max: 1200, step: 1 },
@@ -50,6 +53,7 @@ export const CONDUCTOR_RANGES = {
   spanLength: { label: 'Span length', unit: 'm', min: 50, max: 800, step: 10 },
   phaseSag: { label: 'Sag', unit: 'm', min: 0, max: 40, step: 0.5 },
   shieldSagRatio: { label: 'Shield wire sag ratio', unit: '', min: 0.5, max: 1.2, step: 0.05 },
+  segmentsPerSpan: { label: 'Segments per span', unit: '', min: 4, max: 24, step: 1 },
   bundleCount: { label: 'Subconductors per bundle', unit: '', min: 1, max: 4, step: 1 },
   bundleSpacingMetres: { label: 'Bundle spacing', unit: 'm', min: 0.1, max: 1, step: 0.05 },
   subconductorDiameterMillimetres: {
@@ -95,6 +99,7 @@ export function defaultParameters(kind: TowerKind = 'horizontal'): LineParameter
     spanLengths: [300, 300, 300],
     phaseSag: 10,
     shieldSagRatio: 0.9,
+    segmentsPerSpan: DEFAULT_SEGMENTS_PER_SPAN,
     bundleCount: 3,
     bundleSpacingMetres: 0.4,
     subconductorDiameterMillimetres: 30,
@@ -174,6 +179,7 @@ export function validateParameters(parameters: LineParameters): readonly Validat
     ],
     ['phaseSag', parameters.phaseSag, CONDUCTOR_RANGES.phaseSag],
     ['shieldSagRatio', parameters.shieldSagRatio, CONDUCTOR_RANGES.shieldSagRatio],
+    ['segmentsPerSpan', parameters.segmentsPerSpan, CONDUCTOR_RANGES.segmentsPerSpan],
     ['bundleCount', parameters.bundleCount, CONDUCTOR_RANGES.bundleCount],
     ['bundleSpacingMetres', parameters.bundleSpacingMetres, CONDUCTOR_RANGES.bundleSpacingMetres],
     [

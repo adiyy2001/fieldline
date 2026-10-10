@@ -4,10 +4,11 @@ import {
   type ConductorGeometry,
   type LineGeometry,
   type SpanSpec,
+  SHIELD_GROUP,
   midSpanHeight,
 } from '../geometry/line-geometry';
 
-export const SHIELD_GROUP = -1;
+export { SHIELD_GROUP };
 
 export interface Wire {
   readonly x: number;

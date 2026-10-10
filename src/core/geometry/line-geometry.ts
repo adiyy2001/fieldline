@@ -2,6 +2,8 @@ import { type BundleSpec, equivalentRadius } from './bundle';
 import { type Catenary, createCatenary, heightAt } from './catenary';
 import { type ConductorRole, type TowerDimensions, towerAttachments } from './tower';
 
+export const SHIELD_GROUP = -1;
+
 export interface SpanSpec {
   readonly length: number;
   readonly sag: number;
