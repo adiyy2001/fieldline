@@ -42,6 +42,15 @@ describe('the 3D settings', () => {
     expect(state.stepCount()).toBe(STEP_COUNT_RANGE.min);
   });
 
+  it('chooses the render scale automatically until a level is picked', () => {
+    const state = service();
+    expect(state.renderScale()).toBe('auto');
+    state.setRenderScale('0.75');
+    expect(state.renderScale()).toBe(0.75);
+    state.setRenderScale('nonsense');
+    expect(state.renderScale()).toBe('auto');
+  });
+
   it('keeps one camera per view', () => {
     const state = service();
     state.move('volume', { deltaYaw: 0.5, deltaPitch: 0, zoomFactor: 1, reset: false });

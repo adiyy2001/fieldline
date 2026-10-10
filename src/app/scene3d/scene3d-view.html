@@ -44,6 +44,18 @@
     <button type="button" class="action" data-testid="scene-reset" (click)="resetCamera()">
       Reset camera
     </button>
+    <label class="scale-choice">
+      <span>Render scale</span>
+      <select data-testid="scene-scale" (change)="selectScale($event)">
+        <option value="auto" [selected]="scaleChoice() === 'auto'">Automatic</option>
+        @for (level of scaleLevels; track level.value) {
+          <option [value]="level.value" [selected]="scaleChoice() === level.value">
+            {{ level.label }}
+          </option>
+        }
+      </select>
+    </label>
+    <p class="scale-note" data-testid="scene-scale-note">{{ scaleNote() }}</p>
     <p class="pose" data-testid="scene-pose">Camera: {{ poseText() }}</p>
   </div>
 

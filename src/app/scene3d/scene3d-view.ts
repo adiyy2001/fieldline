@@ -56,6 +56,12 @@ import {
   transferGradient,
   volumeSummary,
 } from './scene3d-model';
+import {
+  RENDER_SCALE_LEVELS,
+  createRenderScaleGovernor,
+  effectiveScale,
+  scaleLabel,
+} from './render-scale';
 import { Scene3dState } from './scene3d-state';
 import type { FieldFrame } from '../services/field-pipeline';
 
@@ -111,6 +117,8 @@ export class Scene3dViewComponent {
   private seconds = 0;
   private drawCount = 0;
   private lastCommand: DrawCommand | null = null;
+  private readonly governor = createRenderScaleGovernor();
+  private readonly automaticScale = signal(1);
 
   protected readonly failure = signal<string | null>(null);
   protected readonly preparing = signal(true);
@@ -120,6 +128,17 @@ export class Scene3dViewComponent {
   protected readonly lineCountRange = LINE_COUNT_RANGE;
   protected readonly stepCountRange = STEP_COUNT_RANGE;
   protected readonly lineGradient = lineGradient();
+  protected readonly scaleLevels = RENDER_SCALE_LEVELS.map((level) => ({
+    value: String(level),
+    label: scaleLabel(level),
+  }));
+  protected readonly scaleChoice = computed(() => String(this.scene.renderScale()));
+  protected readonly activeScale = computed(() =>
+    effectiveScale(this.scene.renderScale(), this.automaticScale()),
+  );
+  protected readonly scaleNote = computed(() =>
+    this.activeScale() < 1 ? `Rendering at ${scaleLabel(this.activeScale())} resolution` : '',
+  );
 
   protected readonly title = computed(() => TITLES[this.view()]);
   protected readonly quantity = computed(() => this.store.settings().quantity);
@@ -140,6 +159,18 @@ export class Scene3dViewComponent {
   private readonly peak = computed(() => {
     const prepared = this.prepared();
     return prepared?.preparation.peaks?.[this.quantity()] ?? null;
+  });
+
+  private readonly groundPeak = computed(() => {
+    const prepared = this.prepared();
+    if (prepared === null) {
+      return null;
+    }
+    const { spec } = prepared.preparation;
+    return peakOnGround(prepared.frame.values, prepared.frame.grid, this.quantity(), {
+      min: spec.zMin,
+      max: spec.zMax,
+    });
   });
 
   protected readonly caption = computed(() => {
@@ -181,17 +212,18 @@ export class Scene3dViewComponent {
             });
       case 'isosurface':
         return peak === null ? '' : isosurfaceSummary(settings.quantity, peak, this.store.levels());
-      case 'lines':
-        return linesSummary({
-          quantity: settings.quantity,
-          phaseDegrees: settings.phaseDegrees,
-          lineCount: this.scene.lineCount(),
-          peak: peakOnGround(prepared.frame.values, prepared.frame.grid, settings.quantity, {
-            min: prepared.preparation.spec.zMin,
-            max: prepared.preparation.spec.zMax,
-          }),
-          ends: this.ends(),
-        });
+      case 'lines': {
+        const ground = this.groundPeak();
+        return ground === null
+          ? ''
+          : linesSummary({
+              quantity: settings.quantity,
+              phaseDegrees: settings.phaseDegrees,
+              lineCount: this.scene.lineCount(),
+              peak: ground,
+              ends: this.ends(),
+            });
+      }
     }
   });
 
@@ -344,7 +376,11 @@ export class Scene3dViewComponent {
       };
       const limit = engine.software ? MAXIMUM_PIXELS_SOFTWARE : MAXIMUM_PIXELS_HARDWARE;
       const ratio = engine.software ? 1 : window.devicePixelRatio;
-      const scale = Math.min(ratio, Math.sqrt(limit / (size.width * size.height)));
+      const choice = this.scene.renderScale();
+      const automatic = untracked(() => this.automaticScale());
+      const resolutionFactor = effectiveScale(choice, automatic);
+      const scale =
+        Math.min(ratio, Math.sqrt(limit / (size.width * size.height))) * resolutionFactor;
       const width = Math.max(1, Math.round(size.width * scale));
       const height = Math.max(1, Math.round(size.height * scale));
       if (canvas.width !== width || canvas.height !== height) {
@@ -353,6 +389,7 @@ export class Scene3dViewComponent {
       }
       try {
         engine.draw(command);
+        this.adaptScale(choice, animating);
         this.lastCommand = command;
         this.drawCount += 1;
         this.failure.set(null);
@@ -432,6 +469,26 @@ export class Scene3dViewComponent {
 
   protected formatPercent(value: number): string {
     return `${formatNumber(value * 100)} percent`;
+  }
+
+  private adaptScale(choice: string | number, animating: boolean): void {
+    if (choice !== 'auto' || !animating) {
+      this.governor.reset();
+      return;
+    }
+    const next = this.governor.observe(performance.now());
+    untracked(() => {
+      if (next !== this.automaticScale()) {
+        this.automaticScale.set(next);
+      }
+    });
+  }
+
+  protected selectScale(event: Event): void {
+    const target = event.target;
+    if (target instanceof HTMLSelectElement) {
+      this.scene.setRenderScale(target.value);
+    }
   }
 
   private currentSpread(): number {

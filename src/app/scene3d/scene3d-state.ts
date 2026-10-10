@@ -13,6 +13,7 @@ import {
   type TransferSettings,
 } from '../../core/volume/transfer-function';
 import type { Scene3dView } from './scene3d-model';
+import { AUTOMATIC_SCALE, RENDER_SCALE_LEVELS, type RenderScaleChoice } from './render-scale';
 import {
   type CameraMotion,
   type CameraPose,
@@ -68,11 +69,13 @@ export class Scene3dState {
   private readonly transferState = signal<TransferSettings>(DEFAULT_TRANSFER);
   private readonly lineCountState = signal(DEFAULT_LINE_COUNT);
   private readonly stepCountState = signal(DEFAULT_STEP_COUNT);
+  private readonly renderScaleState = signal<RenderScaleChoice>(AUTOMATIC_SCALE);
   private readonly orbitState = signal<Readonly<Record<Scene3dView, Orbit>>>(DEFAULT_ORBITS);
 
   readonly transfer = this.transferState.asReadonly();
   readonly lineCount = this.lineCountState.asReadonly();
   readonly stepCount = this.stepCountState.asReadonly();
+  readonly renderScale = this.renderScaleState.asReadonly();
 
   orbit(view: Scene3dView): Orbit {
     return this.orbitState()[view];
@@ -98,6 +101,11 @@ export class Scene3dState {
       ...current,
       threshold: clampToRange(value, THRESHOLD_RANGE),
     }));
+  }
+
+  setRenderScale(choice: string): void {
+    const level = RENDER_SCALE_LEVELS.find((candidate) => String(candidate) === choice);
+    this.renderScaleState.set(level ?? AUTOMATIC_SCALE);
   }
 
   setLineCount(value: number): void {
