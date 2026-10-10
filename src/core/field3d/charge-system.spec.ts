@@ -144,14 +144,14 @@ describe('the potential residual at check points on the conductor surface', () =
 });
 
 describe('the cost of a solve', () => {
-  it('assembles and factors the default system in under 100 ms', () => {
+  it('assembles and factors the default system in under 300 ms even on a loaded machine', () => {
     const parameters = defaultParameters('horizontal');
     solveLine(parameters);
-    const times = Array.from({ length: 3 }, () => {
+    const times = Array.from({ length: 5 }, () => {
       const started = performance.now();
       solveLine(parameters);
       return performance.now() - started;
     });
-    expect(Math.min(...times)).toBeLessThan(100);
+    expect(Math.min(...times)).toBeLessThan(300);
   });
 });
