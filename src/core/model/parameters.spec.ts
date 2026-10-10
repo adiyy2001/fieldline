@@ -59,6 +59,18 @@ describe('line parameters', () => {
     expect(issues.map((issue) => issue.field)).toContain('tower.phaseHeight');
   });
 
+  it('accepts 4 to 24 segments per span and only whole numbers', () => {
+    const base = defaultParameters();
+    expect(base.segmentsPerSpan).toBe(12);
+    const fields = (segmentsPerSpan: number) =>
+      validateParameters({ ...base, segmentsPerSpan }).map((issue) => issue.field);
+    expect(fields(4)).toEqual([]);
+    expect(fields(24)).toEqual([]);
+    expect(fields(3)).toContain('segmentsPerSpan');
+    expect(fields(25)).toContain('segmentsPerSpan');
+    expect(fields(8.5)).toEqual(['segmentsPerSpan']);
+  });
+
   it('rejects a phasing that repeats a phase within a circuit', () => {
     const issues = validateParameters({ ...defaultParameters(), phasing: [0, 0, 2] });
     expect(issues.map((issue) => issue.field)).toContain('phasing');

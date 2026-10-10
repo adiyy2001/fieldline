@@ -118,6 +118,16 @@ function rangeIssue(field: string, value: number, range: NumberRange): Validatio
   return undefined;
 }
 
+function integerIssues(parameters: LineParameters): readonly ValidationIssue[] {
+  const whole: readonly (readonly [string, number, NumberRange])[] = [
+    ['segmentsPerSpan', parameters.segmentsPerSpan, CONDUCTOR_RANGES.segmentsPerSpan],
+    ['bundleCount', parameters.bundleCount, CONDUCTOR_RANGES.bundleCount],
+  ];
+  return whole
+    .filter(([, value]) => !Number.isInteger(value))
+    .map(([field, , range]) => ({ field, message: `${range.label} must be a whole number` }));
+}
+
 function towerIssues(tower: TowerDimensions): readonly ValidationIssue[] {
   return Object.entries(tower).flatMap(([key, value]) => {
     const range = TOWER_RANGES[key];
@@ -202,6 +212,7 @@ export function validateParameters(parameters: LineParameters): readonly Validat
   const structural = [
     ...rangeIssues,
     ...frequencyIssue,
+    ...integerIssues(parameters),
     ...towerIssues(parameters.tower),
     ...phasingIssues(parameters),
     ...spanIssues(parameters),
