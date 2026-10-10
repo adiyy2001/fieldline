@@ -81,3 +81,14 @@ export interface SceneImageRequest {
   readonly width?: number;
   readonly height?: number;
 }
+
+export interface RendererCyclesRequest {
+  readonly cycles: number;
+}
+
+export interface RendererCyclesRun {
+  readonly cycles: number;
+  readonly deviceLost: boolean;
+  readonly validationError: string | null;
+  readonly milliseconds: number;
+}

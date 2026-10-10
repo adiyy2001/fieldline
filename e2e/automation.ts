@@ -18,6 +18,11 @@ export type AutomationMethod =
   | 'setPhase'
   | 'setCamera'
   | 'captureFrame'
+  | 'measureUpdate'
+  | 'scene'
+  | 'sceneFrame'
+  | 'loseDevice'
+  | 'runRendererCycles'
   | 'settle';
 
 type Result<M extends AutomationMethod> = Awaited<ReturnType<FieldlineAutomation[M]>>;

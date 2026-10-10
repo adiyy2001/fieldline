@@ -115,6 +115,7 @@ export const FieldStore = signalStore(
   }),
   withProps(() => ({
     frame: signal<FieldFrame | null>(null),
+    publishedAt: signal<number | null>(null),
   })),
   withComputed((store) => {
     const backends = inject(FieldBackends);
@@ -173,6 +174,7 @@ export const FieldStore = signalStore(
         case 'frame': {
           const previous = store.frame();
           store.frame.set(outcome.frame);
+          store.publishedAt.set(performance.now());
           previous?.release();
           patchState(store, {
             status: 'ready',
@@ -281,6 +283,14 @@ export const FieldStore = signalStore(
             ...store.parameters(),
             phasing: swapPhasing(store.parameters().phasing, position, phase),
           },
+          ...touch(undefined),
+        });
+      },
+      replaceConfiguration(parameters: LineParameters, settings: ViewSettings): void {
+        const viewAllowed = !isThreeDView(settings.view) || store.threeDAvailable();
+        patchState(store, {
+          parameters,
+          settings: viewAllowed ? settings : { ...settings, view: 'ground' },
           ...touch(undefined),
         });
       },

@@ -6,7 +6,10 @@ import type { GpuBackendOptions, GpuFieldBackend } from '../../gpu/field-evaluat
 import { handleSolverMessage } from '../../workers/solver-handler';
 import { createSolverClient } from '../services/solver-client';
 import type { WorkerPort } from '../services/worker-port';
+import { defaultParameters } from '../../core/model/parameters';
+import { defaultSettings } from '../../core/model/settings';
 import { createAutomationApi, type AutomationDependencies } from './automation-api';
+import type { AppBridge, AppSnapshot } from './automation-types';
 
 function solverWorker(): WorkerPort {
   const worker: WorkerPort = {
@@ -205,5 +208,141 @@ describe('the automation API', () => {
     await api.settle();
     expect(frames).toBe(2);
     expect((await running).scenarios).toHaveLength(1);
+  });
+
+  describe('with the application connected', () => {
+    function fakeApp(overrides: Partial<AppBridge> = {}) {
+      const log: string[] = [];
+      let parameters = defaultParameters('horizontal');
+      let settings = defaultSettings();
+      let clockValue = 0;
+      const app: AppBridge = {
+        setParameters: (patch, options) => {
+          parameters = { ...parameters, ...patch };
+          log.push(
+            `parameters ${JSON.stringify(patch)} interactive=${String(options?.interactive)}`,
+          );
+        },
+        setSettings: (patch) => {
+          settings = { ...settings, ...patch };
+          log.push(`settings ${JSON.stringify(patch)}`);
+        },
+        replaceConfiguration: (nextParameters, nextSettings) => {
+          parameters = nextParameters;
+          settings = nextSettings;
+          log.push(`replace ${nextParameters.tower.kind} ${nextSettings.view}`);
+        },
+        phasingsBestFirst: () => [
+          [0, 1, 2, 0, 1, 2],
+          [0, 1, 2, 2, 1, 0],
+          [0, 2, 1, 0, 2, 1],
+          [2, 1, 0, 0, 1, 2],
+        ],
+        setPhase: (degrees) => {
+          settings = { ...settings, phaseDegrees: degrees };
+          log.push(`phase ${String(degrees)}`);
+        },
+        setCamera: () => undefined,
+        snapshot: (): AppSnapshot => ({
+          status: 'ready',
+          backend: 'cpu',
+          quality: 'full',
+          grid: null,
+          maxima: null,
+          timings: { solveMilliseconds: 12, evaluateMilliseconds: 30, totalMilliseconds: 43 },
+          publishedAt: clockValue + 60,
+          parameters,
+          settings,
+          playing: false,
+          probe: { lateral: 0.5, along: 0.5 },
+          issues: [],
+          message: null,
+        }),
+        settled: () => Promise.resolve(),
+        groundFrame: () => null,
+        capture: () => Promise.resolve(null),
+        ...overrides,
+      };
+      return { app, log, tick: (value: number) => (clockValue = value) };
+    }
+
+    it('measures a parameter change from the edit to the rendered frame', async () => {
+      const { app, log } = fakeApp();
+      let now = 0;
+      const api = createAutomationApi(
+        dependencies({
+          app,
+          clock: () => {
+            now += 30;
+            return now;
+          },
+        }),
+      );
+      const run = await api.measureUpdate({ patch: { phaseSag: 12 }, interactive: true });
+      expect(log).toContain('parameters {"phaseSag":12} interactive=true');
+      expect(run).toMatchObject({
+        backend: 'cpu',
+        quality: 'full',
+        solveMilliseconds: 12,
+        evaluateMilliseconds: 30,
+        pipelineMilliseconds: 43,
+      });
+      expect(run.endToEndMilliseconds).toBeCloseTo(run.updateMilliseconds + run.renderMilliseconds);
+    });
+
+    it('prepares a demo scene, reports its frames and steps through them', async () => {
+      const { app, log } = fakeApp();
+      const api = createAutomationApi(dependencies({ app }));
+      const run = await api.scene('phasing-change');
+      expect(run).toMatchObject({ name: 'phasing-change', frameCount: 4 });
+      expect(log.find((entry) => entry.startsWith('replace'))).toBe(
+        'replace double-circuit ground',
+      );
+      expect(log).toContain('parameters {"phasing":[2,1,0,0,1,2]} interactive=undefined');
+      await api.sceneFrame(3);
+      expect(log.at(-1)).toBe('parameters {"phasing":[0,1,2,0,1,2]} interactive=undefined');
+    });
+
+    it('steps the field line scene by phase', async () => {
+      const { app, log } = fakeApp();
+      const api = createAutomationApi(dependencies({ app }));
+      const run = await api.scene('lines-cycle');
+      expect(run.frameCount).toBe(24);
+      await api.sceneFrame(6);
+      expect(log.at(-1)).toBe('phase 90');
+    });
+
+    it('refuses a frame without a prepared scene or beyond the last one', async () => {
+      const { app } = fakeApp();
+      const api = createAutomationApi(dependencies({ app }));
+      await expect(api.sceneFrame(0)).rejects.toThrow('demo scene frame');
+      await api.scene('profile-chart');
+      await expect(api.sceneFrame(99)).rejects.toThrow('demo scene frame 99');
+    });
+
+    it('destroys the device and waits for the loss report', async () => {
+      const { app } = fakeApp();
+      let destroyed = false;
+      const device = {
+        status: 'ready',
+        device: {
+          limits: { maxComputeInvocationsPerWorkgroup: 256, maxStorageBufferBindingSize: 1 << 30 },
+          queue: { onSubmittedWorkDone: () => Promise.resolve() },
+          destroy: () => (destroyed = true),
+        },
+        adapter: {
+          vendor: 'test',
+          architecture: 'fake',
+          device: '',
+          description: '',
+          software: true,
+        },
+        timestampQuery: true,
+        lost: Promise.resolve({ reason: 'destroyed', message: 'gone' }),
+      } as unknown as ReadyDevice;
+      const api = createAutomationApi(dependencies({ app }, device));
+      await api.loseDevice();
+      expect(destroyed).toBe(true);
+    });
   });
 });

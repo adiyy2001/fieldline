@@ -1,5 +1,8 @@
 import { Injectable, inject } from '@angular/core';
+import { arrangementPhasing } from '../../core/optimizer/arrangements';
+import { rankArrangements } from '../../core/optimizer/ranking';
 import { createGpuFieldBackend } from '../../gpu/field-evaluator';
+import { OptimizerData } from '../optimizer/optimizer-data';
 import { CPU_EXECUTOR_FACTORY, SOLVER_CLIENT } from '../services/tokens';
 import { GpuStatus } from '../services/gpu-status';
 import { HeatmapCapture } from '../services/heatmap-capture';
@@ -56,14 +59,27 @@ export class Automation {
   private readonly store = inject(FieldStore);
   private readonly capture = inject(HeatmapCapture);
   private readonly scene = inject(Scene3dState);
+  private readonly optimizer = inject(OptimizerData);
   private readonly solver = inject(SOLVER_CLIENT);
   private readonly cpuExecutor = inject(CPU_EXECUTOR_FACTORY);
 
   private bridge(): AppBridge {
     const store = this.store;
     return {
-      setParameters: (patch) => {
-        store.setParameters(patch);
+      setParameters: (patch, options) => {
+        store.setParameters(patch, options);
+      },
+      replaceConfiguration: (parameters, settings) => {
+        store.setPlaying(false);
+        store.replaceConfiguration(parameters, settings);
+      },
+      phasingsBestFirst: () => {
+        const results = this.optimizer.results();
+        return results.length === 0
+          ? null
+          : rankArrangements(results, this.optimizer.criterion()).map((ranked) =>
+              arrangementPhasing(ranked.result.arrangement),
+            );
       },
       setSettings: (patch) => {
         store.setSettings(patch);
@@ -85,6 +101,7 @@ export class Automation {
           grid: frame?.grid ?? null,
           maxima: frame?.maxima ?? null,
           timings: frame?.timings ?? null,
+          publishedAt: store.publishedAt(),
           parameters: store.parameters(),
           settings: store.settings(),
           playing: store.playing(),

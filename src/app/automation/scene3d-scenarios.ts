@@ -37,6 +37,7 @@ import { DEFAULT_CAMERA_POSE } from '../../gpu/camera';
 import type { ReadyDevice } from '../../gpu/device';
 import type { GpuFieldBackend } from '../../gpu/field-evaluator';
 import { createFieldLinesLayer } from '../../gpu/field-lines';
+import { createHeatmapRenderer } from '../../gpu/heatmap-renderer';
 import { createIsosurfaceLayer } from '../../gpu/isosurface-layer';
 import { SCENE_COLORS } from '../../gpu/scene-geometry';
 import { createSceneRenderer } from '../../gpu/scene-renderer';
@@ -53,6 +54,8 @@ import type {
   IsosurfaceLevelRun,
   IsosurfaceRequest,
   IsosurfaceRun,
+  RendererCyclesRequest,
+  RendererCyclesRun,
   VolumeImageRequest,
   VolumeImageRun,
 } from './scene3d-types';
@@ -396,4 +399,41 @@ export async function runFieldLines(
   } finally {
     layer.dispose();
   }
+}
+
+const CYCLE_IMAGE = { width: 16, height: 16 };
+
+export async function runRendererCycles(
+  dependencies: ScenarioDependencies,
+  request: RendererCyclesRequest,
+): Promise<RendererCyclesRun> {
+  const { ready, clock } = dependencies;
+  const { device } = ready;
+  const started = clock();
+  let deviceLost = false;
+  void ready.lost.then(() => {
+    deviceLost = true;
+  });
+  device.pushErrorScope('validation');
+  for (let cycle = 0; cycle < request.cycles; cycle += 1) {
+    const heatmapCanvas = document.createElement('canvas');
+    heatmapCanvas.width = CYCLE_IMAGE.width;
+    heatmapCanvas.height = CYCLE_IMAGE.height;
+    createHeatmapRenderer(ready, heatmapCanvas).dispose();
+    const sceneCanvas = document.createElement('canvas');
+    sceneCanvas.width = CYCLE_IMAGE.width;
+    sceneCanvas.height = CYCLE_IMAGE.height;
+    const renderer = createSceneRenderer(ready, sceneCanvas);
+    renderer.render({ pose: { ...DEFAULT_CAMERA_POSE, target: { x: 0, y: 0, z: 0 } }, seconds: 0 });
+    renderer.dispose();
+    await runVolumeImage(dependencies, CYCLE_IMAGE);
+  }
+  await device.queue.onSubmittedWorkDone();
+  const validation = await device.popErrorScope();
+  return {
+    cycles: request.cycles,
+    deviceLost,
+    validationError: validation === null ? null : validation.message,
+    milliseconds: clock() - started,
+  };
 }

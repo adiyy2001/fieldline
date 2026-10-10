@@ -14,9 +14,12 @@ import type {
   FieldLinesRun,
   IsosurfaceRequest,
   IsosurfaceRun,
+  RendererCyclesRequest,
+  RendererCyclesRun,
   VolumeImageRequest,
   VolumeImageRun,
 } from './scene3d-types';
+import type { DemoSceneName } from './demo-scenes';
 
 export type ParityScenario = 'ground' | 'volume' | 'profile' | 'clamp';
 export type FieldKind = 'ground' | 'volume' | 'profile' | 'clamp';
@@ -107,6 +110,28 @@ export interface AdapterReport extends AdapterSummary {
   readonly maxStorageBufferBindingSize: number;
 }
 
+export interface UpdateRequest {
+  readonly patch: Partial<LineParameters>;
+  readonly interactive?: boolean;
+}
+
+export interface UpdateRun {
+  readonly backend: FrameBackend | null;
+  readonly quality: Quality | null;
+  readonly solveMilliseconds: number;
+  readonly evaluateMilliseconds: number;
+  readonly pipelineMilliseconds: number;
+  readonly updateMilliseconds: number;
+  readonly renderMilliseconds: number;
+  readonly endToEndMilliseconds: number;
+}
+
+export interface DemoSceneRun {
+  readonly name: DemoSceneName;
+  readonly view: ViewSettings['view'];
+  readonly frameCount: number;
+}
+
 export interface AppSnapshot {
   readonly status: FieldStatus;
   readonly backend: FrameBackend | null;
@@ -114,6 +139,7 @@ export interface AppSnapshot {
   readonly grid: GridSpec | null;
   readonly maxima: RmsMaxima | null;
   readonly timings: FrameTimings | null;
+  readonly publishedAt: number | null;
   readonly parameters: LineParameters;
   readonly settings: ViewSettings;
   readonly playing: boolean;
@@ -146,8 +172,10 @@ export interface CameraRequest {
 }
 
 export interface AppBridge {
-  setParameters(patch: Partial<LineParameters>): void;
+  setParameters(patch: Partial<LineParameters>, options?: { interactive?: boolean }): void;
   setSettings(patch: Partial<ViewSettings>): void;
+  replaceConfiguration(parameters: LineParameters, settings: ViewSettings): void;
+  phasingsBestFirst(): readonly (readonly number[])[] | null;
   setPhase(degrees: number): void;
   setCamera(request: CameraRequest): void;
   snapshot(): AppSnapshot;
@@ -170,6 +198,11 @@ export interface FieldlineAutomation {
   setPhase(degrees: number): Promise<void>;
   setCamera(request: CameraRequest): Promise<void>;
   captureFrame(request?: FrameCaptureRequest): Promise<FrameCapture | null>;
+  measureUpdate(request: UpdateRequest): Promise<UpdateRun>;
+  scene(name: DemoSceneName): Promise<DemoSceneRun>;
+  sceneFrame(index: number): Promise<void>;
+  loseDevice(): Promise<void>;
+  runRendererCycles(request: RendererCyclesRequest): Promise<RendererCyclesRun>;
   runParity(request: ParityRequest): Promise<ParityRun>;
   runMirror(request: MirrorRequest): Promise<MirrorRun>;
   runKernelBench(request: KernelBenchRequest): Promise<readonly KernelBenchRow[]>;

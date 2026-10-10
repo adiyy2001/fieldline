@@ -24,6 +24,7 @@ import { clampProbe, profilePoints } from '../../core/validation/parity-scenario
 import type { DeviceResult, ReadyDevice } from '../../gpu/device';
 import type { GpuBackendOptions, GpuFieldBackend } from '../../gpu/field-evaluator';
 import type { SolverClient } from '../services/solver-client';
+import { type DemoScenePlan, type DemoSceneName, planDemoScene } from './demo-scenes';
 import type { ScenarioDependencies } from './scene3d-scenarios';
 import type {
   AdapterReport,
@@ -41,6 +42,9 @@ import type {
   ParityScenario,
   ScenarioParity,
   ScenarioTiming,
+  UpdateRequest,
+  UpdateRun,
+  DemoSceneRun,
 } from './automation-types';
 
 export interface AutomationDependencies {
@@ -353,6 +357,78 @@ export function createAutomationApi(dependencies: AutomationDependencies): Field
     };
   }
 
+  let activeScene: DemoScenePlan | null = null;
+
+  async function renderedAfter(): Promise<number> {
+    const result = await device();
+    if (result.status === 'ready') {
+      await result.device.queue.onSubmittedWorkDone();
+    }
+    await dependencies.nextFrame();
+    return clock();
+  }
+
+  async function measureUpdate(request: UpdateRequest): Promise<UpdateRun> {
+    const app = bridge();
+    await settle();
+    const started = clock();
+    app.setParameters(request.patch, { interactive: request.interactive ?? false });
+    await app.settled();
+    const snapshot = app.snapshot();
+    const publishedAt = snapshot.publishedAt ?? clock();
+    const renderedAt = await renderedAfter();
+    return {
+      backend: snapshot.backend,
+      quality: snapshot.quality,
+      solveMilliseconds: snapshot.timings?.solveMilliseconds ?? 0,
+      evaluateMilliseconds: snapshot.timings?.evaluateMilliseconds ?? 0,
+      pipelineMilliseconds: snapshot.timings?.totalMilliseconds ?? 0,
+      updateMilliseconds: publishedAt - started,
+      renderMilliseconds: renderedAt - publishedAt,
+      endToEndMilliseconds: renderedAt - started,
+    };
+  }
+
+  async function scene(name: DemoSceneName): Promise<DemoSceneRun> {
+    const app = bridge();
+    const opening = planDemoScene(name, { phasingsBestFirst: null });
+    app.replaceConfiguration(opening.parameters, opening.settings);
+    await settle();
+    const plan = planDemoScene(name, { phasingsBestFirst: app.phasingsBestFirst() });
+    activeScene = plan;
+    app.setPhase(plan.settings.phaseDegrees);
+    await settle();
+    await applySceneFrame(0);
+    return {
+      name,
+      view: app.snapshot().settings.view,
+      frameCount: plan.frames.length,
+    };
+  }
+
+  async function applySceneFrame(index: number): Promise<void> {
+    const plan = activeScene;
+    const frame = plan?.frames[index];
+    if (plan === null || frame === undefined) {
+      throw new Error(`There is no demo scene frame ${String(index)}`);
+    }
+    const app = bridge();
+    if (frame.parameters !== undefined) {
+      app.setParameters(frame.parameters);
+    }
+    if (frame.phaseDegrees !== undefined) {
+      app.setPhase(frame.phaseDegrees);
+    }
+    await settle();
+  }
+
+  async function loseDevice(): Promise<void> {
+    const ready = await readyDevice();
+    ready.device.destroy();
+    await ready.lost;
+    await dependencies.nextFrame();
+  }
+
   const DEFAULT_CAPTURE_WIDTH = 256;
   const DEFAULT_CAPTURE_HEIGHT = 96;
 
@@ -413,6 +489,16 @@ export function createAutomationApi(dependencies: AutomationDependencies): Field
         height: request?.height ?? DEFAULT_CAPTURE_HEIGHT,
       });
     },
+    measureUpdate,
+    scene,
+    sceneFrame: applySceneFrame,
+    loseDevice: () => track(loseDevice()),
+    runRendererCycles: (request) =>
+      track(
+        scenario(async (dependencies) =>
+          (await import('./scene3d-scenarios')).runRendererCycles(dependencies, request),
+        ),
+      ),
     runParity: (request) => track(runParity(request)),
     runMirror: (request) => track(runMirror(request)),
     runKernelBench: (request) => track(runKernelBench(request)),
