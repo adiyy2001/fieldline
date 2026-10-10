@@ -134,6 +134,10 @@ export function segmentMagneticField(
   out: Float64Array,
 ): void {
   fillTerms({ data, offset: index * SEGMENT_STRIDE }, DIRECT, px, py, pz, terms);
+  writeMagnetic(terms, out);
+}
+
+function writeMagnetic(terms: Float64Array, out: Float64Array): void {
   const k = (terms[6] ?? 0) * MAGNETIC_CONSTANT;
   const rx = terms[0] ?? 0;
   const ry = terms[1] ?? 0;
@@ -144,4 +148,38 @@ export function segmentMagneticField(
   out[0] = k * (uy * rz - uz * ry);
   out[1] = k * (uz * rx - ux * rz);
   out[2] = k * (ux * ry - uy * rx);
+}
+
+export interface SegmentFieldBuffers {
+  readonly direct: Float64Array;
+  readonly image: Float64Array;
+  readonly electric: Float64Array;
+  readonly magnetic: Float64Array;
+}
+
+export function createFieldBuffers(): SegmentFieldBuffers {
+  return {
+    direct: createTerms(),
+    image: createTerms(),
+    electric: new Float64Array(3),
+    magnetic: new Float64Array(3),
+  };
+}
+
+export function segmentFieldsWithImage(
+  data: Float64Array,
+  index: number,
+  px: number,
+  py: number,
+  pz: number,
+  buffers: SegmentFieldBuffers,
+): void {
+  const frame = { data, offset: index * SEGMENT_STRIDE };
+  const { direct, image, electric, magnetic } = buffers;
+  electric.fill(0);
+  fillTerms(frame, DIRECT, px, py, pz, direct);
+  writeElectric(direct, 1, electric);
+  fillTerms(frame, IMAGE, px, py, pz, image);
+  writeElectric(image, -1, electric);
+  writeMagnetic(direct, magnetic);
 }

@@ -3,9 +3,11 @@ import { ELECTRIC_CONSTANT, MAGNETIC_CONSTANT } from '../constants';
 import { integrate } from '../testing/quadrature';
 import { singleSegmentSet } from '../testing/segments';
 import {
+  createFieldBuffers,
   createTerms,
   segmentElectricField,
   segmentElectricFieldWithImage,
+  segmentFieldsWithImage,
   segmentMagneticField,
   segmentPotential,
   segmentPotentialWithImage,
@@ -265,6 +267,26 @@ describe('images in the ground plane', () => {
     expect(
       segmentPotentialWithImage(overhead.data, 0, point.x, point.y, point.z, terms),
     ).toBeCloseTo(direct - image, 9);
+  });
+});
+
+describe('combined field evaluation', () => {
+  const overhead = singleSegmentSet({ x: 2, y: 20, z: -40 }, { x: 6, y: 25, z: 60 }, 0.05);
+  it('gives the electric field with image and the magnetic field of the separate functions', () => {
+    const buffers = createFieldBuffers();
+    const electric = new Float64Array(3);
+    const magnetic = new Float64Array(3);
+    for (const point of [
+      { x: 1, y: 3, z: 5 },
+      { x: -8, y: 0.5, z: 60 },
+      { x: 2, y: 8.01, z: 1 },
+    ]) {
+      segmentFieldsWithImage(overhead.data, 0, point.x, point.y, point.z, buffers);
+      segmentElectricFieldWithImage(overhead.data, 0, point.x, point.y, point.z, terms, electric);
+      segmentMagneticField(overhead.data, 0, point.x, point.y, point.z, terms, magnetic);
+      expect(Array.from(buffers.electric)).toEqual(Array.from(electric));
+      expect(Array.from(buffers.magnetic)).toEqual(Array.from(magnetic));
+    }
   });
 });
 
