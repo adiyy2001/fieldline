@@ -10,6 +10,7 @@ import {
 } from './gpu-status-text';
 import { GroundView } from './ground/ground-view';
 import { ParameterPanel } from './panel/parameter-panel';
+import { ProfileView } from './profile/profile-view';
 import { FieldBackends } from './services/field-backends';
 import { GpuStatus } from './services/gpu-status';
 import { PhaseClock } from './services/phase-clock';
@@ -23,7 +24,7 @@ type ChipState = 'solving' | 'ready' | 'invalid' | 'failed';
 
 @Component({
   selector: 'fl-root',
-  imports: [GroundView, ParameterPanel, ViewTabs, HelpDialog],
+  imports: [GroundView, ParameterPanel, ProfileView, ViewTabs, HelpDialog],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.css',

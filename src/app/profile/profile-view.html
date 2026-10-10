@@ -1,0 +1,143 @@
+<section class="profile" id="fl-view-profile" role="tabpanel" aria-labelledby="fl-tab-profile">
+  <div class="heading">
+    <h2>Lateral profile</h2>
+    <p class="caption" data-testid="profile-caption">
+      {{ height() }} m above ground, {{ data.sectionText() }}
+    </p>
+  </div>
+
+  <div class="controls">
+    <div class="segmented" role="group" aria-label="Presentation">
+      <button
+        type="button"
+        [attr.aria-pressed]="presentation() === 'chart'"
+        (click)="show('chart')"
+      >
+        Charts
+      </button>
+      <button
+        type="button"
+        [attr.aria-pressed]="presentation() === 'table'"
+        (click)="show('table')"
+      >
+        Data table
+      </button>
+    </div>
+    <div class="section">
+      <label for="fl-section">Section along the span</label>
+      <input
+        id="fl-section"
+        type="range"
+        [min]="sectionRange.min"
+        [max]="sectionRange.max"
+        [step]="sectionRange.step"
+        [value]="store.settings().sectionFraction"
+        [disabled]="twoDimensional()"
+        [attr.aria-valuetext]="data.sectionText()"
+        (input)="setSection($event)"
+      />
+      <output for="fl-section">{{ data.section()?.percent }} %</output>
+    </div>
+    <label class="overlay">
+      <input
+        type="checkbox"
+        [checked]="store.settings().overlay2d"
+        [disabled]="!data.overlayAvailable()"
+        (change)="setOverlay($event)"
+      />
+      Overlay the 2D cross-section
+    </label>
+    <button type="button" class="download" (click)="downloadCsv()">Download CSV</button>
+  </div>
+
+  @if (data.profile() === null) {
+    <p class="placeholder">Solving the line</p>
+  } @else if (presentation() === 'chart') {
+    <div class="charts">
+      @if (electricSpec(); as spec) {
+        <fl-line-chart
+          [spec]="spec"
+          [cursor]="cursor()"
+          [focusable]="true"
+          cursorLabel="Position along both profiles"
+          [cursorText]="readout()?.text ?? ''"
+          (cursorChange)="setCursor($event)"
+        />
+      }
+      @if (magneticSpec(); as spec) {
+        <fl-line-chart [spec]="spec" [cursor]="cursor()" (cursorChange)="setCursor($event)" />
+      }
+    </div>
+  } @else {
+    <div class="table-frame" role="region" aria-label="Profile data" tabindex="0">
+      <table data-testid="profile-table">
+        <caption>
+          Resultant rms values,
+          {{
+            height()
+          }}
+          m above ground,
+          {{
+            data.sectionText()
+          }}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">x (m)</th>
+            <th scope="col">E (kV/m)</th>
+            <th scope="col">B (µT)</th>
+            @if (overlayOn()) {
+              <th scope="col">E 2D (kV/m)</th>
+              <th scope="col">B 2D (µT)</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of data.rows(); track row.x) {
+            <tr>
+              <th scope="row">{{ row.x }}</th>
+              <td>{{ row.electric.toFixed(4) }}</td>
+              <td>{{ row.magnetic.toFixed(4) }}</td>
+              @if (overlayOn()) {
+                <td>{{ row.electricTwoD?.toFixed(4) }}</td>
+                <td>{{ row.magneticTwoD?.toFixed(4) }}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <p class="readout" role="status" aria-label="Value at the cursor" data-testid="profile-readout">
+    {{ readout()?.text }}
+  </p>
+
+  <div class="crossings">
+    <h3>Where each level is crossed</h3>
+    <table data-testid="profile-crossings">
+      <thead>
+        <tr>
+          <th scope="col">Field</th>
+          <th scope="col">Level</th>
+          <th scope="col">Source</th>
+          <th scope="col">Lateral distance</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of crossings(); track row.key) {
+          <tr [class.reached]="row.reached">
+            <th scope="row">{{ row.field }}</th>
+            <td>{{ row.text }}</td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="summary" role="status" aria-label="Profile summary" data-testid="profile-summary">
+    {{ summary() }}
+  </p>
+</section>

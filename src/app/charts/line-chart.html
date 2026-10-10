@@ -1,0 +1,232 @@
+<figure class="chart">
+  <div class="frame" #frame>
+    <svg
+      [attr.viewBox]="'0 0 ' + model().width + ' ' + model().height"
+      [attr.width]="model().width"
+      [attr.height]="model().height"
+      role="img"
+      [attr.aria-labelledby]="titleId + ' ' + descriptionId"
+      (pointermove)="pointerMoved($event)"
+      (pointerdown)="pointerMoved($event)"
+    >
+      <title [id]="titleId">{{ model().title }}</title>
+      <desc [id]="descriptionId">{{ model().textAlternative }}</desc>
+      @for (tick of model().xTicks; track tick.value) {
+        <line
+          class="grid"
+          [attr.x1]="tick.position"
+          [attr.x2]="tick.position"
+          [attr.y1]="model().plot.top"
+          [attr.y2]="model().plot.top + model().plot.height"
+        />
+        <text
+          class="tick"
+          text-anchor="middle"
+          [attr.x]="tick.position"
+          [attr.y]="model().plot.top + model().plot.height + 18"
+        >
+          {{ tick.label }}
+        </text>
+      }
+      @for (tick of model().yTicks; track tick.value) {
+        <line
+          class="grid"
+          [attr.x1]="model().plot.left"
+          [attr.x2]="model().plot.left + model().plot.width"
+          [attr.y1]="tick.position"
+          [attr.y2]="tick.position"
+        />
+        <text
+          class="tick"
+          text-anchor="end"
+          [attr.x]="model().plot.left - 8"
+          [attr.y]="tick.position + 4"
+        >
+          {{ tick.label }}
+        </text>
+      }
+      <rect
+        class="frame-line"
+        [attr.x]="model().plot.left"
+        [attr.y]="model().plot.top"
+        [attr.width]="model().plot.width"
+        [attr.height]="model().plot.height"
+      />
+      @for (line of model().levelLines; track line.id) {
+        <line
+          class="level"
+          [attr.x1]="model().plot.left"
+          [attr.x2]="model().plot.left + model().plot.width"
+          [attr.y1]="line.position"
+          [attr.y2]="line.position"
+          [attr.stroke-dasharray]="line.dash || null"
+        />
+        <text
+          class="level-label"
+          text-anchor="end"
+          [attr.x]="model().plot.left + model().plot.width - 4"
+          [attr.y]="line.position - 5"
+        >
+          {{ line.label }}
+        </text>
+      }
+      @for (series of model().series; track series.id) {
+        @if (series.path !== '') {
+          <path
+            class="series"
+            [class]="'series c' + series.colorIndex"
+            [attr.d]="series.path"
+            [attr.stroke-dasharray]="series.dash || null"
+          />
+        }
+        @for (point of series.markerPoints; track $index) {
+          @switch (series.marker) {
+            @case ('circle') {
+              <circle
+                [class]="'mark c' + series.colorIndex"
+                [attr.cx]="point.x"
+                [attr.cy]="point.y"
+                r="4.5"
+              />
+            }
+            @case ('square') {
+              <rect
+                [class]="'mark c' + series.colorIndex"
+                [attr.x]="point.x - 4.5"
+                [attr.y]="point.y - 4.5"
+                width="9"
+                height="9"
+              />
+            }
+            @case ('triangle') {
+              <polygon
+                [class]="'mark c' + series.colorIndex"
+                [attr.points]="
+                  point.x +
+                  ',' +
+                  (point.y - 5.5) +
+                  ' ' +
+                  (point.x - 5.5) +
+                  ',' +
+                  (point.y + 4.5) +
+                  ' ' +
+                  (point.x + 5.5) +
+                  ',' +
+                  (point.y + 4.5)
+                "
+              />
+            }
+            @case ('diamond') {
+              <polygon
+                [class]="'mark c' + series.colorIndex"
+                [attr.points]="
+                  point.x +
+                  ',' +
+                  (point.y - 6.5) +
+                  ' ' +
+                  (point.x + 6.5) +
+                  ',' +
+                  point.y +
+                  ' ' +
+                  point.x +
+                  ',' +
+                  (point.y + 6.5) +
+                  ' ' +
+                  (point.x - 6.5) +
+                  ',' +
+                  point.y
+                "
+              />
+            }
+          }
+        }
+      }
+      @if (cursorPixel(); as pixel) {
+        <line
+          class="cursor"
+          [attr.x1]="pixel"
+          [attr.x2]="pixel"
+          [attr.y1]="model().plot.top"
+          [attr.y2]="model().plot.top + model().plot.height"
+        />
+        @for (dot of cursorDots(); track dot.id) {
+          <circle [class]="'dot c' + dot.colorIndex" [attr.cx]="dot.x" [attr.cy]="dot.y" r="5" />
+        }
+      }
+      <text
+        class="axis-title"
+        text-anchor="middle"
+        [attr.x]="model().plot.left + model().plot.width / 2"
+        [attr.y]="model().plot.top + model().plot.height + 44"
+      >
+        {{ model().xLabel }}
+      </text>
+      <text
+        class="axis-title"
+        text-anchor="middle"
+        [attr.transform]="
+          'translate(16 ' + (model().plot.top + model().plot.height / 2) + ') rotate(-90)'
+        "
+      >
+        {{ model().yLabel }}
+      </text>
+    </svg>
+    @if (focusable()) {
+      <div
+        class="control"
+        role="slider"
+        tabindex="0"
+        aria-orientation="horizontal"
+        [attr.aria-label]="cursorLabel()"
+        [attr.aria-valuemin]="model().xDomain[0]"
+        [attr.aria-valuemax]="model().xDomain[1]"
+        [attr.aria-valuenow]="cursor() ?? (model().xDomain[0] + model().xDomain[1]) / 2"
+        [attr.aria-valuetext]="cursorText() || null"
+        [style.left.%]="controlBox().left"
+        [style.top.%]="controlBox().top"
+        [style.width.%]="controlBox().width"
+        [style.height.%]="controlBox().height"
+        (keydown)="keyPressed($event)"
+      ></div>
+    }
+  </div>
+  <figcaption class="key">
+    <ul>
+      @for (series of model().series; track series.id) {
+        <li>
+          <svg width="40" height="14" viewBox="0 0 40 14" aria-hidden="true">
+            @if (series.path !== '') {
+              <line
+                [class]="'series c' + series.colorIndex"
+                x1="2"
+                x2="38"
+                y1="7"
+                y2="7"
+                [attr.stroke-dasharray]="series.dash || null"
+              />
+            }
+            @if (series.marker === 'diamond') {
+              <polygon [class]="'mark c' + series.colorIndex" points="20,1 26,7 20,13 14,7" />
+            }
+          </svg>
+          <span>{{ series.label }}</span>
+        </li>
+      }
+      @for (line of model().levelLines; track line.id) {
+        <li>
+          <svg width="40" height="14" viewBox="0 0 40 14" aria-hidden="true">
+            <line
+              class="level"
+              x1="2"
+              x2="38"
+              y1="7"
+              y2="7"
+              [attr.stroke-dasharray]="line.dash || null"
+            />
+          </svg>
+          <span>{{ line.label }}</span>
+        </li>
+      }
+    </ul>
+  </figcaption>
+</figure>
