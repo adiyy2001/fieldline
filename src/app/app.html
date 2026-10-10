@@ -1,0 +1,26 @@
+<header class="masthead">
+  <h1>fieldline</h1>
+  <p>Electric and magnetic fields around overhead high-voltage lines, computed on the GPU.</p>
+</header>
+<main>
+  <section class="panel" aria-labelledby="graphics-heading">
+    <h2 id="graphics-heading">Graphics</h2>
+    <div class="status" role="status" aria-atomic="false" [attr.data-state]="status()">
+      <p class="headline">{{ text().headline }}</p>
+      @if (text().detail; as detail) {
+        <p class="detail">{{ detail }}</p>
+      }
+      @if (adapterRows().length > 0) {
+        <dl class="adapter">
+          @for (row of adapterRows(); track row.label) {
+            <div class="adapter-row">
+              <dt>{{ row.label }}</dt>
+              <dd>{{ row.value }}</dd>
+            </div>
+          }
+        </dl>
+        <p class="kernel" [attr.data-outcome]="smokeOutcome()">{{ smokeText() }}</p>
+      }
+    </div>
+  </section>
+</main>

@@ -1,0 +1,96 @@
+:host {
+  display: block;
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 3rem;
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.masthead p {
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+}
+
+.panel {
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+.panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.125rem;
+}
+
+.status {
+  padding-left: 1rem;
+  border-left: 0.25rem solid var(--border);
+}
+
+.status[data-state='ready'] {
+  border-left-color: var(--ok);
+}
+
+.status[data-state='unsupported'],
+.status[data-state='lost'] {
+  border-left-color: var(--danger);
+}
+
+.headline {
+  margin: 0;
+  font-weight: 600;
+}
+
+.detail {
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+}
+
+.adapter {
+  display: grid;
+  gap: 0.25rem;
+  margin: 1rem 0 0;
+}
+
+.adapter-row {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  gap: 0.75rem;
+}
+
+.adapter dt {
+  color: var(--text-muted);
+}
+
+.adapter dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.kernel {
+  margin: 1rem 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.kernel[data-outcome='passed'] {
+  color: var(--ok);
+}
+
+.kernel[data-outcome='failed'] {
+  color: var(--danger);
+}
+
+@media (max-width: 30rem) {
+  .adapter-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
