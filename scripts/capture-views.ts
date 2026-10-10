@@ -1,4 +1,4 @@
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { type Browser, type BrowserContext, type Page, chromium } from '@playwright/test';
 import { createDistServer, host } from './serve-dist';
@@ -30,7 +30,7 @@ const SHOTS: readonly Shot[] = [
   { name: 'ground-instantaneous', search: '?v=1&r=inst&ang=90' },
   { name: 'ground-delta-tower', search: '?v=1&t=d' },
   { name: 'ground-cross-section', search: '?v=1&m=cross-section-2d' },
-  { name: 'ground-high-voltage', search: '?v=1&kv=765&a=2000' },
+  { name: 'ground-high-voltage', search: '?v=1&kv=1100&a=2000' },
   {
     name: 'help',
     search: '',
@@ -40,6 +40,38 @@ const SHOTS: readonly Shot[] = [
     },
   },
 ];
+
+const READBACK = { width: 512, height: 192 };
+
+async function readbackPng(page: Page): Promise<Buffer | null> {
+  const dataUrl = await page.evaluate(async (size) => {
+    const api = (
+      window as unknown as {
+        fieldline: {
+          captureFrame(request: {
+            width: number;
+            height: number;
+          }): Promise<{ width: number; height: number; pixels: Uint8Array } | null>;
+        };
+      }
+    ).fieldline;
+    const frame = await api.captureFrame(size);
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (frame === null || context === null) {
+      return null;
+    }
+    canvas.width = frame.width;
+    canvas.height = frame.height;
+    context.putImageData(
+      new ImageData(new Uint8ClampedArray(frame.pixels), frame.width, frame.height),
+      0,
+      0,
+    );
+    return canvas.toDataURL('image/png');
+  }, READBACK);
+  return dataUrl === null ? null : Buffer.from(dataUrl.split(',')[1] ?? '', 'base64');
+}
 
 async function capture(
   context: BrowserContext,
@@ -61,6 +93,12 @@ async function capture(
     path: join(outputDirectory, `${group}-${viewport.name}-${shot.name}.png`),
     fullPage: true,
   });
+  if (viewport.name === 'desktop' && shot.prepare === undefined) {
+    const png = await readbackPng(page);
+    if (png !== null) {
+      writeFileSync(join(outputDirectory, `${group}-readback-${shot.name}.png`), png);
+    }
+  }
   await page.close();
 }
 

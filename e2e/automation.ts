@@ -2,7 +2,19 @@ import type { Page } from '@playwright/test';
 import type { FieldlineAutomation } from '../src/app/automation/automation-types.ts';
 
 export type AutomationMethod =
-  'runParity' | 'runMirror' | 'runKernelBench' | 'runCpuPool' | 'adapter';
+  | 'runParity'
+  | 'runMirror'
+  | 'runKernelBench'
+  | 'runCpuPool'
+  | 'adapter'
+  | 'appState'
+  | 'groundFrame'
+  | 'setParameters'
+  | 'setSettings'
+  | 'setView'
+  | 'setPhase'
+  | 'captureFrame'
+  | 'settle';
 
 type Result<M extends AutomationMethod> = Awaited<ReturnType<FieldlineAutomation[M]>>;
 type Request<M extends AutomationMethod> = Parameters<FieldlineAutomation[M]>[0];

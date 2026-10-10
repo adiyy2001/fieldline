@@ -1,4 +1,9 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+async function openGraphics(page: Page): Promise<void> {
+  await page.goto('/');
+  await page.getByText('Graphics details').click();
+}
 
 test.describe('WebGPU in the production build', () => {
   test('the browser offers an adapter', async ({ page }) => {
@@ -11,16 +16,16 @@ test.describe('WebGPU in the production build', () => {
   });
 
   test('the shell reports a ready device and a correct compute kernel', async ({ page }) => {
-    await page.goto('/');
-    const status = page.getByRole('status');
+    await openGraphics(page);
+    const status = page.getByRole('status', { name: 'Graphics' });
     await expect(status).toHaveAttribute('data-state', 'ready');
     await expect(status).toContainText('WebGPU is ready.');
     await expect(status).toContainText('Compute check: 1000 of 1000 values correct.');
   });
 
   test('the shell lists the adapter that ran the kernel', async ({ page }) => {
-    await page.goto('/');
-    const adapter = page.getByRole('status').locator('.adapter');
+    await openGraphics(page);
+    const adapter = page.getByRole('status', { name: 'Graphics' }).locator('.adapter');
     await expect(adapter.getByText('Vendor')).toBeVisible();
     await expect(adapter.getByText('Architecture')).toBeVisible();
     await expect(adapter.getByText('Software (CPU emulation)')).toBeVisible();
@@ -34,8 +39,10 @@ test.describe('WebGPU in the production build', () => {
       }
     });
     page.on('pageerror', (error) => problems.push(error.message));
-    await page.goto('/');
-    await expect(page.getByRole('status')).toContainText('Compute check: 1000 of 1000');
+    await openGraphics(page);
+    await expect(page.getByRole('status', { name: 'Graphics' })).toContainText(
+      'Compute check: 1000 of 1000',
+    );
     expect(problems).toEqual([]);
   });
 });
