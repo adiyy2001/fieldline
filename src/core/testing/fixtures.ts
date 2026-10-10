@@ -4,12 +4,12 @@ import { createFieldEvaluator2D } from '../field2d/evaluator';
 import { type CrossSectionSolver, createCrossSectionSolver } from '../field2d/solver';
 import { type LineGeometry } from '../geometry/line-geometry';
 import { type TowerKind } from '../geometry/tower';
+import { groupExcitation, pickPhasors } from '../model/excitation';
 import {
   type LineParameters,
   defaultParameters,
   lineGeometryFromParameters,
 } from '../model/parameters';
-import { phaseCurrentPhasors, phaseVoltagePhasors } from '../phasor';
 
 export interface Fixture {
   readonly parameters: LineParameters;
@@ -33,18 +33,10 @@ export function groupPhasors(
   phasing: readonly number[],
   phasors: readonly Complex[],
 ): readonly Complex[] {
-  return phasing.map((phase) => phasors[phase] ?? phasors[0] ?? { re: 0, im: 0 });
+  return pickPhasors(phasing, phasors);
 }
 
 export function evaluatorFor(fixture: Fixture, phasing = fixture.parameters.phasing) {
-  const voltages = phaseVoltagePhasors(fixture.parameters.lineToLineKilovolts * 1000);
-  const currents = phaseCurrentPhasors(
-    fixture.parameters.currentAmperes,
-    fixture.parameters.powerFactorAngleDegrees,
-  );
-  return createFieldEvaluator2D(
-    fixture.solver,
-    groupPhasors(phasing, voltages),
-    groupPhasors(phasing, currents),
-  );
+  const excitation = groupExcitation(fixture.parameters, phasing);
+  return createFieldEvaluator2D(fixture.solver, excitation.voltages, excitation.currents);
 }

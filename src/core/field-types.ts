@@ -12,3 +12,8 @@ export interface FieldPair {
 }
 
 export type FieldEvaluator = (point: Point3) => FieldPair;
+
+export interface ComplexSeries {
+  readonly re: Float64Array;
+  readonly im: Float64Array;
+}

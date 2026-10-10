@@ -1,12 +1,9 @@
 import { LINE_CHARGE_FIELD_CONSTANT } from '../constants';
 import type { Complex } from '../complex';
+import type { ComplexSeries } from '../field-types';
+import { combineColumns } from '../linear/combine';
 import { factorLu, solveLu } from '../linear/lu';
 import { type CrossSection, type Wire, wiresInGroup } from './cross-section';
-
-export interface ComplexSeries {
-  readonly re: Float64Array;
-  readonly im: Float64Array;
-}
 
 export interface CrossSectionSolver {
   readonly section: CrossSection;
@@ -58,27 +55,6 @@ function splitColumns(rhs: Float64Array, count: number, columns: number): Float6
   );
 }
 
-function combine(
-  basis: readonly Float64Array[],
-  weights: readonly Complex[],
-  count: number,
-): ComplexSeries {
-  const re = new Float64Array(count);
-  const im = new Float64Array(count);
-  basis.forEach((column, group) => {
-    const weight = weights[group];
-    if (weight === undefined) {
-      return;
-    }
-    for (let row = 0; row < count; row += 1) {
-      const value = column[row] ?? 0;
-      re[row] = (re[row] ?? 0) + value * weight.re;
-      im[row] = (im[row] ?? 0) + value * weight.im;
-    }
-  });
-  return { re, im };
-}
-
 function currentShares(section: CrossSection): readonly Float64Array[] {
   return Array.from({ length: section.groupCount }, (_, group) => {
     const share = 1 / wiresInGroup(section, group);
@@ -96,7 +72,7 @@ export function createCrossSectionSolver(section: CrossSection): CrossSectionSol
   return {
     section,
     basisCharges,
-    chargesFor: (groupVoltages) => combine(basisCharges, groupVoltages, count),
-    currentsFor: (groupCurrents) => combine(shares, groupCurrents, count),
+    chargesFor: (groupVoltages) => combineColumns(basisCharges, groupVoltages, count),
+    currentsFor: (groupCurrents) => combineColumns(shares, groupCurrents, count),
   };
 }

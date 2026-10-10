@@ -1,5 +1,5 @@
 import { ONE, ZERO } from '../complex';
-import type { Point3 } from '../field-types';
+import type { ComplexSeries, Point3 } from '../field-types';
 import type { Point2 } from '../geometry/bundle';
 import {
   BASIS_COMPONENTS,
@@ -7,7 +7,7 @@ import {
   type BasisFields,
 } from '../optimizer/basis-field-source';
 import { electricFieldAt, magneticFieldAt } from './field';
-import type { ComplexSeries, CrossSectionSolver } from './solver';
+import type { CrossSectionSolver } from './solver';
 
 function groupCentroid(solver: CrossSectionSolver, group: number): Point2 {
   const members = solver.section.wires.filter((wire) => wire.group === group);

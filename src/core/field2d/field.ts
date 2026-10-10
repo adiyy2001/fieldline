@@ -1,8 +1,8 @@
 import { LINE_CHARGE_FIELD_CONSTANT, LINE_CURRENT_FIELD_CONSTANT } from '../constants';
 import { ZERO } from '../complex';
+import type { ComplexSeries } from '../field-types';
 import type { ComplexVector3 } from '../phasor';
 import type { CrossSection } from './cross-section';
-import type { ComplexSeries } from './solver';
 
 export function potentialAt(
   section: CrossSection,
