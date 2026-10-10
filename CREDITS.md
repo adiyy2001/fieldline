@@ -15,6 +15,7 @@ These ship in the production bundle.
 | @ngrx/signals             | 22.0.1  | MIT        |
 | rxjs                      | 7.8.2   | Apache-2.0 |
 | tslib                     | 2.8.1   | 0BSD       |
+| wgpu-matrix               | 3.4.2   | MIT        |
 
 ## Development tools
 
