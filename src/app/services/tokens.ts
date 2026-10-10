@@ -2,6 +2,7 @@ import { InjectionToken } from '@angular/core';
 import { type CpuExecutor } from '../../core/backend/cpu-backend';
 import type { ReadyDevice } from '../../gpu/device';
 import { type GpuFieldBackend, createGpuFieldBackend } from '../../gpu/field-evaluator';
+import { withSolveCache } from './cached-solver';
 import { createCpuWorkerPool } from './cpu-worker-pool';
 import { type SolverClient, createSolverClient } from './solver-client';
 
@@ -10,7 +11,7 @@ export type CpuExecutorFactory = () => CpuExecutor;
 
 export const SOLVER_CLIENT = new InjectionToken<SolverClient>('SOLVER_CLIENT', {
   providedIn: 'root',
-  factory: () => createSolverClient(),
+  factory: () => withSolveCache(createSolverClient()),
 });
 
 export const GPU_BACKEND_FACTORY = new InjectionToken<GpuBackendFactory>('GPU_BACKEND_FACTORY', {
