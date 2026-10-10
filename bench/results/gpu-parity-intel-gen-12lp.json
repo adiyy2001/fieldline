@@ -1,0 +1,508 @@
+{
+  "environment": {
+    "date": "2026-10-10T19:51:51.293Z",
+    "commit": "92aef50",
+    "node": "v24.21.0",
+    "os": "linux 6.6.87.2-microsoft-standard-WSL2",
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+    "logicalCpus": 20
+  },
+  "runHost": "Windows host, headless system Chrome",
+  "browser": "chrome 154.0.8037.98",
+  "adapter": {
+    "vendor": "intel",
+    "architecture": "gen-12lp",
+    "device": "0x46a6",
+    "description": "Intel(R) Iris(R) Xe Graphics",
+    "software": false,
+    "timestampQuery": true,
+    "maxComputeInvocationsPerWorkgroup": 256,
+    "maxStorageBufferBindingSize": 134217728
+  },
+  "target": 0.001,
+  "summary": {
+    "electricMaximum": 0.0006460998854405242,
+    "magneticMaximum": 0.00015670649658294377,
+    "mirrorMaximum": 0.0000305298791498938,
+    "allFinite": true,
+    "withinTarget": true
+  },
+  "runs": [
+    {
+      "tower": "horizontal",
+      "segmentCount": 210,
+      "solveMilliseconds": 23.100000023841858,
+      "scenarios": [
+        {
+          "scenario": "ground",
+          "pointCount": 524288,
+          "electric": {
+            "comparedPoints": 524288,
+            "totalPoints": 524288,
+            "maximum": 0.00019876614375156871,
+            "mean": 0.0000012961263597972185,
+            "worstIndex": 495871
+          },
+          "magnetic": {
+            "comparedPoints": 524288,
+            "totalPoints": 524288,
+            "maximum": 0.000024968976600208958,
+            "mean": 9.36634348763052e-7,
+            "worstIndex": 519467
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": -0.11741682974560064,
+            "y": 1,
+            "z": 905.1612903225806
+          },
+          "worstMagneticPoint": {
+            "x": 10.215264187866921,
+            "y": 1,
+            "z": 951.0263929618768
+          },
+          "gpuKernelMilliseconds": 32.807242,
+          "gpuWallMilliseconds": 38.80000001192093,
+          "cpuMilliseconds": 8523.200000047684
+        },
+        {
+          "scenario": "volume",
+          "pointCount": 524288,
+          "electric": {
+            "comparedPoints": 151044,
+            "totalPoints": 524288,
+            "maximum": 0.000015843043120643274,
+            "mean": 7.132106532769505e-7,
+            "worstIndex": 26598
+          },
+          "magnetic": {
+            "comparedPoints": 152544,
+            "totalPoints": 524288,
+            "maximum": 0.000012742130434159007,
+            "mean": 5.649093808798105e-7,
+            "worstIndex": 485350
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": 10.317460317460316,
+            "y": 29.523809523809522,
+            "z": 296.06299212598424
+          },
+          "worstMagneticPoint": {
+            "x": 10.317460317460316,
+            "y": 29.523809523809522,
+            "z": 595.9055118110236
+          },
+          "gpuKernelMilliseconds": 66.610313,
+          "gpuWallMilliseconds": 78,
+          "cpuMilliseconds": 9176.600000023842
+        },
+        {
+          "scenario": "profile",
+          "pointCount": 241,
+          "electric": {
+            "comparedPoints": 241,
+            "totalPoints": 241,
+            "maximum": 0.000006160434001284857,
+            "mean": 0.0000011154634676374432,
+            "worstIndex": 121
+          },
+          "magnetic": {
+            "comparedPoints": 241,
+            "totalPoints": 241,
+            "maximum": 0.000002965369725295207,
+            "mean": 9.780746699955258e-7,
+            "worstIndex": 4
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": 0.5,
+            "y": 1,
+            "z": 450
+          },
+          "worstMagneticPoint": {
+            "x": -58,
+            "y": 1,
+            "z": 450
+          },
+          "gpuKernelMilliseconds": 3.694248,
+          "gpuWallMilliseconds": 6.899999976158142,
+          "cpuMilliseconds": 5.099999964237213
+        },
+        {
+          "scenario": "clamp",
+          "pointCount": 20,
+          "electric": {
+            "comparedPoints": 19,
+            "totalPoints": 20,
+            "maximum": 0.0006460998854405242,
+            "mean": 0.0000740719062166273,
+            "worstIndex": 0
+          },
+          "magnetic": {
+            "comparedPoints": 19,
+            "totalPoints": 20,
+            "maximum": 0.00015670649658294377,
+            "mean": 0.00001871298125375281,
+            "worstIndex": 0
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": -10,
+            "y": 20.138689606561933,
+            "z": 437.5
+          },
+          "worstMagneticPoint": {
+            "x": -10,
+            "y": 20.138689606561933,
+            "z": 437.5
+          },
+          "gpuKernelMilliseconds": 1.709052,
+          "gpuWallMilliseconds": 4.900000035762787,
+          "cpuMilliseconds": 1.100000023841858
+        }
+      ]
+    },
+    {
+      "tower": "delta",
+      "segmentCount": 210,
+      "solveMilliseconds": 25.30000001192093,
+      "scenarios": [
+        {
+          "scenario": "ground",
+          "pointCount": 524288,
+          "electric": {
+            "comparedPoints": 524288,
+            "totalPoints": 524288,
+            "maximum": 0.000029791721516764486,
+            "mean": 0.0000016309501959609684,
+            "worstIndex": 495871
+          },
+          "magnetic": {
+            "comparedPoints": 524288,
+            "totalPoints": 524288,
+            "maximum": 0.000036252784800834255,
+            "mean": 0.000001492120898178602,
+            "worstIndex": 495872
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": -0.11741682974560064,
+            "y": 1,
+            "z": 905.1612903225806
+          },
+          "worstMagneticPoint": {
+            "x": 0.11741682974559353,
+            "y": 1,
+            "z": 905.1612903225806
+          },
+          "gpuKernelMilliseconds": 63.564915,
+          "gpuWallMilliseconds": 69.60000002384186,
+          "cpuMilliseconds": 8055.100000023842
+        },
+        {
+          "scenario": "volume",
+          "pointCount": 524288,
+          "electric": {
+            "comparedPoints": 132280,
+            "totalPoints": 524288,
+            "maximum": 0.000014294693481830428,
+            "mean": 9.743355031542069e-7,
+            "worstIndex": 20509
+          },
+          "magnetic": {
+            "comparedPoints": 132768,
+            "totalPoints": 524288,
+            "maximum": 0.000009786621547149473,
+            "mean": 7.650432123245449e-7,
+            "worstIndex": 52317
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": -3.9682539682539684,
+            "y": 0,
+            "z": 293.38582677165357
+          },
+          "worstMagneticPoint": {
+            "x": -3.9682539682539684,
+            "y": 46.666666666666664,
+            "z": 312.1259842519685
+          },
+          "gpuKernelMilliseconds": 71.18716,
+          "gpuWallMilliseconds": 88.69999998807907,
+          "cpuMilliseconds": 9962.399999976158
+        },
+        {
+          "scenario": "profile",
+          "pointCount": 241,
+          "electric": {
+            "comparedPoints": 241,
+            "totalPoints": 241,
+            "maximum": 0.000007320994108102729,
+            "mean": 0.0000017842801218354491,
+            "worstIndex": 2
+          },
+          "magnetic": {
+            "comparedPoints": 241,
+            "totalPoints": 241,
+            "maximum": 0.000004696828719827423,
+            "mean": 0.0000014817605507404626,
+            "worstIndex": 8
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": -59,
+            "y": 1,
+            "z": 450
+          },
+          "worstMagneticPoint": {
+            "x": -56,
+            "y": 1,
+            "z": 450
+          },
+          "gpuKernelMilliseconds": 0.40057,
+          "gpuWallMilliseconds": 5.600000023841858,
+          "cpuMilliseconds": 4.600000023841858
+        },
+        {
+          "scenario": "clamp",
+          "pointCount": 20,
+          "electric": {
+            "comparedPoints": 19,
+            "totalPoints": 20,
+            "maximum": 0.00042205326906139126,
+            "mean": 0.00005039831982662636,
+            "worstIndex": 0
+          },
+          "magnetic": {
+            "comparedPoints": 19,
+            "totalPoints": 20,
+            "maximum": 0.0000931738162954376,
+            "mean": 0.000011910135551342921,
+            "worstIndex": 0
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": -4.5,
+            "y": 16.138689606561933,
+            "z": 437.5
+          },
+          "worstMagneticPoint": {
+            "x": -4.5,
+            "y": 16.138689606561933,
+            "z": 437.5
+          },
+          "gpuKernelMilliseconds": 0.39031,
+          "gpuWallMilliseconds": 4.399999976158142,
+          "cpuMilliseconds": 1.199999988079071
+        }
+      ]
+    },
+    {
+      "tower": "double-circuit",
+      "segmentCount": 336,
+      "solveMilliseconds": 81.90000003576279,
+      "scenarios": [
+        {
+          "scenario": "ground",
+          "pointCount": 524288,
+          "electric": {
+            "comparedPoints": 516808,
+            "totalPoints": 524288,
+            "maximum": 0.00004670454903533505,
+            "mean": 0.00000383037236403304,
+            "worstIndex": 80789
+          },
+          "magnetic": {
+            "comparedPoints": 524288,
+            "totalPoints": 524288,
+            "maximum": 0.000019734948927394037,
+            "mean": 9.831910310196676e-7,
+            "worstIndex": 28902
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": 35.10763209393346,
+            "y": 1,
+            "z": 96.53958944281524
+          },
+          "worstMagneticPoint": {
+            "x": -5.988258317025441,
+            "y": 1,
+            "z": -4.164222873900293
+          },
+          "gpuKernelMilliseconds": 76.034056,
+          "gpuWallMilliseconds": 80.30000001192093,
+          "cpuMilliseconds": 12442.699999988079
+        },
+        {
+          "scenario": "volume",
+          "pointCount": 524288,
+          "electric": {
+            "comparedPoints": 112204,
+            "totalPoints": 524288,
+            "maximum": 0.00009266054647662969,
+            "mean": 8.902502232394044e-7,
+            "worstIndex": 223586
+          },
+          "magnetic": {
+            "comparedPoints": 272316,
+            "totalPoints": 524288,
+            "maximum": 0.000010324653650794412,
+            "mean": 7.205938505524531e-7,
+            "worstIndex": 495715
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": 3.9682539682539684,
+            "y": 35.238095238095234,
+            "z": 424.56692913385825
+          },
+          "worstMagneticPoint": {
+            "x": 5.55555555555555,
+            "y": 0.9523809523809523,
+            "z": 603.9370078740158
+          },
+          "gpuKernelMilliseconds": 88.412,
+          "gpuWallMilliseconds": 105,
+          "cpuMilliseconds": 11185.800000011921
+        },
+        {
+          "scenario": "profile",
+          "pointCount": 241,
+          "electric": {
+            "comparedPoints": 233,
+            "totalPoints": 241,
+            "maximum": 0.000023353197081905037,
+            "mean": 0.0000036678154990661184,
+            "worstIndex": 180
+          },
+          "magnetic": {
+            "comparedPoints": 241,
+            "totalPoints": 241,
+            "maximum": 0.000002623480261723917,
+            "mean": 0.0000010009695479856713,
+            "worstIndex": 5
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": 30,
+            "y": 1,
+            "z": 450
+          },
+          "worstMagneticPoint": {
+            "x": -57.5,
+            "y": 1,
+            "z": 450
+          },
+          "gpuKernelMilliseconds": 1.527022,
+          "gpuWallMilliseconds": 3.5,
+          "cpuMilliseconds": 3.600000023841858
+        },
+        {
+          "scenario": "clamp",
+          "pointCount": 20,
+          "electric": {
+            "comparedPoints": 19,
+            "totalPoints": 20,
+            "maximum": 0.00039943878539189064,
+            "mean": 0.00004834282017356868,
+            "worstIndex": 0
+          },
+          "magnetic": {
+            "comparedPoints": 19,
+            "totalPoints": 20,
+            "maximum": 0.00008450983957886078,
+            "mean": 0.00001118281094984255,
+            "worstIndex": 0
+          },
+          "finite": true,
+          "worstElectricPoint": {
+            "x": -6,
+            "y": 28.138689606561933,
+            "z": 437.5
+          },
+          "worstMagneticPoint": {
+            "x": -6,
+            "y": 28.138689606561933,
+            "z": 437.5
+          },
+          "gpuKernelMilliseconds": 1.510668,
+          "gpuWallMilliseconds": 3.400000035762787,
+          "cpuMilliseconds": 1.199999988079071
+        }
+      ]
+    }
+  ],
+  "mirrorRuns": [
+    {
+      "tower": "horizontal",
+      "phasing": [
+        0,
+        1,
+        2
+      ],
+      "mirroredPhasing": [
+        2,
+        1,
+        0
+      ],
+      "electric": {
+        "comparedPoints": 524288,
+        "maximum": 0.000012485346654964052
+      },
+      "magnetic": {
+        "comparedPoints": 524288,
+        "maximum": 0.000003002895012094798
+      }
+    },
+    {
+      "tower": "delta",
+      "phasing": [
+        0,
+        1,
+        2
+      ],
+      "mirroredPhasing": [
+        1,
+        0,
+        2
+      ],
+      "electric": {
+        "comparedPoints": 524288,
+        "maximum": 0.000004115121087364127
+      },
+      "magnetic": {
+        "comparedPoints": 524288,
+        "maximum": 0.0000045162336532554855
+      }
+    },
+    {
+      "tower": "double-circuit",
+      "phasing": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "mirroredPhasing": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2
+      ],
+      "electric": {
+        "comparedPoints": 516810,
+        "maximum": 0.0000305298791498938
+      },
+      "magnetic": {
+        "comparedPoints": 524288,
+        "maximum": 0.0000024093647453272826
+      }
+    }
+  ]
+}

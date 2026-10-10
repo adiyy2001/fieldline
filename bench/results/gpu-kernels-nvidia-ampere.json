@@ -1,0 +1,604 @@
+{
+  "environment": {
+    "date": "2026-10-10T19:50:28.995Z",
+    "commit": "92aef50",
+    "node": "v24.21.0",
+    "os": "linux 6.6.87.2-microsoft-standard-WSL2",
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+    "logicalCpus": 20
+  },
+  "runHost": "Windows host, headless system Chrome",
+  "browser": "chrome 154.0.8037.98",
+  "adapter": {
+    "vendor": "nvidia",
+    "architecture": "ampere",
+    "device": "0x24e0",
+    "description": "NVIDIA GeForce RTX 3070 Ti Laptop GPU",
+    "software": false,
+    "timestampQuery": true,
+    "maxComputeInvocationsPerWorkgroup": 256,
+    "maxStorageBufferBindingSize": 134217728
+  },
+  "rows": [
+    {
+      "kernel": "ground",
+      "dimensions": [
+        128,
+        256
+      ],
+      "pointCount": 32768,
+      "segmentCount": 120,
+      "tiled": true,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 0.105472,
+      "wallMedianMilliseconds": 1.800000011920929,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 120,
+      "tiled": true,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 0.380928,
+      "wallMedianMilliseconds": 3.200000047683716,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        16,
+        16,
+        32
+      ],
+      "pointCount": 8192,
+      "segmentCount": 120,
+      "tiled": true,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 0.043008,
+      "wallMedianMilliseconds": 1.899999976158142,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 120,
+      "tiled": true,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 0.207872,
+      "wallMedianMilliseconds": 2.100000023841858,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        128,
+        256
+      ],
+      "pointCount": 32768,
+      "segmentCount": 120,
+      "tiled": true,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 0.10752,
+      "wallMedianMilliseconds": 1.800000011920929,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 120,
+      "tiled": true,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 0.398336,
+      "wallMedianMilliseconds": 3,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        16,
+        16,
+        32
+      ],
+      "pointCount": 8192,
+      "segmentCount": 120,
+      "tiled": true,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 0.044032,
+      "wallMedianMilliseconds": 1.699999988079071,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 120,
+      "tiled": true,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 0.207872,
+      "wallMedianMilliseconds": 2.099999964237213,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        128,
+        256
+      ],
+      "pointCount": 32768,
+      "segmentCount": 120,
+      "tiled": false,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 0.131072,
+      "wallMedianMilliseconds": 1.899999976158142,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 120,
+      "tiled": false,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 0.482304,
+      "wallMedianMilliseconds": 3.599999964237213,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        16,
+        16,
+        32
+      ],
+      "pointCount": 8192,
+      "segmentCount": 120,
+      "tiled": false,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 0.055296,
+      "wallMedianMilliseconds": 1.7000000476837158,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 120,
+      "tiled": false,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 0.252928,
+      "wallMedianMilliseconds": 1.899999976158142,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        128,
+        256
+      ],
+      "pointCount": 32768,
+      "segmentCount": 120,
+      "tiled": false,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 0.128,
+      "wallMedianMilliseconds": 1.800000011920929,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 120,
+      "tiled": false,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 0.484352,
+      "wallMedianMilliseconds": 3.199999988079071,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        16,
+        16,
+        32
+      ],
+      "pointCount": 8192,
+      "segmentCount": 120,
+      "tiled": false,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 0.05632,
+      "wallMedianMilliseconds": 1.9000000357627869,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 120,
+      "tiled": false,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 0.252928,
+      "wallMedianMilliseconds": 2.100000023841858,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 210,
+      "tiled": true,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 0.64,
+      "wallMedianMilliseconds": 5.600000023841858,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        512,
+        1024
+      ],
+      "pointCount": 524288,
+      "segmentCount": 210,
+      "tiled": true,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 2.453504,
+      "wallMedianMilliseconds": 6.800000011920929,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 210,
+      "tiled": true,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 0.800768,
+      "wallMedianMilliseconds": 4.699999988079071,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        64,
+        64,
+        128
+      ],
+      "pointCount": 524288,
+      "segmentCount": 210,
+      "tiled": true,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 5.936128,
+      "wallMedianMilliseconds": 11.699999988079071,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 210,
+      "tiled": true,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 1.85344,
+      "wallMedianMilliseconds": 7,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        512,
+        1024
+      ],
+      "pointCount": 524288,
+      "segmentCount": 210,
+      "tiled": true,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 7.012352,
+      "wallMedianMilliseconds": 12.599999964237213,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 210,
+      "tiled": true,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 0.969728,
+      "wallMedianMilliseconds": 4.5,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        64,
+        64,
+        128
+      ],
+      "pointCount": 524288,
+      "segmentCount": 210,
+      "tiled": true,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 7.184384,
+      "wallMedianMilliseconds": 12.699999988079071,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 210,
+      "tiled": false,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 2.267136,
+      "wallMedianMilliseconds": 5.5,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        512,
+        1024
+      ],
+      "pointCount": 524288,
+      "segmentCount": 210,
+      "tiled": false,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 8.845312,
+      "wallMedianMilliseconds": 14.800000011920929,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 210,
+      "tiled": false,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 1.17248,
+      "wallMedianMilliseconds": 4.5,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        64,
+        64,
+        128
+      ],
+      "pointCount": 524288,
+      "segmentCount": 210,
+      "tiled": false,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 8.433664,
+      "wallMedianMilliseconds": 14.100000023841858,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 210,
+      "tiled": false,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 2.234368,
+      "wallMedianMilliseconds": 6.199999988079071,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        512,
+        1024
+      ],
+      "pointCount": 524288,
+      "segmentCount": 210,
+      "tiled": false,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 8.44288,
+      "wallMedianMilliseconds": 16,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 210,
+      "tiled": false,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 1.174528,
+      "wallMedianMilliseconds": 4.099999964237213,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        64,
+        64,
+        128
+      ],
+      "pointCount": 524288,
+      "segmentCount": 210,
+      "tiled": false,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 8.435712,
+      "wallMedianMilliseconds": 14.400000035762787,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 390,
+      "tiled": true,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 3.054592,
+      "wallMedianMilliseconds": 7.600000023841858,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 390,
+      "tiled": true,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 1.651712,
+      "wallMedianMilliseconds": 4.699999988079071,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 390,
+      "tiled": true,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 3.19488,
+      "wallMedianMilliseconds": 7.600000023841858,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 390,
+      "tiled": true,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 1.654784,
+      "wallMedianMilliseconds": 4.900000035762787,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 390,
+      "tiled": false,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 3.87072,
+      "wallMedianMilliseconds": 9.699999988079071,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 390,
+      "tiled": false,
+      "workgroup": 8,
+      "gpuMedianMilliseconds": 2.03264,
+      "wallMedianMilliseconds": 4.599999964237213,
+      "samples": 3
+    },
+    {
+      "kernel": "ground",
+      "dimensions": [
+        256,
+        512
+      ],
+      "pointCount": 131072,
+      "segmentCount": 390,
+      "tiled": false,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 3.902464,
+      "wallMedianMilliseconds": 8.5,
+      "samples": 3
+    },
+    {
+      "kernel": "volume",
+      "dimensions": [
+        32,
+        32,
+        64
+      ],
+      "pointCount": 65536,
+      "segmentCount": 390,
+      "tiled": false,
+      "workgroup": 16,
+      "gpuMedianMilliseconds": 2.03264,
+      "wallMedianMilliseconds": 4.699999988079071,
+      "samples": 3
+    }
+  ]
+}

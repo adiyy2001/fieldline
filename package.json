@@ -24,6 +24,7 @@
     "validate:physics": "tsx bench/physics-validation.ts",
     "plot:convergence": "tsx bench/convergence.ts",
     "bench:solve": "tsx bench/solve-timing.ts",
+    "bench:gpu": "pnpm build && tsx bench/gpu-bench.ts",
     "verify": "pnpm format:check && pnpm lint && pnpm check:style && pnpm typecheck && pnpm test:coverage && pnpm build && playwright test"
   },
   "dependencies": {
