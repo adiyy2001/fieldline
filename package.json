@@ -26,6 +26,7 @@
     "bench:solve": "tsx bench/solve-timing.ts",
     "capture:views": "pnpm build && tsx scripts/capture-views.ts",
     "bench:gpu": "pnpm build && tsx bench/gpu-bench.ts",
+    "bench:scene3d": "pnpm build && tsx bench/scene3d-bench.ts",
     "verify": "pnpm format:check && pnpm lint && pnpm check:style && pnpm typecheck && pnpm test:coverage && pnpm build && playwright test"
   },
   "dependencies": {
