@@ -1,0 +1,424 @@
+{
+  "environment": {
+    "date": "2026-10-10T18:53:08.144Z",
+    "commit": "435e16b",
+    "node": "v24.21.0",
+    "os": "linux 6.6.87.2-microsoft-standard-WSL2",
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+    "logicalCpus": 20
+  },
+  "report": {
+    "citation": "Bendik, Cenky, Elesova, Determination of Ground Clearance for EHV 400 kV Overhead Power Lines Based on Electromagnetic Field Limits, Electricity 2026, 7(2), 39, https://doi.org/10.3390/electricity7020039, CC BY 4.0",
+    "tolerance": 0.05,
+    "analytic": [
+      {
+        "id": "line-charge",
+        "description": "Line charge of one conductor above ground, C/m",
+        "value": 0.0000017414190892893804,
+        "reference": 0.0000017414190892893802,
+        "relativeError": 1.216009621784881e-16,
+        "tolerance": 1e-9,
+        "passed": true
+      },
+      {
+        "id": "field-ground",
+        "description": "Vertical E below the conductor at ground level, V/m",
+        "value": 5217.031415471564,
+        "reference": 5217.031415471563,
+        "relativeError": 1.7433184302393543e-16,
+        "tolerance": 1e-9,
+        "passed": true
+      },
+      {
+        "id": "field-one-metre",
+        "description": "Vertical E below the conductor at 1 m, V/m",
+        "value": 5253.514152642695,
+        "reference": 5253.514152642694,
+        "relativeError": 1.7312120522515806e-16,
+        "tolerance": 1e-9,
+        "passed": true
+      },
+      {
+        "id": "field-scatter",
+        "description": "Worst relative error of E over 168 points",
+        "value": 3.953373209427701e-16,
+        "reference": 0,
+        "relativeError": 3.953373209427701e-16,
+        "tolerance": 1e-9,
+        "passed": true
+      },
+      {
+        "id": "potential-scatter",
+        "description": "Worst relative error of the potential over 168 points",
+        "value": 3.732900151157966e-16,
+        "reference": 0,
+        "relativeError": 3.732900151157966e-16,
+        "tolerance": 1e-9,
+        "passed": true
+      },
+      {
+        "id": "flux-density",
+        "description": "B of 1000 A at 10 m, T (mu0 I over 2 pi r)",
+        "value": 0.000019999999997359346,
+        "reference": 0.000019999999997359346,
+        "relativeError": 0,
+        "tolerance": 1e-12,
+        "passed": true
+      },
+      {
+        "id": "flux-density-value",
+        "description": "B of 1000 A at 10 m against the textbook 20 microtesla",
+        "value": 19.999999997359346,
+        "reference": 20,
+        "relativeError": 1.3203269588757394e-10,
+        "tolerance": 1e-8,
+        "passed": true
+      },
+      {
+        "id": "equivalent-radius",
+        "description": "Equivalent radius of three 30.2 mm subconductors at 0.4 m, m",
+        "value": 0.1341834570416214,
+        "reference": 0.1342,
+        "relativeError": 0.00012327092681525316,
+        "tolerance": 0.0005,
+        "passed": true
+      }
+    ],
+    "published": [
+      {
+        "id": "BR-A",
+        "tower": "barrel",
+        "fitted": false,
+        "electric": {
+          "published": 16.68,
+          "reproduced": 16.65804874897003,
+          "deviation": -0.021951251029967978,
+          "equivalentConductor": 16.66387975215912,
+          "equivalentShift": 0.005831003189086914
+        },
+        "magnetic": {
+          "published": 5.62,
+          "reproduced": 5.592136740684509,
+          "deviation": -0.02786325931549083,
+          "equivalentConductor": 5.591369271278381,
+          "equivalentShift": -0.0007674694061279297
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "BR-B",
+        "tower": "barrel",
+        "fitted": false,
+        "electric": {
+          "published": 13.12,
+          "reproduced": 13.09562337398529,
+          "deviation": -0.02437662601470869,
+          "equivalentConductor": 13.097546458244324,
+          "equivalentShift": 0.0019230842590332031
+        },
+        "magnetic": {
+          "published": 5.82,
+          "reproduced": 5.800191521644592,
+          "deviation": -0.019808478355408,
+          "equivalentConductor": 5.799476981163025,
+          "equivalentShift": -0.0007145404815673828
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "BR-C",
+        "tower": "barrel",
+        "fitted": false,
+        "electric": {
+          "published": 11.97,
+          "reproduced": 11.945001482963562,
+          "deviation": -0.024998517036438628,
+          "equivalentConductor": 11.94702160358429,
+          "equivalentShift": 0.002020120620727539
+        },
+        "magnetic": {
+          "published": 6.04,
+          "reproduced": 6.014236092567444,
+          "deviation": -0.025763907432556188,
+          "equivalentConductor": 6.013697981834412,
+          "equivalentShift": -0.0005381107330322266
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "BR-D",
+        "tower": "barrel",
+        "fitted": false,
+        "electric": {
+          "published": 16.39,
+          "reproduced": 16.37060058116913,
+          "deviation": -0.01939941883087215,
+          "equivalentConductor": 16.37688148021698,
+          "equivalentShift": 0.0062808990478515625
+        },
+        "magnetic": {
+          "published": 5.65,
+          "reproduced": 5.623470664024353,
+          "deviation": -0.026529335975647328,
+          "equivalentConductor": 5.622712016105652,
+          "equivalentShift": -0.0007586479187011719
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "BR-E",
+        "tower": "barrel",
+        "fitted": false,
+        "electric": {
+          "published": 12.53,
+          "reproduced": 12.506577372550964,
+          "deviation": -0.023422627449035005,
+          "equivalentConductor": 12.508694529533386,
+          "equivalentShift": 0.002117156982421875
+        },
+        "magnetic": {
+          "published": 5.96,
+          "reproduced": 5.933343052864075,
+          "deviation": -0.026656947135925257,
+          "equivalentConductor": 5.932699084281921,
+          "equivalentShift": -0.0006439685821533203
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "BR-F",
+        "tower": "barrel",
+        "fitted": false,
+        "electric": {
+          "published": 12.53,
+          "reproduced": 12.506577372550964,
+          "deviation": -0.023422627449035005,
+          "equivalentConductor": 12.508694529533386,
+          "equivalentShift": 0.002117156982421875
+        },
+        "magnetic": {
+          "published": 5.96,
+          "reproduced": 5.933343052864075,
+          "deviation": -0.026656947135925257,
+          "equivalentConductor": 5.932699084281921,
+          "equivalentShift": -0.0006439685821533203
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "DN-A",
+        "tower": "danube",
+        "fitted": false,
+        "electric": {
+          "published": 11.59,
+          "reproduced": 11.566656708717346,
+          "deviation": -0.023343291282653666,
+          "equivalentConductor": 11.571067452430725,
+          "equivalentShift": 0.004410743713378906
+        },
+        "magnetic": {
+          "published": 6.15,
+          "reproduced": 6.127618670463562,
+          "deviation": -0.022381329536438344,
+          "equivalentConductor": 6.1273099184036255,
+          "equivalentShift": -0.00030875205993652344
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "DN-B",
+        "tower": "danube",
+        "fitted": false,
+        "electric": {
+          "published": 11.05,
+          "reproduced": 11.03436815738678,
+          "deviation": -0.015631842613220925,
+          "equivalentConductor": 11.038170218467712,
+          "equivalentShift": 0.003802061080932617
+        },
+        "magnetic": {
+          "published": 6.41,
+          "reproduced": 6.389202237129211,
+          "deviation": -0.020797762870788716,
+          "equivalentConductor": 6.388858199119568,
+          "equivalentShift": -0.0003440380096435547
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "DN-C",
+        "tower": "danube",
+        "fitted": false,
+        "electric": {
+          "published": 13.58,
+          "reproduced": 13.555222868919373,
+          "deviation": -0.024777131080627512,
+          "equivalentConductor": 13.564000248908997,
+          "equivalentShift": 0.008777379989624023
+        },
+        "magnetic": {
+          "published": 6.94,
+          "reproduced": 6.919708847999573,
+          "deviation": -0.020291152000427637,
+          "equivalentConductor": 6.919488310813904,
+          "equivalentShift": -0.0002205371856689453
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "DN-D",
+        "tower": "danube",
+        "fitted": false,
+        "electric": {
+          "published": 11.75,
+          "reproduced": 11.734264969825745,
+          "deviation": -0.01573503017425537,
+          "equivalentConductor": 11.738649249076843,
+          "equivalentShift": 0.004384279251098633
+        },
+        "magnetic": {
+          "published": 6.65,
+          "reproduced": 6.624577164649963,
+          "deviation": -0.025422835350036976,
+          "equivalentConductor": 6.624347805976868,
+          "equivalentShift": -0.00022935867309570312
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "DN-E",
+        "tower": "danube",
+        "fitted": false,
+        "electric": {
+          "published": 13.72,
+          "reproduced": 13.70465886592865,
+          "deviation": -0.015341134071350737,
+          "equivalentConductor": 13.713462710380554,
+          "equivalentShift": 0.008803844451904297
+        },
+        "magnetic": {
+          "published": 6.53,
+          "reproduced": 6.5075777769088745,
+          "deviation": -0.022422223091125737,
+          "equivalentConductor": 6.507339596748352,
+          "equivalentShift": -0.00023818016052246094
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "DN-F",
+        "tower": "danube",
+        "fitted": false,
+        "electric": {
+          "published": 11.75,
+          "reproduced": 11.734264969825745,
+          "deviation": -0.01573503017425537,
+          "equivalentConductor": 11.738649249076843,
+          "equivalentShift": 0.004384279251098633
+        },
+        "magnetic": {
+          "published": 6.65,
+          "reproduced": 6.624577164649963,
+          "deviation": -0.025422835350036976,
+          "equivalentConductor": 6.624347805976868,
+          "equivalentShift": -0.00022935867309570312
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "Cat",
+        "tower": "cat",
+        "fitted": false,
+        "electric": {
+          "published": 12.68,
+          "reproduced": 12.666255116462708,
+          "deviation": -0.013744883537292196,
+          "equivalentConductor": 12.667710661888123,
+          "equivalentShift": 0.001455545425415039
+        },
+        "magnetic": {
+          "published": 6.45,
+          "reproduced": 6.425608515739441,
+          "deviation": -0.02439148426055926,
+          "equivalentConductor": 6.425255656242371,
+          "equivalentShift": -0.0003528594970703125
+        },
+        "withinTolerance": true
+      },
+      {
+        "id": "Portal",
+        "tower": "portal",
+        "fitted": true,
+        "electric": {
+          "published": 14.79,
+          "reproduced": 14.76807153224945,
+          "deviation": -0.021928467750548464,
+          "equivalentConductor": 14.76807153224945,
+          "equivalentShift": 0
+        },
+        "magnetic": {
+          "published": 7.22,
+          "reproduced": 7.194471716880798,
+          "deviation": -0.02552828311920141,
+          "equivalentConductor": 7.194127678871155,
+          "equivalentShift": -0.0003440380096435547
+        },
+        "withinTolerance": true
+      }
+    ],
+    "ranking": [
+      {
+        "tower": "barrel",
+        "clearance": 12,
+        "pairsChecked": 14,
+        "violations": 0
+      },
+      {
+        "tower": "danube",
+        "clearance": 12,
+        "pairsChecked": 14,
+        "violations": 0
+      }
+    ],
+    "summary": {
+      "analyticPassed": true,
+      "publishedCases": 14,
+      "fittedCases": 1,
+      "maximumDeviation": 0.02786325931549083,
+      "meanDeviation": 0.022164919559772296,
+      "allWithinTolerance": true,
+      "maximumEquivalentShift": 0.008803844451904297,
+      "rankingViolations": 0
+    },
+    "exposure": [
+      {
+        "id": "icnirp-2010",
+        "label": "ICNIRP 2010, general public",
+        "electricKilovoltsPerMetre": 5,
+        "magneticMicrotesla": 200.00000000000003,
+        "source": "ICNIRP, Health Physics 99(6):818-836, 2010, Table 4, unperturbed rms values at 50 Hz"
+      },
+      {
+        "id": "icnirp-1998",
+        "label": "ICNIRP 1998 and Council Recommendation 1999/519/EC",
+        "electricKilovoltsPerMetre": 5,
+        "magneticMicrotesla": 100.00000000000001,
+        "source": "ICNIRP, Health Physics 74(4):494-522, 1998, Table 7, at 50 Hz"
+      },
+      {
+        "id": "poland-public",
+        "label": "Poland, places accessible to the public",
+        "electricKilovoltsPerMetre": 10,
+        "magneticMicrotesla": 75.3982236762,
+        "source": "Regulation of the Minister of Health of 17 December 2019, Dz.U. 2019 poz. 2448, Table 2"
+      },
+      {
+        "id": "poland-residential",
+        "label": "Poland, residential development areas",
+        "electricKilovoltsPerMetre": 1,
+        "magneticMicrotesla": 75.3982236762,
+        "source": "Regulation of the Minister of Health of 17 December 2019, Dz.U. 2019 poz. 2448, Table 1"
+      }
+    ]
+  }
+}

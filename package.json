@@ -21,6 +21,7 @@
     "build": "ng build",
     "serve:dist": "tsx scripts/serve-dist.ts",
     "e2e": "pnpm build && playwright test",
+    "validate:physics": "tsx bench/physics-validation.ts",
     "verify": "pnpm format:check && pnpm lint && pnpm check:style && pnpm typecheck && pnpm test:coverage && pnpm build && playwright test"
   },
   "dependencies": {
