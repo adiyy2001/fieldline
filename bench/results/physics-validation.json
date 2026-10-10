@@ -1,14 +1,14 @@
 {
   "environment": {
-    "date": "2026-10-10T18:53:08.144Z",
-    "commit": "435e16b",
+    "date": "2026-10-10T19:04:03.327Z",
+    "commit": "b8828b9",
     "node": "v24.21.0",
     "os": "linux 6.6.87.2-microsoft-standard-WSL2",
     "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
     "logicalCpus": 20
   },
   "report": {
-    "citation": "Bendik, Cenky, Elesova, Determination of Ground Clearance for EHV 400 kV Overhead Power Lines Based on Electromagnetic Field Limits, Electricity 2026, 7(2), 39, https://doi.org/10.3390/electricity7020039, CC BY 4.0",
+    "citation": "Bendík, Cenký, Eleschová, Determination of Ground Clearance for EHV 400 kV Overhead Power Lines Based on Electromagnetic Field Limits, Electricity 2026, 7(2), 39, https://doi.org/10.3390/electricity7020039, CC BY 4.0",
     "tolerance": 0.05,
     "analytic": [
       {
