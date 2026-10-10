@@ -80,7 +80,6 @@ function combine(
 }
 
 function currentShares(section: CrossSection): readonly Float64Array[] {
-  const count = section.wires.length;
   return Array.from({ length: section.groupCount }, (_, group) => {
     const share = 1 / wiresInGroup(section, group);
     return Float64Array.from(section.wires, (wire) => (wire.group === group ? share : 0));

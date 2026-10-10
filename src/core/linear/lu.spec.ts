@@ -53,7 +53,9 @@ describe('LU factorization', () => {
   it('rejects arrays of the wrong length', () => {
     expect(() => factorLu(new Float64Array(5), 2)).toThrow(RangeError);
     const factors = factorLu(Float64Array.from([1, 0, 0, 1]), 2);
-    expect(() => solveLu(factors, new Float64Array(3))).toThrow(RangeError);
+    expect(() => {
+      solveLu(factors, new Float64Array(3));
+    }).toThrow(RangeError);
   });
 
   it('leaves a small residual on diagonally dominant random systems', () => {
