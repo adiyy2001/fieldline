@@ -340,7 +340,7 @@ At mid-span of a long straight line the 3D model has to give the 2D answer. `pnp
 
 What the numbers say:
 
-- With no sag the 3D peak E is within 7.2e-6 of the 2D value for 300 m spans and within 7.2e-5 for 100 m spans. The peak B is within 2.0e-4 and 1.8e-3. The remaining difference is the finite length of the line, and it falls as the span grows. On a straight line the result hardly depends on the segment count: it changes by less than 1e-8 between 4 and 24 segments per span.
+- With no sag the 3D peak E is within 7.2e-6 of the 2D value for 300 m spans and within 7.2e-5 for 100 m spans. The peak B is within 2.0e-4 and 1.8e-3. The remaining difference is the finite length of the line, and it falls as the span grows. On a straight line the result hardly depends on the segment count: it is the same to six digits from 4 to 48 segments per span.
 - The ratio of 3D to 2D rises monotonically towards 1 as the sag goes to zero and as the span grows at a fixed sag. The sag lifts the conductor away from mid-span, so the 3D field is lower than the 2D field of the mid-span cross-section. At 10 m sag and 300 m spans the ratio is 0.9936 for E and 0.9873 for B at the default 12 segments.
 - Chords lie above the catenary, so a coarse discretization lowers the field slightly. The ratio approaches its limit from below: 0.9972 (E) and 0.9909 (B) at 48 segments per span. Twelve segments differ from 48 by 0.36 percent in E and 0.37 percent in B.
 - Removing the run-outs changes the mid-span peak E by 3e-5 and the peak B by 9.6e-4, relative.
