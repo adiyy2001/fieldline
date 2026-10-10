@@ -26,6 +26,7 @@ import type { GpuBackendOptions, GpuFieldBackend } from '../../gpu/field-evaluat
 import type { SolverClient } from '../services/solver-client';
 import type {
   AdapterReport,
+  AppBridge,
   CpuPoolRequest,
   CpuPoolRun,
   FieldKind,
@@ -48,6 +49,7 @@ export interface AutomationDependencies {
   readonly createCpuExecutor: () => CpuExecutor;
   readonly clock: () => number;
   readonly nextFrame: () => Promise<void>;
+  readonly app?: AppBridge;
 }
 
 const ALL_SCENARIOS: readonly ParityScenario[] = ['ground', 'volume', 'profile', 'clamp'];
@@ -338,7 +340,18 @@ export function createAutomationApi(dependencies: AutomationDependencies): Field
     };
   }
 
+  const DEFAULT_CAPTURE_WIDTH = 256;
+  const DEFAULT_CAPTURE_HEIGHT = 96;
+
+  function bridge(): AppBridge {
+    if (dependencies.app === undefined) {
+      throw new Error('The application is not connected to the automation hook');
+    }
+    return dependencies.app;
+  }
+
   async function settle(): Promise<void> {
+    await dependencies.app?.settled();
     while (pending.size > 0) {
       await Promise.allSettled([...pending]);
     }
@@ -355,7 +368,34 @@ export function createAutomationApi(dependencies: AutomationDependencies): Field
     adapter: () => track(adapter()),
     settle,
     timings: () => [...recorded],
-    readField: (kind) => fields.get(kind) ?? null,
+    readField: (kind) =>
+      fields.get(kind) ??
+      (kind === 'ground' ? (dependencies.app?.groundFrame()?.values ?? null) : null),
+    appState: () => dependencies.app?.snapshot() ?? null,
+    groundFrame: () => dependencies.app?.groundFrame() ?? null,
+    setParameters: async (patch) => {
+      bridge().setParameters(patch);
+      await settle();
+    },
+    setSettings: async (patch) => {
+      bridge().setSettings(patch);
+      await settle();
+    },
+    setView: async (view) => {
+      bridge().setSettings({ view });
+      await settle();
+    },
+    setPhase: async (degrees) => {
+      bridge().setPhase(degrees);
+      await settle();
+    },
+    captureFrame: async (request) => {
+      await settle();
+      return bridge().capture({
+        width: request?.width ?? DEFAULT_CAPTURE_WIDTH,
+        height: request?.height ?? DEFAULT_CAPTURE_HEIGHT,
+      });
+    },
     runParity: (request) => track(runParity(request)),
     runMirror: (request) => track(runMirror(request)),
     runKernelBench: (request) => track(runKernelBench(request)),

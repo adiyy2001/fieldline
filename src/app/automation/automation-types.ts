@@ -1,7 +1,12 @@
 import type { GridSize, VolumeSize } from '../../core/backend/regions';
+import type { GridSpec } from '../../core/backend/types';
+import type { RmsMaxima } from '../../core/heatmap/scalar';
+import type { ViewSettings } from '../../core/model/settings';
 import type { Point3 } from '../../core/field-types';
 import type { TowerKind } from '../../core/geometry/tower';
 import type { LineParameters } from '../../core/model/parameters';
+import type { FieldStatus, Probe } from '../state/field-store';
+import type { FrameBackend, FrameTimings, Quality } from '../services/field-pipeline';
 import type { MirrorDifference, ParityStatistics } from '../../core/validation/parity';
 import type { AdapterSummary } from '../../gpu/device';
 
@@ -94,12 +99,60 @@ export interface AdapterReport extends AdapterSummary {
   readonly maxStorageBufferBindingSize: number;
 }
 
+export interface AppSnapshot {
+  readonly status: FieldStatus;
+  readonly backend: FrameBackend | null;
+  readonly quality: Quality | null;
+  readonly grid: GridSpec | null;
+  readonly maxima: RmsMaxima | null;
+  readonly timings: FrameTimings | null;
+  readonly parameters: LineParameters;
+  readonly settings: ViewSettings;
+  readonly playing: boolean;
+  readonly probe: Probe;
+  readonly issues: readonly string[];
+  readonly message: string | null;
+}
+
+export interface GroundFrame {
+  readonly grid: GridSpec;
+  readonly values: Float32Array;
+}
+
+export interface FrameCaptureRequest {
+  readonly width?: number;
+  readonly height?: number;
+}
+
+export interface FrameCapture {
+  readonly width: number;
+  readonly height: number;
+  readonly pixels: Uint8Array;
+}
+
+export interface AppBridge {
+  setParameters(patch: Partial<LineParameters>): void;
+  setSettings(patch: Partial<ViewSettings>): void;
+  setPhase(degrees: number): void;
+  snapshot(): AppSnapshot;
+  settled(): Promise<void>;
+  groundFrame(): GroundFrame | null;
+  capture(request: { width: number; height: number }): Promise<FrameCapture | null>;
+}
+
 export interface FieldlineAutomation {
   readonly ready: Promise<void>;
   adapter(): Promise<AdapterReport | null>;
   settle(): Promise<void>;
   timings(): readonly ScenarioTiming[];
   readField(kind: FieldKind): Float32Array | null;
+  appState(): AppSnapshot | null;
+  groundFrame(): GroundFrame | null;
+  setParameters(patch: Partial<LineParameters>): Promise<void>;
+  setSettings(patch: Partial<ViewSettings>): Promise<void>;
+  setView(view: ViewSettings['view']): Promise<void>;
+  setPhase(degrees: number): Promise<void>;
+  captureFrame(request?: FrameCaptureRequest): Promise<FrameCapture | null>;
   runParity(request: ParityRequest): Promise<ParityRun>;
   runMirror(request: MirrorRequest): Promise<MirrorRun>;
   runKernelBench(request: KernelBenchRequest): Promise<readonly KernelBenchRow[]>;

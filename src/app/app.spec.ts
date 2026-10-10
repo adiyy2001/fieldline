@@ -5,6 +5,9 @@ import { fakeDevice, neverLost, swiftShaderAdapterInfo } from '../gpu/testing/fa
 import { App } from './app';
 import { appConfig } from './app.config';
 import { DEVICE_ACQUIRER, SMOKE_RUNNER } from './services/gpu-status';
+import { GPU_BACKEND_FACTORY } from './services/tokens';
+import { fakeGpuBackend } from './testing/doubles';
+import { storeProviders } from './testing/store-providers';
 
 const hardwareAdapter = {
   vendor: 'nvidia',
@@ -28,6 +31,8 @@ async function mount(
   TestBed.configureTestingModule({
     providers: [
       ...appConfig.providers,
+      ...storeProviders(),
+      { provide: GPU_BACKEND_FACTORY, useValue: () => fakeGpuBackend() },
       {
         provide: DEVICE_ACQUIRER,
         useValue: () =>
@@ -52,7 +57,7 @@ async function mount(
 }
 
 function statusRegion(root: HTMLElement): HTMLElement {
-  const region = root.querySelector<HTMLElement>('[role="status"]');
+  const region = root.querySelector<HTMLElement>('[role="status"][aria-label="Graphics"]');
   if (region === null) {
     throw new Error('the status region is missing');
   }

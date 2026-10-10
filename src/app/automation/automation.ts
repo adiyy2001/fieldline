@@ -1,16 +1,33 @@
 import { Injectable, inject } from '@angular/core';
 import { createGpuFieldBackend } from '../../gpu/field-evaluator';
-import { createCpuWorkerPool } from '../services/cpu-worker-pool';
+import { CPU_EXECUTOR_FACTORY, SOLVER_CLIENT } from '../services/tokens';
 import { GpuStatus } from '../services/gpu-status';
-import { createSolverClient } from '../services/solver-client';
+import { HeatmapCapture } from '../services/heatmap-capture';
+import { FieldStore } from '../state/field-store';
 import { createAutomationApi } from './automation-api';
-import type { FieldlineAutomation } from './automation-types';
+import type { AppBridge, FieldlineAutomation } from './automation-types';
 
 export const AUTOMATION_QUERY_PARAMETER = 'automation';
 
 declare global {
   interface Window {
     fieldline?: FieldlineAutomation;
+  }
+}
+
+const SETTLE_POLL_MILLISECONDS = 8;
+const SETTLE_TIMEOUT_MILLISECONDS = 120_000;
+
+export async function waitForSettled(
+  condition: () => boolean,
+  timeoutMilliseconds = SETTLE_TIMEOUT_MILLISECONDS,
+): Promise<void> {
+  const deadline = performance.now() + timeoutMilliseconds;
+  while (!condition()) {
+    if (performance.now() > deadline) {
+      throw new Error('The application did not settle in time');
+    }
+    await new Promise<void>((resolve) => setTimeout(resolve, SETTLE_POLL_MILLISECONDS));
   }
 }
 
@@ -35,14 +52,57 @@ export function installAutomation(
 @Injectable({ providedIn: 'root' })
 export class Automation {
   private readonly gpu = inject(GpuStatus);
+  private readonly store = inject(FieldStore);
+  private readonly capture = inject(HeatmapCapture);
+  private readonly solver = inject(SOLVER_CLIENT);
+  private readonly cpuExecutor = inject(CPU_EXECUTOR_FACTORY);
+
+  private bridge(): AppBridge {
+    const store = this.store;
+    return {
+      setParameters: (patch) => {
+        store.setParameters(patch);
+      },
+      setSettings: (patch) => {
+        store.setSettings(patch);
+      },
+      setPhase: (degrees) => {
+        store.setPhase(degrees);
+      },
+      settled: () => waitForSettled(() => store.status() !== 'solving'),
+      snapshot: () => {
+        const frame = store.frame();
+        return {
+          status: store.status(),
+          backend: frame?.backend ?? null,
+          quality: frame?.quality ?? null,
+          grid: frame?.grid ?? null,
+          maxima: frame?.maxima ?? null,
+          timings: frame?.timings ?? null,
+          parameters: store.parameters(),
+          settings: store.settings(),
+          playing: store.playing(),
+          probe: store.probe(),
+          issues: store.issues().map((issue) => issue.message),
+          message: store.message(),
+        };
+      },
+      groundFrame: () => {
+        const frame = store.frame();
+        return frame === null ? null : { grid: frame.grid, values: frame.values };
+      },
+      capture: (request) => this.capture.capture(request),
+    };
+  }
 
   installIfRequested(host: AutomationHost, search: string): boolean {
     return installAutomation(host, search, () =>
       createAutomationApi({
         acquireDevice: () => this.gpu.deviceResult,
-        solver: createSolverClient(),
+        solver: this.solver,
         createGpuBackend: createGpuFieldBackend,
-        createCpuExecutor: () => createCpuWorkerPool(),
+        createCpuExecutor: () => this.cpuExecutor(),
+        app: this.bridge(),
         clock: () => performance.now(),
         nextFrame: () =>
           new Promise((resolve) =>
