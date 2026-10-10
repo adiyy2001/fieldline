@@ -1,7 +1,7 @@
 {
   "environment": {
-    "date": "2026-10-10T19:48:43.064Z",
-    "commit": "92aef50",
+    "date": "2026-10-10T23:40:19.001Z",
+    "commit": "4477157",
     "node": "v24.21.0",
     "os": "linux 6.6.87.2-microsoft-standard-WSL2",
     "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
@@ -30,8 +30,8 @@
       "segmentCount": 120,
       "tiled": true,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 43.26999,
-      "wallMedianMilliseconds": 45.40000000037253,
+      "gpuMedianMilliseconds": 49.288105,
+      "wallMedianMilliseconds": 107.89999999850988,
       "samples": 3
     },
     {
@@ -44,8 +44,8 @@
       "segmentCount": 120,
       "tiled": true,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 168.167475,
-      "wallMedianMilliseconds": 171.70000000018626,
+      "gpuMedianMilliseconds": 163.218052,
+      "wallMedianMilliseconds": 165.69999999925494,
       "samples": 3
     },
     {
@@ -59,8 +59,8 @@
       "segmentCount": 120,
       "tiled": true,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 12.756866,
-      "wallMedianMilliseconds": 14.600000000093132,
+      "gpuMedianMilliseconds": 8.999417,
+      "wallMedianMilliseconds": 10.600000001490116,
       "samples": 3
     },
     {
@@ -74,8 +74,8 @@
       "segmentCount": 120,
       "tiled": true,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 106.497097,
-      "wallMedianMilliseconds": 108.79999999981374,
+      "gpuMedianMilliseconds": 82.216662,
+      "wallMedianMilliseconds": 84,
       "samples": 3
     },
     {
@@ -88,8 +88,8 @@
       "segmentCount": 120,
       "tiled": true,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 33.901074,
-      "wallMedianMilliseconds": 35.700000000186265,
+      "gpuMedianMilliseconds": 43.320166,
+      "wallMedianMilliseconds": 45,
       "samples": 3
     },
     {
@@ -102,8 +102,8 @@
       "segmentCount": 120,
       "tiled": true,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 167.266032,
-      "wallMedianMilliseconds": 169.79999999981374,
+      "gpuMedianMilliseconds": 120.014456,
+      "wallMedianMilliseconds": 122.89999999850988,
       "samples": 3
     },
     {
@@ -117,8 +117,8 @@
       "segmentCount": 120,
       "tiled": true,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 10.753048,
-      "wallMedianMilliseconds": 12.700000000186265,
+      "gpuMedianMilliseconds": 6.915343,
+      "wallMedianMilliseconds": 8.699999999254942,
       "samples": 3
     },
     {
@@ -132,8 +132,8 @@
       "segmentCount": 120,
       "tiled": true,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 64.184843,
-      "wallMedianMilliseconds": 66.1999999997206,
+      "gpuMedianMilliseconds": 59.155537,
+      "wallMedianMilliseconds": 61,
       "samples": 3
     },
     {
@@ -146,8 +146,8 @@
       "segmentCount": 120,
       "tiled": false,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 24.845603,
-      "wallMedianMilliseconds": 26.800000000279397,
+      "gpuMedianMilliseconds": 23.228466,
+      "wallMedianMilliseconds": 24.699999999254942,
       "samples": 3
     },
     {
@@ -160,8 +160,8 @@
       "segmentCount": 120,
       "tiled": false,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 100.797892,
-      "wallMedianMilliseconds": 103.5,
+      "gpuMedianMilliseconds": 93.374593,
+      "wallMedianMilliseconds": 96,
       "samples": 3
     },
     {
@@ -175,8 +175,8 @@
       "segmentCount": 120,
       "tiled": false,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 5.889691,
-      "wallMedianMilliseconds": 7.300000000279397,
+      "gpuMedianMilliseconds": 5.301257,
+      "wallMedianMilliseconds": 7.199999999254942,
       "samples": 3
     },
     {
@@ -190,8 +190,8 @@
       "segmentCount": 120,
       "tiled": false,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 64.625163,
-      "wallMedianMilliseconds": 66.3000000002794,
+      "gpuMedianMilliseconds": 59.359383,
+      "wallMedianMilliseconds": 60.70000000298023,
       "samples": 3
     },
     {
@@ -204,8 +204,8 @@
       "segmentCount": 120,
       "tiled": false,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 30.178737,
-      "wallMedianMilliseconds": 32.09999999962747,
+      "gpuMedianMilliseconds": 28.318184,
+      "wallMedianMilliseconds": 30,
       "samples": 3
     },
     {
@@ -218,8 +218,8 @@
       "segmentCount": 120,
       "tiled": false,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 131.071969,
-      "wallMedianMilliseconds": 133.10000000009313,
+      "gpuMedianMilliseconds": 112.174113,
+      "wallMedianMilliseconds": 114.19999999925494,
       "samples": 3
     },
     {
@@ -233,8 +233,8 @@
       "segmentCount": 120,
       "tiled": false,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 6.427723,
-      "wallMedianMilliseconds": 8,
+      "gpuMedianMilliseconds": 6.004184,
+      "wallMedianMilliseconds": 7,
       "samples": 3
     },
     {
@@ -248,8 +248,8 @@
       "segmentCount": 120,
       "tiled": false,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 62.337084,
-      "wallMedianMilliseconds": 63.799999999813735,
+      "gpuMedianMilliseconds": 55.654169,
+      "wallMedianMilliseconds": 57.899999998509884,
       "samples": 3
     },
     {
@@ -262,8 +262,8 @@
       "segmentCount": 210,
       "tiled": true,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 295.123946,
-      "wallMedianMilliseconds": 298,
+      "gpuMedianMilliseconds": 258.336474,
+      "wallMedianMilliseconds": 261.0999999977648,
       "samples": 3
     },
     {
@@ -276,8 +276,8 @@
       "segmentCount": 210,
       "tiled": true,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 994.502045,
-      "wallMedianMilliseconds": 1000.1000000000931,
+      "gpuMedianMilliseconds": 1012.572314,
+      "wallMedianMilliseconds": 1016.5999999977648,
       "samples": 3
     },
     {
@@ -291,8 +291,8 @@
       "segmentCount": 210,
       "tiled": true,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 141.345697,
-      "wallMedianMilliseconds": 143.39999999990687,
+      "gpuMedianMilliseconds": 94.299759,
+      "wallMedianMilliseconds": 96.19999999925494,
       "samples": 3
     },
     {
@@ -306,8 +306,8 @@
       "segmentCount": 210,
       "tiled": true,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 1023.023143,
-      "wallMedianMilliseconds": 1028.6999999997206,
+      "gpuMedianMilliseconds": 782.558701,
+      "wallMedianMilliseconds": 787.5,
       "samples": 3
     },
     {
@@ -320,8 +320,8 @@
       "segmentCount": 210,
       "tiled": true,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 310.646907,
-      "wallMedianMilliseconds": 313.60000000009313,
+      "gpuMedianMilliseconds": 195.270065,
+      "wallMedianMilliseconds": 197.80000000074506,
       "samples": 3
     },
     {
@@ -334,8 +334,8 @@
       "segmentCount": 210,
       "tiled": true,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 1300.013515,
-      "wallMedianMilliseconds": 1308.2000000001863,
+      "gpuMedianMilliseconds": 778.727577,
+      "wallMedianMilliseconds": 783.3999999985099,
       "samples": 3
     },
     {
@@ -349,8 +349,8 @@
       "segmentCount": 210,
       "tiled": true,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 139.827209,
-      "wallMedianMilliseconds": 141.79999999981374,
+      "gpuMedianMilliseconds": 94.127446,
+      "wallMedianMilliseconds": 96.5,
       "samples": 3
     },
     {
@@ -364,8 +364,8 @@
       "segmentCount": 210,
       "tiled": true,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 914.632323,
-      "wallMedianMilliseconds": 921,
+      "gpuMedianMilliseconds": 822.952089,
+      "wallMedianMilliseconds": 829.8000000007451,
       "samples": 3
     },
     {
@@ -378,8 +378,8 @@
       "segmentCount": 210,
       "tiled": false,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 226.712227,
-      "wallMedianMilliseconds": 230.60000000009313,
+      "gpuMedianMilliseconds": 157.996147,
+      "wallMedianMilliseconds": 161.10000000149012,
       "samples": 3
     },
     {
@@ -392,8 +392,8 @@
       "segmentCount": 210,
       "tiled": false,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 974.056988,
-      "wallMedianMilliseconds": 979.8999999999069,
+      "gpuMedianMilliseconds": 633.63553,
+      "wallMedianMilliseconds": 639.5,
       "samples": 3
     },
     {
@@ -407,8 +407,8 @@
       "segmentCount": 210,
       "tiled": false,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 99.662335,
-      "wallMedianMilliseconds": 101.79999999981374,
+      "gpuMedianMilliseconds": 80.680467,
+      "wallMedianMilliseconds": 82.60000000149012,
       "samples": 3
     },
     {
@@ -422,8 +422,8 @@
       "segmentCount": 210,
       "tiled": false,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 879.700993,
-      "wallMedianMilliseconds": 884.3999999999069,
+      "gpuMedianMilliseconds": 632.583485,
+      "wallMedianMilliseconds": 637.3000000007451,
       "samples": 3
     },
     {
@@ -436,8 +436,8 @@
       "segmentCount": 210,
       "tiled": false,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 207.76447,
-      "wallMedianMilliseconds": 210.29999999981374,
+      "gpuMedianMilliseconds": 159.652529,
+      "wallMedianMilliseconds": 162.5,
       "samples": 3
     },
     {
@@ -450,8 +450,8 @@
       "segmentCount": 210,
       "tiled": false,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 835.241405,
-      "wallMedianMilliseconds": 841,
+      "gpuMedianMilliseconds": 632.292973,
+      "wallMedianMilliseconds": 637.5,
       "samples": 3
     },
     {
@@ -465,8 +465,8 @@
       "segmentCount": 210,
       "tiled": false,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 99.803529,
-      "wallMedianMilliseconds": 102.39999999990687,
+      "gpuMedianMilliseconds": 78.593482,
+      "wallMedianMilliseconds": 80.30000000074506,
       "samples": 3
     },
     {
@@ -480,8 +480,8 @@
       "segmentCount": 210,
       "tiled": false,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 874.234792,
-      "wallMedianMilliseconds": 879.7999999998137,
+      "gpuMedianMilliseconds": 647.212257,
+      "wallMedianMilliseconds": 651.8000000007451,
       "samples": 3
     },
     {
@@ -494,8 +494,8 @@
       "segmentCount": 390,
       "tiled": true,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 735.052377,
-      "wallMedianMilliseconds": 742.7000000001863,
+      "gpuMedianMilliseconds": 325.519664,
+      "wallMedianMilliseconds": 328.0999999977648,
       "samples": 3
     },
     {
@@ -509,8 +509,8 @@
       "segmentCount": 390,
       "tiled": true,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 379.69526,
-      "wallMedianMilliseconds": 383.39999999990687,
+      "gpuMedianMilliseconds": 163.070608,
+      "wallMedianMilliseconds": 165.5,
       "samples": 3
     },
     {
@@ -523,8 +523,8 @@
       "segmentCount": 390,
       "tiled": true,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 595.340579,
-      "wallMedianMilliseconds": 599.1000000000931,
+      "gpuMedianMilliseconds": 323.971178,
+      "wallMedianMilliseconds": 327.0999999977648,
       "samples": 3
     },
     {
@@ -538,8 +538,8 @@
       "segmentCount": 390,
       "tiled": true,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 210.355293,
-      "wallMedianMilliseconds": 212.90000000037253,
+      "gpuMedianMilliseconds": 158.797805,
+      "wallMedianMilliseconds": 160.40000000223517,
       "samples": 3
     },
     {
@@ -552,8 +552,8 @@
       "segmentCount": 390,
       "tiled": false,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 409.474802,
-      "wallMedianMilliseconds": 413.1999999997206,
+      "gpuMedianMilliseconds": 294.656373,
+      "wallMedianMilliseconds": 297.8999999985099,
       "samples": 3
     },
     {
@@ -567,8 +567,8 @@
       "segmentCount": 390,
       "tiled": false,
       "workgroup": 8,
-      "gpuMedianMilliseconds": 243.899762,
-      "wallMedianMilliseconds": 247.20000000018626,
+      "gpuMedianMilliseconds": 146.268902,
+      "wallMedianMilliseconds": 147.80000000074506,
       "samples": 3
     },
     {
@@ -581,8 +581,8 @@
       "segmentCount": 390,
       "tiled": false,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 577.388518,
-      "wallMedianMilliseconds": 580.8000000002794,
+      "gpuMedianMilliseconds": 292.270793,
+      "wallMedianMilliseconds": 294.8999999985099,
       "samples": 3
     },
     {
@@ -596,8 +596,8 @@
       "segmentCount": 390,
       "tiled": false,
       "workgroup": 16,
-      "gpuMedianMilliseconds": 181.644864,
-      "wallMedianMilliseconds": 183.89999999990687,
+      "gpuMedianMilliseconds": 149.241706,
+      "wallMedianMilliseconds": 151.5,
       "samples": 3
     }
   ]
