@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { formatNumber } from '../core/exposure/contour-levels';
 import { CPU_GRID_SIZE } from '../core/backend/regions';
 import {
@@ -23,6 +23,12 @@ import { ViewTabs } from './shell/view-tabs';
 import { FieldStore } from './state/field-store';
 import { THREE_D_NOTICE, isThreeDView } from './state/views';
 
+const NARROW_LAYOUT_QUERY = '(max-width: 62rem)';
+
+function startsNarrow(): boolean {
+  return typeof window.matchMedia === 'function' && window.matchMedia(NARROW_LAYOUT_QUERY).matches;
+}
+
 type ChipState = 'solving' | 'ready' | 'invalid' | 'failed';
 
 @Component({
@@ -45,6 +51,14 @@ export class App {
   private readonly backends = inject(FieldBackends);
   protected readonly store = inject(FieldStore);
   protected readonly ui = inject(UiState);
+
+  protected readonly parametersOpen = signal(!startsNarrow());
+
+  protected toggleParameters(event: Event): void {
+    if (event.target instanceof HTMLDetailsElement) {
+      this.parametersOpen.set(event.target.open);
+    }
+  }
 
   protected readonly status = computed(() => this.gpu.state().status);
   protected readonly text = computed(() => describeGpuState(this.gpu.state()));

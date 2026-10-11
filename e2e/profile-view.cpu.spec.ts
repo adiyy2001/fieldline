@@ -35,4 +35,20 @@ test.describe('the profile view without a graphics adapter', () => {
     );
     expect(overflow).toBeLessThanOrEqual(0);
   });
+
+  test('the parameter panel starts collapsed on a phone and opens on demand', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await openProfile(page);
+    const voltage = page.getByLabel('Line voltage', { exact: true });
+    await expect(voltage).toBeHidden();
+    await page.getByText('Parameters', { exact: true }).click();
+    await expect(voltage).toBeVisible();
+  });
+
+  test('the parameter panel is open on a wide screen without a toggle', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await openProfile(page);
+    await expect(page.getByLabel('Line voltage', { exact: true })).toBeVisible();
+    await expect(page.getByText('Parameters', { exact: true })).toBeHidden();
+  });
 });

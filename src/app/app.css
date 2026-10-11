@@ -206,7 +206,34 @@ kbd {
   color: var(--danger);
 }
 
+.parameters > summary {
+  display: none;
+}
+
+@media (min-width: 62.01rem) {
+  .parameters::details-content {
+    content-visibility: visible;
+    display: block;
+  }
+}
+
 @media (max-width: 62rem) {
+  .parameters > summary {
+    display: block;
+    min-height: 2.75rem;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .parameters[open] > summary {
+    margin-bottom: 0.75rem;
+  }
+
   .workspace {
     grid-template-columns: minmax(0, 1fr);
   }

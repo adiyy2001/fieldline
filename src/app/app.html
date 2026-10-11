@@ -43,7 +43,10 @@
     }
   </div>
   <aside class="sidebar" aria-label="Parameters">
-    <fl-parameter-panel />
+    <details class="parameters" [open]="parametersOpen()" (toggle)="toggleParameters($event)">
+      <summary>Parameters</summary>
+      <fl-parameter-panel />
+    </details>
   </aside>
 </main>
 <footer class="graphics">
