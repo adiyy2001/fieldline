@@ -32,6 +32,8 @@ import {
   volumeSizeFor,
 } from './scene3d-model';
 
+const CAPTURE_SECONDS = 0;
+
 export interface SceneInput {
   readonly source: FieldSource;
   readonly geometry: LineGeometry;
@@ -313,7 +315,7 @@ export function createScene3dEngine(
     },
     capture(command, width, height) {
       configure(command);
-      return renderer.capture({ pose: command.pose, seconds: command.seconds }, width, height);
+      return renderer.capture({ pose: command.pose, seconds: CAPTURE_SECONDS }, width, height);
     },
     async readLines() {
       if (lines === null) {
