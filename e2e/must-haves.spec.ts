@@ -19,10 +19,14 @@ async function open(page: Page, query = ''): Promise<void> {
   await callAutomation(page, 'settle');
 }
 
-async function type(page: Page, label: string, value: string): Promise<void> {
+async function enter(page: Page, label: string, value: string): Promise<void> {
   const field = page.getByLabel(label, { exact: true });
   await field.fill(value);
   await field.blur();
+}
+
+async function type(page: Page, label: string, value: string): Promise<void> {
+  await enter(page, label, value);
   await callAutomation(page, 'settle');
 }
 
@@ -63,10 +67,9 @@ test.describe('must have: modelling', () => {
   test('parametric towers: horizontal, delta and double circuit with editable dimensions', async ({
     page,
   }) => {
-    await open(page);
+    await open(page, 'coarse-grid');
     for (const kind of TOWER_KINDS) {
       await page.selectOption('#fl-tower', kind);
-      await callAutomation(page, 'settle');
       const state = await callAutomation(page, 'appState');
       expect(state?.parameters.tower.kind).toBe(kind);
       await expect(page.locator('#fl-phasing-0')).toBeVisible();
@@ -76,25 +79,25 @@ test.describe('must have: modelling', () => {
       const value = Number(await dimension.inputValue());
       await dimension.fill(String(value + 1));
       await dimension.blur();
-      await callAutomation(page, 'settle');
       expect(JSON.stringify((await callAutomation(page, 'appState'))?.parameters.tower)).not.toBe(
         before,
       );
     }
+    await callAutomation(page, 'settle');
+    expect((await callAutomation(page, 'appState'))?.status).toBe('ready');
   });
 
   test('two or three spans, catenary sag, bundles of one to four and shield wires', async ({
     page,
   }) => {
-    await open(page);
+    await open(page, 'coarse-grid');
     for (const count of [2, 3]) {
       await page.selectOption('#fl-spans', String(count));
-      await callAutomation(page, 'settle');
       expect((await callAutomation(page, 'appState'))?.parameters.spanLengths).toHaveLength(count);
     }
-    await type(page, 'Sag', '14');
+    await enter(page, 'Sag', '14');
     expect((await callAutomation(page, 'appState'))?.parameters.phaseSag).toBe(14);
-    await type(page, 'Shield wire sag ratio', '0.8');
+    await enter(page, 'Shield wire sag ratio', '0.8');
     expect((await callAutomation(page, 'appState'))?.parameters.shieldSagRatio).toBe(0.8);
     const peaks: number[] = [];
     for (const count of [1, 2, 3, 4]) {
@@ -114,7 +117,9 @@ test.describe('must have: modelling', () => {
     expect(state?.playing).toBe(true);
     const start = state?.settings.phaseDegrees ?? 0;
     await expect
-      .poll(async () => (await callAutomation(page, 'appState'))?.settings.phaseDegrees)
+      .poll(async () => (await callAutomation(page, 'appState'))?.settings.phaseDegrees, {
+        timeout: 30_000,
+      })
       .not.toBe(start);
     await page.getByRole('button', { name: 'Pause' }).click();
     await page.getByLabel('Rms').check();

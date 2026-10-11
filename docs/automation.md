@@ -4,6 +4,8 @@ Tests, benchmarks and the demo recording drive the production build through a gl
 
 The object is `window.fieldline`. Every method returns a promise unless noted.
 
+With `coarse-grid` added to the query (`?automation&coarse-grid`) every update uses the draft grid and draft segment counts instead of switching to full quality after a pause. Tests that check the panel and the state rather than the field values use it to stay fast on a software adapter.
+
 ## State and settling
 
 | Member            | What it does                                                                                           |

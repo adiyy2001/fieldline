@@ -2,7 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { defaultConfiguration } from '../../core/model/settings';
 import { encodeConfiguration } from '../../core/model/url-state';
-import { LOCATION_ACCESS, URL_WRITE_INTERVAL_MILLISECONDS, UrlSync, mergeQuery } from './url-sync';
+import {
+  LOCATION_ACCESS,
+  URL_WRITE_INTERVAL_MILLISECONDS,
+  UrlSync,
+  coarseGridRequested,
+  mergeQuery,
+} from './url-sync';
 
 function setup(search: string) {
   const writes: string[] = [];
@@ -79,5 +85,14 @@ describe('merging the state into the query', () => {
 
   it('starts from an empty query', () => {
     expect(mergeQuery('', 'v=1&q=b')).toBe('?v=1&q=b');
+  });
+});
+
+describe('the coarse grid request', () => {
+  it('needs both the automation hook and the coarse grid parameter', () => {
+    expect(coarseGridRequested('?automation&coarse-grid')).toBe(true);
+    expect(coarseGridRequested('?coarse-grid')).toBe(false);
+    expect(coarseGridRequested('?automation')).toBe(false);
+    expect(coarseGridRequested('')).toBe(false);
   });
 });

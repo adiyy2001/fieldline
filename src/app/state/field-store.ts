@@ -37,7 +37,7 @@ import {
   createFieldPipeline,
 } from '../services/field-pipeline';
 import { PREFERS_REDUCED_MOTION, SOLVER_CLIENT } from '../services/tokens';
-import { UrlSync } from '../services/url-sync';
+import { LOCATION_ACCESS, UrlSync, coarseGridRequested } from '../services/url-sync';
 import { VIEW_AVAILABILITY, isThreeDView, threeDAvailable } from './views';
 
 export type FieldStatus = 'solving' | 'ready' | 'invalid' | 'failed';
@@ -163,6 +163,7 @@ export const FieldStore = signalStore(
     const backends = inject(FieldBackends);
     const solver = inject(SOLVER_CLIENT);
     const sync = inject(UrlSync);
+    const alwaysDraft = coarseGridRequested(inject(LOCATION_ACCESS).search());
     const pipeline = createFieldPipeline({
       solver,
       backends,
@@ -195,7 +196,8 @@ export const FieldStore = signalStore(
       }
     }
 
-    function evaluateOnce(quality: Quality) {
+    function evaluateOnce(requested: Quality) {
+      const quality: Quality = alwaysDraft ? 'draft' : requested;
       return defer(() => {
         const configuration: Configuration = {
           parameters: store.parameters(),

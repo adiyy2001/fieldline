@@ -1,6 +1,7 @@
 import { Injectable, InjectionToken, inject } from '@angular/core';
 import { type Configuration, defaultConfiguration } from '../../core/model/settings';
 import { decodeConfiguration, urlStateKeys } from '../../core/model/url-state';
+import { AUTOMATION_QUERY_PARAMETER } from '../automation/automation-query';
 
 export interface LocationAccess {
   search(): string;
@@ -38,6 +39,13 @@ export const LOCATION_ACCESS = new InjectionToken<LocationAccess>('LOCATION_ACCE
     },
   }),
 });
+
+export const COARSE_GRID_QUERY_PARAMETER = 'coarse-grid';
+
+export function coarseGridRequested(search: string): boolean {
+  const parameters = new URLSearchParams(search);
+  return parameters.has(AUTOMATION_QUERY_PARAMETER) && parameters.has(COARSE_GRID_QUERY_PARAMETER);
+}
 
 export const URL_WRITE_INTERVAL_MILLISECONDS = 400;
 

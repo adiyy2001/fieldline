@@ -19,6 +19,21 @@ describe('the field store', () => {
     expect(store.frame()?.backend).toBe('cpu');
   });
 
+  it('keeps every update at draft quality when the automation hook asks for a coarse grid', async () => {
+    const store = createStore({ search: '?automation&coarse-grid' });
+    await until(() => store.status() === 'ready');
+    expect(store.frame()?.quality).toBe('draft');
+    store.setParameters({ lineToLineKilovolts: 420 });
+    await until(() => store.status() === 'ready' && store.parameters().lineToLineKilovolts === 420);
+    expect(store.frame()?.quality).toBe('draft');
+  });
+
+  it('ignores the coarse grid request without the automation hook', async () => {
+    const store = createStore({ search: '?coarse-grid' });
+    await until(() => store.status() === 'ready');
+    expect(store.frame()?.quality).toBe('full');
+  });
+
   it('restores the configuration from the URL', async () => {
     const store = createStore({ search: '?v=1&kv=500&q=b&r=inst&ang=45&ht=1.8' });
     expect(store.parameters().lineToLineKilovolts).toBe(500);
