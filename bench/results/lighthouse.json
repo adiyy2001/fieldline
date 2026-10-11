@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-11T00:12:00.102Z",
+  "generatedAt": "2026-10-11T00:40:53.916Z",
   "node": "v24.21.0",
   "platform": "linux 6.6.87.2-microsoft-standard-WSL2 x64",
   "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
@@ -30,7 +30,7 @@
         "accessibility": 1,
         "best-practices": 0.96,
         "seo": 1,
-        "performance": 0.86
+        "performance": 0.87
       },
       "failedAccessibilityAudits": []
     },
@@ -41,7 +41,7 @@
         "accessibility": 1,
         "best-practices": 0.96,
         "seo": 1,
-        "performance": 0.87
+        "performance": 0.95
       },
       "failedAccessibilityAudits": []
     },
