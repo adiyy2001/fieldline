@@ -19,8 +19,6 @@ I work on software for high-voltage substations, and a question that keeps comin
 
 It is also a serious WebGPU compute project. The field evaluation, marching cubes and the field line tracer are compute passes, and a float64 TypeScript version of the same math is the reference they are tested against.
 
-<!-- ADRIAN: confirm this section before publishing, and add anything personal about why the question matters to you -->
-
 ## What is hard about it
 
 - A 3D field from a hanging conductor. Conductors are catenaries, so the line is not a set of infinite parallel wires. Each conductor is cut into straight segments with uniform charge, the charges follow from matching the potential at one collocation point per segment, and the field comes from closed-form expressions for finite segments and their ground images. The matrix depends on the geometry only, so it is factored once with a real LU and every change of voltage, angle or phasing reuses the factors.
