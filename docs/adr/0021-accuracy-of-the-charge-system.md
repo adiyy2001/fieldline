@@ -4,7 +4,7 @@ Status: accepted
 
 ## Context
 
-A charge simulation is exact at its collocation points by construction, so the residual there says nothing about the discretization. The plan asked for a potential residual at check points below 0.3 percent at the default size, based on a prototype with a simpler geometry. The real model has thin shield wires, kinks at the towers and conductors a few metres apart.
+A charge simulation is exact at its collocation points by construction, so the residual there says nothing about the discretization. The first target was a potential residual at check points below 0.3 percent at the default size, based on a prototype with a simpler geometry. The real model has thin shield wires, kinks at the towers and conductors a few metres apart.
 
 ## Decision
 

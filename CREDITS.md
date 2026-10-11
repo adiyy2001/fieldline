@@ -1,6 +1,6 @@
 # Credits
 
-Third-party code, data and assets used by fieldline, with their licences. Every entry is permissive.
+Third-party code, data and assets used by fieldline, with their licences. Every direct dependency is permissive.
 
 ## Runtime dependencies
 
@@ -42,13 +42,15 @@ These build, check and test the project. They are not shipped.
 | typescript-eslint     | 8.71.1  | MIT          |
 | vitest                | 5.0.3   | MIT          |
 
+Transitive build and test tools include a few packages with other licences: axe-core and lightningcss are MPL-2.0 and caniuse-lite is CC-BY-4.0 data. They are used unmodified, only on the development machine and in CI, and none of them is part of the production bundle.
+
 ## Own work
 
 The favicon in `public/favicon.svg` and the demo recording in `docs/img/demo.gif` were made for this project and are covered by the project licence (MIT). The recording is made with Playwright and encoded with ffmpeg, which is used as a local tool and is not part of the repository or the build.
 
 ## Published data
 
-The 14 limit heights in `src/core/validation/published-reference.ts` and the tower and phasing cases behind them come from Bendík, Cenký and Eleschová, "Determination of Ground Clearance for EHV 400 kV Overhead Power Lines Based on Electromagnetic Field Limits", Electricity 2026, 7(2), 39, https://doi.org/10.3390/electricity7020039, licensed CC BY 4.0. The values were transcribed and the tower geometry was encoded from the paper for the validation tests, with the Portal tower marked as fitted.
+The limit heights of 14 cases in `src/core/validation/published-reference.ts` and the tower and phasing cases behind them come from Bendík, Cenký and Eleschová, "Determination of Ground Clearance for EHV 400 kV Overhead Power Lines Based on Electromagnetic Field Limits", Electricity 2026, 7(2), 39, https://doi.org/10.3390/electricity7020039, licensed CC BY 4.0. The values were transcribed and the tower geometry was encoded from the paper for the validation tests. Thirteen cases are compared and the Portal tower is the one fitted case.
 
 The 256 viridis colours in `src/core/color/viridis.ts` come from `colormaps.py` of the matplotlib colormaps project by Nathaniel J. Smith, Stefan van der Walt and Eric Firing (https://github.com/BIDS/colormap), released under CC0 1.0. `scripts/generate-viridis.ts` converts the file.
 

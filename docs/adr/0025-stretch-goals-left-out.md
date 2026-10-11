@@ -15,7 +15,7 @@ The brief lists three stretch items: Deri's complex image depth for earth return
 
 ## Alternatives
 
-- Build the corridor first, as the plan suggested. It adds features without making any existing claim more true.
+- Build the corridor first. It adds features without making any existing claim more true.
 - Build a rough version of each. Half-validated physics in a project built around checkable numbers does the opposite of what it is for.
 
 ## Consequences
