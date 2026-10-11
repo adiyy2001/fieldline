@@ -1,6 +1,6 @@
 # Credits
 
-Third-party code, data and assets used by fieldline, with their licences. Every entry is permissive. Later milestones add a line here when they bring in a dependency, a dataset or an asset.
+Third-party code, data and assets used by fieldline, with their licences. Every entry is permissive.
 
 ## Runtime dependencies
 
@@ -35,6 +35,7 @@ These build, check and test the project. They are not shipped.
 | eslint                | 10.12.0 | MIT          |
 | fast-check            | 4.10.2  | MIT          |
 | jsdom                 | 30.1.2  | MIT          |
+| lighthouse            | 13.5.0  | Apache-2.0   |
 | prettier              | 3.9.10  | MIT          |
 | tsx                   | 4.23.15 | MIT          |
 | typescript            | 6.0.3   | Apache-2.0   |
@@ -43,7 +44,7 @@ These build, check and test the project. They are not shipped.
 
 ## Own work
 
-The favicon in `public/favicon.svg` was drawn for this project and is covered by the project licence (MIT).
+The favicon in `public/favicon.svg` and the demo recording in `docs/img/demo.gif` were made for this project and are covered by the project licence (MIT). The recording is made with Playwright and encoded with ffmpeg, which is used as a local tool and is not part of the repository or the build.
 
 ## Published data
 
