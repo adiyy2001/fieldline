@@ -129,4 +129,13 @@ describe('App', () => {
     expect(region.textContent).toContain('The graphics device was lost.');
     expect(region.textContent).toContain('GPU reset');
   });
+
+  it('keeps the parameter panel in a details element that follows the toggle', async () => {
+    const root = await mount(ready());
+    const details = root.querySelector<HTMLDetailsElement>('details.parameters');
+    expect(details).not.toBeNull();
+    expect(details?.querySelector('summary')?.textContent).toContain('Parameters');
+    details?.dispatchEvent(new Event('toggle'));
+    expect(details?.open).toBeTypeOf('boolean');
+  });
 });
