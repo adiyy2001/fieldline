@@ -14,11 +14,11 @@ async function openProfile(page: Page, query = ''): Promise<void> {
 
 async function tableRows(page: Page): Promise<number[][]> {
   await page.getByRole('button', { name: 'Data table' }).click();
-  const cells = await page
-    .locator('[data-testid="profile-table"] tbody tr')
-    .evaluateAll((rows) =>
-      rows.map((row) => Array.from(row.querySelectorAll('th, td')).map((cell) => cell.textContent)),
-    );
+  const tableRowsLocator = page.locator('[data-testid="profile-table"] tbody tr');
+  await expect(tableRowsLocator).not.toHaveCount(0);
+  const cells = await tableRowsLocator.evaluateAll((rows) =>
+    rows.map((row) => Array.from(row.querySelectorAll('th, td')).map((cell) => cell.textContent)),
+  );
   return cells.map((row) => row.map((cell) => Number(cell)));
 }
 

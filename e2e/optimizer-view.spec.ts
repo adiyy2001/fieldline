@@ -25,7 +25,7 @@ test.describe('the phasing optimizer view', () => {
   });
 
   test('applying the best arrangement lowers the peak electric field', async ({ page }) => {
-    await openOptimizer(page);
+    await openOptimizer(page, 't=dc&coarse-grid');
     const peak = async () => {
       const state = await callAutomation(page, 'appState');
       return state?.maxima?.electric ?? Number.NaN;
