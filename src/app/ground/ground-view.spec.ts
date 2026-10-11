@@ -66,7 +66,11 @@ describe('the ground view', () => {
     expect(root.textContent).toContain('Lateral position x (m)');
     expect(root.querySelectorAll('.tick-label').length).toBeGreaterThan(4);
     expect(root.querySelectorAll('.conductor').length).toBeGreaterThan(3);
-    expect(root.querySelectorAll('.tower').length).toBeGreaterThan(1);
+    const towers = Array.from(root.querySelectorAll('.tower'));
+    expect(towers.length).toBeGreaterThan(1);
+    for (const tower of towers) {
+      expect(Number(tower.getAttribute('height'))).toBeGreaterThan(0);
+    }
     expect(root.querySelectorAll('.level-label').length).toBeGreaterThan(0);
     expect(root.querySelectorAll('.probe-marker')).toHaveLength(1);
   });

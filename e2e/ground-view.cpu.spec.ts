@@ -10,6 +10,19 @@ async function openCpu(page: Page, query = ''): Promise<void> {
   await callAutomation(page, 'settle');
 }
 
+test('the ground view logs no console errors while it draws', async ({ page }) => {
+  const problems: string[] = [];
+  page.on('console', (message) => {
+    if (message.type() === 'error') {
+      problems.push(message.text());
+    }
+  });
+  page.on('pageerror', (error) => problems.push(error.message));
+  await openCpu(page);
+  await expect(page.locator('.tower').first()).toBeVisible();
+  expect(problems).toEqual([]);
+});
+
 test.describe('the ground view without a graphics adapter', () => {
   test('explains the fallback and still draws the heatmap on Canvas2D', async ({ page }) => {
     await openCpu(page);

@@ -27,7 +27,11 @@ import type { HeatmapUniforms } from '../../gpu/heatmap-params';
 import { type HeatmapRenderer, createHeatmapRenderer } from '../../gpu/heatmap-renderer';
 import { FieldBackends } from '../services/field-backends';
 import type { FieldFrame } from '../services/field-pipeline';
-import { HeatmapCapture, type HeatmapPixels } from '../services/heatmap-capture';
+import {
+  HeatmapCapture,
+  type HeatmapCaptureRequest,
+  type HeatmapPixels,
+} from '../services/heatmap-capture';
 import { FieldStore } from '../state/field-store';
 import { paintHeatmap } from './canvas-painter';
 import {
@@ -105,11 +109,14 @@ export class GroundView {
         x2: projection.zToPixel(line.zEnd),
         role: line.role,
       })),
-      towers: layout.towers.map((tower) => ({
-        x: projection.zToPixel(tower.z),
-        y1: projection.xToPixel(tower.xStart),
-        y2: projection.xToPixel(tower.xEnd),
-      })),
+      towers: layout.towers.map((tower) => {
+        const ends = [projection.xToPixel(tower.xStart), projection.xToPixel(tower.xEnd)];
+        return {
+          x: projection.zToPixel(tower.z),
+          y1: Math.min(...ends),
+          y2: Math.max(...ends),
+        };
+      }),
     };
   });
   protected readonly summary = computed(() => {
@@ -319,7 +326,7 @@ export class GroundView {
     }
   }
 
-  private async captureNow(request: { width: number; height: number }): Promise<HeatmapPixels> {
+  private async captureNow(request: HeatmapCaptureRequest): Promise<HeatmapPixels> {
     const frame = this.store.frame();
     if (frame === null) {
       throw new Error('There is no field to capture');
@@ -338,7 +345,7 @@ export class GroundView {
         maximum,
         width: request.width,
         height: request.height,
-        levels: [],
+        levels: request.contours === true ? this.store.levels() : [],
       };
       const pixels = await renderer.capture(uniforms, request.width, request.height);
       return { width: request.width, height: request.height, pixels };
