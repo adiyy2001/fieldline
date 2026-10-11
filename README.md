@@ -8,10 +8,10 @@ The recording is made by `pnpm record:demo`, which drives the production build i
 
 [![ci](https://github.com/adiyy2001/fieldline/actions/workflows/ci.yml/badge.svg)](https://github.com/adiyy2001/fieldline/actions/workflows/ci.yml)
 ![core line coverage 99.3 percent](https://img.shields.io/badge/core%20lines-99.3%25-brightgreen)
-![app line coverage 82.0 percent](https://img.shields.io/badge/app%20lines-82.0%25-brightgreen)
+![app line coverage 82.2 percent](https://img.shields.io/badge/app%20lines-82.2%25-brightgreen)
 [![license MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-The two coverage badges are static and come from `pnpm test:coverage` (see the table under Tests). CI runs the same command and uploads the report.
+The two coverage badges are static and come from `pnpm test:coverage` (see the table under Tests). `pnpm check:readme` fails when the coverage table, the badges, the solve table or the GPU error table in this file differ from the stored results, and CI runs it after the coverage step.
 
 ## Why I built this
 
@@ -145,7 +145,7 @@ Both real GPUs meet the target in every case. The CPU fallback does not, except 
 
 ### Frame times
 
-`pnpm bench:fps` records 300 frames per view at 1920 by 1080 (30 frames on the software adapter). The Windows display refreshes at 120 Hz, so 8 ms per frame is the display limit and not the cost of the frame.
+`pnpm bench:fps` records the interval between 300 `requestAnimationFrame` callbacks per view at 1920 by 1080 (30 frames on the software adapter). On both real GPUs the median sits at 8 ms for almost every view, with a p95 below 9 ms. That is the frame clock of the headless browser, which I did not measure separately, so the table shows that those views fit inside it and says nothing about how much faster they could run. The only view that does not is the electric field lines on the Iris Xe.
 
 | View                      | NVIDIA RTX 3070 Ti Laptop | Intel Iris Xe | SwiftShader (software) |
 | ------------------------- | ------------------------- | ------------- | ---------------------- |
@@ -201,15 +201,16 @@ The GPU benchmarks accept `--channel chrome --real-gpu` to run on the real GPU o
 
 | Layer                              | Lines covered | Percent |
 | ---------------------------------- | ------------- | ------- |
-| src/core (math, models, optimizer) | 2406 of 2422  | 99.3    |
+| src/core (math, models, optimizer) | 2410 of 2426  | 99.3    |
 | src/gpu                            | 358 of 358    | 100.0   |
 | src/workers                        | 32 of 32      | 100.0   |
-| src/app                            | 1640 of 2000  | 82.0    |
+| src/app                            | 1669 of 2031  | 82.2    |
 
 Thresholds are 90 percent of lines for the core and 80 percent for the rest. A short list of files that need a real device is excluded, with the reasons in ADR 15.
 
 - Unit tests (Vitest through the Angular builder) check the math against the analytic cases, plus fast-check properties for symmetry and superposition.
-- Playwright runs a `gpu` project against the production build with the SwiftShader adapter and a `cpu` project without WebGPU. They compare GPU and CPU fields, check the views, the keyboard paths, the fallback after a lost device, and screenshots of every view.
+- The integration layer is the store, pipeline and service specs under `src/app`, which run the real store against an inline solver and the CPU executor, and the Playwright parity specs, which run the real shaders against the float64 code in the production build. CI names the two steps "Unit and integration tests with coverage" and "End-to-end tests".
+- Playwright runs a `gpu` project against the production build with the SwiftShader adapter and a `cpu` project without WebGPU. They compare GPU and CPU fields, check the views, the keyboard paths, the fallback after a lost device, and screenshots of every view. The single-key shortcuts (digits, Space, brackets, E, B, R and ?) can be turned off in the help dialog, as WCAG 2.1.4 asks, and the choice is kept in the browser.
 - `pnpm test` runs unit tests, `pnpm test:coverage` adds coverage, `pnpm e2e` builds and runs Playwright (first run `pnpm exec playwright install chromium`).
 - CI runs the same steps and Lighthouse. I could not dry-run the workflow with `act` because it is not installed here, so I ran a fresh clone with `pnpm install`, `pnpm start` and `pnpm verify` in a clean Node 24 container instead.
 
