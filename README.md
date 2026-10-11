@@ -66,7 +66,7 @@ The app has six views: ground heatmap with contours, lateral profile with a data
 
 Every number below is printed by a script in this repository, and `pnpm report` prints all of the tables in this section from the stored result files. The files in `bench/results/` name the host, browser, adapter and commit.
 
-**Machine.** Intel Core i7-12700H (20 logical CPUs), Linux 6.6.87.2 under WSL2, Node 24.21.0, run on 2026-10-11 at commit ac6bbca. Software numbers (SwiftShader, the CPU backend) come from Chromium 156.0.8078.4 on that machine. Real GPU numbers come from the Windows host of the same laptop, through headless Chrome 154.0.8037.98 with the production build served from WSL: an NVIDIA GeForce RTX 3070 Ti Laptop GPU (Ampere) and an Intel Iris Xe (Gen 12LP). No mid-range desktop GPU was measured, so I make no claim about one.
+**Machine.** Intel Core i7-12700H (20 logical CPUs), Linux 6.6.87.2 under WSL2, Node 24.21.0, run on 2026-10-11. Every result file records the commit it was measured at: the real GPU files at dbda4b7, the software 3D scene file at da568d6 and the other software and CPU files at ac6bbca. Between those commits only the interface, the URL angle rounding and an automation-only draft grid switch changed, none of which the timing files exercise. Software numbers (SwiftShader, the CPU backend) come from Chromium 156.0.8078.4 on that machine. Real GPU numbers come from the Windows host of the same laptop, through headless Chrome 154.0.8037.98 with the production build served from WSL: an NVIDIA GeForce RTX 3070 Ti Laptop GPU (Ampere) and an Intel Iris Xe (Gen 12LP). No mid-range desktop GPU was measured, so I make no claim about one.
 
 ### Validation of the physics
 
@@ -134,12 +134,12 @@ The target was 1e-3, and it holds with a factor of 1.5 inside the clamp zone and
 
 | Case                                     | NVIDIA RTX 3070 Ti Laptop | Intel Iris Xe | CPU backend (software) | SwiftShader (software) |
 | ---------------------------------------- | ------------------------- | ------------- | ---------------------- | ---------------------- |
-| Horizontal, geometry change              | 45 / 56                   | 73 / 83       | 263 / 299              | 1316 / 1669            |
-| Horizontal, geometry drag, draft quality | 52 / 56                   | 61 / 76       | 75 / 78                | 251 / 400              |
-| Horizontal, voltage change               | 33 / 39                   | 104 / 116     | 241 / 301              | 1092 / 1598            |
-| Double circuit, geometry change          | 67 / 85                   | 119 / 135     | 411 / 500              | 1628 / 1973            |
-| Double circuit, voltage change           | 38 / 44                   | 122 / 134     | 416 / 469              | 1615 / 2026            |
-| Double circuit, phasing change           | 38 / 54                   | 133 / 141     | 429 / 476              | 1610 / 2002            |
+| Horizontal, geometry change              | 50 / 60                   | 75 / 83       | 263 / 299              | 1316 / 1669            |
+| Horizontal, geometry drag, draft quality | 49 / 56                   | 55 / 59       | 75 / 78                | 251 / 400              |
+| Horizontal, voltage change               | 38 / 60                   | 65 / 73       | 241 / 301              | 1092 / 1598            |
+| Double circuit, geometry change          | 124 / 141                 | 121 / 147     | 411 / 500              | 1628 / 1973            |
+| Double circuit, voltage change           | 45 / 54                   | 114 / 138     | 416 / 469              | 1615 / 2026            |
+| Double circuit, phasing change           | 65 / 80                   | 98 / 123      | 429 / 476              | 1610 / 2002            |
 
 Both real GPUs meet the target in every case. The CPU fallback does not, except for the draft quality drag, and the software WebGPU adapter is only a correctness tool.
 
@@ -149,13 +149,13 @@ Both real GPUs meet the target in every case. The CPU fallback does not, except 
 
 | View                      | NVIDIA RTX 3070 Ti Laptop | Intel Iris Xe | SwiftShader (software) |
 | ------------------------- | ------------------------- | ------------- | ---------------------- |
-| Ground, instantaneous     | 125.0 fps                 | 125.0 fps     | 30.0 fps               |
-| Volume, instantaneous     | 125.0 fps                 | 125.0 fps     | 7.5 fps                |
-| Volume, rms, orbiting     | 125.0 fps                 | 125.0 fps     | 7.5 fps                |
-| Isosurface of E, orbiting | 125.0 fps                 | 125.0 fps     | 59.9 fps               |
-| Isosurface of B, orbiting | 125.0 fps                 | 125.0 fps     | 59.9 fps               |
-| Field lines of E          | 125.0 fps                 | 64.1 fps      | 0.6 fps                |
-| Field lines of B          | 125.0 fps                 | 125.0 fps     | 0.6 fps                |
+| Ground, instantaneous     | 126.6 fps                 | 128.2 fps     | 30.0 fps               |
+| Volume, instantaneous     | 128.2 fps                 | 129.9 fps     | 7.5 fps                |
+| Volume, rms, orbiting     | 129.9 fps                 | 128.2 fps     | 7.5 fps                |
+| Isosurface of E, orbiting | 126.6 fps                 | 129.9 fps     | 59.9 fps               |
+| Isosurface of B, orbiting | 128.2 fps                 | 128.2 fps     | 59.9 fps               |
+| Field lines of E          | 128.2 fps                 | 64.9 fps      | 0.6 fps                |
+| Field lines of B          | 129.9 fps                 | 125.0 fps     | 0.6 fps                |
 
 The slowest real case is the electric field lines on the Iris Xe, at 15.6 ms (64 fps). On software rendering the 3D views are slow, which is why an automatic render scale steps the 3D views down when the median frame time stays above 20 ms (ADR 23).
 
@@ -197,7 +197,7 @@ The GPU benchmarks accept `--channel chrome --real-gpu` to run on the real GPU o
 
 ## Tests
 
-`pnpm verify` runs format check, lint, a style check, type checks, unit tests with coverage, a production build and the end-to-end suite. It passed on this machine with 889 unit tests in 103 files, 88 script tests and 107 end-to-end tests.
+`pnpm verify` runs format check, lint, a style check, type checks, unit tests with coverage, a production build and the end-to-end suite. It passed on this machine with 902 unit tests in 104 files, 90 script tests and 108 end-to-end tests, and in a fresh clone inside a Node 24 container limited to 2 CPUs.
 
 | Layer                              | Lines covered | Percent |
 | ---------------------------------- | ------------- | ------- |
