@@ -14,9 +14,7 @@
       (keydown)="navigate($event, index)"
     >
       {{ tab.label }}
-      @if (ui.shortcutsEnabled()) {
-        <kbd aria-hidden="true">{{ tab.key }}</kbd>
-      }
+      <kbd aria-hidden="true" [class.inactive]="!ui.shortcutsEnabled()">{{ tab.key }}</kbd>
     </button>
   }
 </div>

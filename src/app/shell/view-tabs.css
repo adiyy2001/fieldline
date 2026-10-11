@@ -63,3 +63,7 @@ kbd {
     display: inline;
   }
 }
+
+kbd.inactive {
+  visibility: hidden;
+}

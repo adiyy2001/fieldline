@@ -173,7 +173,7 @@ test.describe('the ground view on WebGPU', () => {
   });
 
   test('a parameter change updates the grid', async ({ page }) => {
-    await openGround(page);
+    await openGround(page, 'coarse-grid');
     const before = await callAutomation(page, 'groundFrame');
     await callAutomation(page, 'setParameters', { currentAmperes: 2000 });
     const after = await callAutomation(page, 'groundFrame');
@@ -185,7 +185,7 @@ test.describe('the ground view on WebGPU', () => {
   });
 
   test('typing in the panel recomputes the field and writes the link', async ({ page }) => {
-    await openGround(page);
+    await openGround(page, 'coarse-grid');
     const before = await page.getByTestId('ground-probe').textContent();
     const voltage = page.getByLabel('Line voltage', { exact: true });
     await voltage.fill('500');
@@ -196,7 +196,7 @@ test.describe('the ground view on WebGPU', () => {
   });
 
   test('reloading the link restores the state', async ({ page }) => {
-    await openGround(page);
+    await openGround(page, 'coarse-grid');
     await page.getByLabel('Line voltage', { exact: true }).fill('450');
     await page.getByLabel('Magnetic (B)').check();
     await page.getByLabel('Instantaneous').check();
@@ -248,7 +248,7 @@ test.describe('the ground view on WebGPU', () => {
     await page.keyboard.press('?');
     await expect(page.getByLabel('Electric (E)')).toBeChecked();
     await expect(page.getByRole('dialog')).toHaveCount(0);
-    await expect(page.locator('[role="tab"] kbd')).toHaveCount(0);
+    await expect(page.locator('[role="tab"] kbd.inactive')).toHaveCount(6);
     await page.reload();
     await page.waitForFunction(() => 'fieldline' in window);
     await callAutomation(page, 'settle');

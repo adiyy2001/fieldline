@@ -15,10 +15,7 @@
       [attr.aria-keyshortcuts]="ui.shortcutsEnabled() ? '?' : null"
       (click)="ui.openHelp()"
     >
-      Keys
-      @if (ui.shortcutsEnabled()) {
-        <kbd aria-hidden="true">?</kbd>
-      }
+      Keys <kbd aria-hidden="true" [class.inactive]="!ui.shortcutsEnabled()">?</kbd>
     </button>
   </div>
 </header>

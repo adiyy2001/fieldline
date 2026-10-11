@@ -30,11 +30,11 @@ describe('view tabs', () => {
     const { fixture, root } = mount();
     const tab = root.querySelector('[role="tab"]');
     expect(tab?.getAttribute('aria-keyshortcuts')).toBe('1');
-    expect(tab?.querySelector('kbd')).not.toBeNull();
+    expect(tab?.querySelector('kbd')?.classList.contains('inactive')).toBe(false);
     TestBed.inject(UiState).setShortcutsEnabled(false);
     fixture.detectChanges();
     expect(tab?.hasAttribute('aria-keyshortcuts')).toBe(false);
-    expect(tab?.querySelector('kbd')).toBeNull();
+    expect(tab?.querySelector('kbd')?.classList.contains('inactive')).toBe(true);
   });
 
   it('exposes a tablist with the ground tab selected', () => {

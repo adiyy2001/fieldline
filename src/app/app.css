@@ -263,3 +263,7 @@ kbd {
   border-radius: 0.5rem;
   color: var(--text-muted);
 }
+
+kbd.inactive {
+  visibility: hidden;
+}
