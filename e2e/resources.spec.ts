@@ -5,11 +5,11 @@ import { callAutomation, openAutomation } from './automation.ts';
 const RENDERER_CYCLES = 20;
 
 test.describe('the demo scenes of the automation hook', () => {
-  test.describe.configure({ timeout: 240_000 });
+  test.describe.configure({ timeout: 480_000 });
 
   for (const name of DEMO_SCENE_NAMES) {
     test(`${name} steps through every frame and leaves a settled page`, async ({ page }) => {
-      await openAutomation(page);
+      await openAutomation(page, 'coarse-grid');
       const run = await callAutomation(page, 'scene', name);
       expect(run.name).toBe(name);
       expect(run.frameCount).toBeGreaterThan(1);

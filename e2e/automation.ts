@@ -28,8 +28,8 @@ export type AutomationMethod =
 type Result<M extends AutomationMethod> = Awaited<ReturnType<FieldlineAutomation[M]>>;
 type Request<M extends AutomationMethod> = Parameters<FieldlineAutomation[M]>[0];
 
-export async function openAutomation(page: Page): Promise<void> {
-  await page.goto('/?automation');
+export async function openAutomation(page: Page, query = ''): Promise<void> {
+  await page.goto(`/?automation${query === '' ? '' : `&${query}`}`);
   await page.waitForFunction(() => 'fieldline' in window);
   await page.evaluate(
     () => (window as unknown as { fieldline: { ready: Promise<void> } }).fieldline.ready,
