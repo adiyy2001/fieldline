@@ -32,6 +32,7 @@
     "bench:latency": "pnpm build && tsx bench/latency.ts",
     "bench:fps": "pnpm build && tsx bench/frame-times.ts",
     "lighthouse": "pnpm build && tsx scripts/lighthouse.ts",
+    "report": "tsx scripts/results-report.ts",
     "verify": "pnpm format:check && pnpm lint && pnpm check:style && pnpm typecheck && pnpm test:coverage && pnpm build && playwright test"
   },
   "dependencies": {
