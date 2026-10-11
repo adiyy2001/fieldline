@@ -72,17 +72,15 @@ describe('results report helpers', () => {
 });
 
 describe('the README drift check', () => {
-  const readme = '| src/app                 | 1642 of 2004  | 81.9    |\n| 210 | 10.0 |';
+  const readme = '| src/app (all)           | 1642 of 2004  | 81.9    |\n| 210 | 10.0 |';
 
   it('ignores the padding prettier adds to table cells', () => {
-    expect(
-      missingFromReadme(readme, ['| src/app | 1642 of 2004 | 81.9 |', '| 210 | 10.0 |']),
-    ).toEqual([]);
+    expect(missingFromReadme(readme, ['| 1642 of 2004 | 81.9 |', '| 210 | 10.0 |'])).toEqual([]);
   });
 
   it('lists every fragment the README does not contain', () => {
-    expect(
-      missingFromReadme(readme, ['| src/app | 1640 of 2000 | 82.0 |', '| 210 | 10.0 |']),
-    ).toEqual(['| src/app | 1640 of 2000 | 82.0 |']);
+    expect(missingFromReadme(readme, ['| 1640 of 2000 | 82.0 |', '| 210 | 10.0 |'])).toEqual([
+      '| 1640 of 2000 | 82.0 |',
+    ]);
   });
 });

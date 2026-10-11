@@ -370,7 +370,7 @@ function coverageFragments(): readonly string[] {
   };
   const rows = [...layers.entries()].map(
     ([layer, { covered, total }]) =>
-      `| src/${layer} | ${String(covered)} of ${String(total)} | ${percent(layer)} |`,
+      `| ${String(covered)} of ${String(total)} | ${percent(layer)} |`,
   );
   return [
     ...rows,
