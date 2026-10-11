@@ -42,6 +42,12 @@ const spec: ChartSpec = {
 describe('chart model', () => {
   const model = buildChart(spec);
 
+  it('never gives the plot area a negative size in a tiny container', () => {
+    const tiny = buildChart({ ...spec, width: 20, height: 20 });
+    expect(tiny.plot.width).toBeGreaterThan(0);
+    expect(tiny.plot.height).toBeGreaterThan(0);
+  });
+
   it('keeps the plot area inside the canvas', () => {
     expect(model.plot.left + model.plot.width).toBeLessThanOrEqual(model.width);
     expect(model.plot.top + model.plot.height).toBeLessThanOrEqual(model.height);

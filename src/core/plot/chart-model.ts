@@ -137,6 +137,7 @@ function resolveDomain(
 }
 
 const LEVEL_REACH_FACTOR = 3;
+const MINIMUM_PLOT_SIZE = 1;
 
 function nearbyLevelLines(
   levels: readonly LevelLine[],
@@ -190,8 +191,8 @@ export function buildChart(spec: ChartSpec): ChartModel {
   const plot: PlotArea = {
     left: MARGIN.left,
     top,
-    width: width - MARGIN.left - MARGIN.right,
-    height: height - top - bottom,
+    width: Math.max(MINIMUM_PLOT_SIZE, width - MARGIN.left - MARGIN.right),
+    height: Math.max(MINIMUM_PLOT_SIZE, height - top - bottom),
   };
   const cleaned = spec.series.map((series) => ({ series, points: finitePoints(series.points) }));
   const xValues = cleaned.flatMap(({ points }) => points.map((point) => point.x));
