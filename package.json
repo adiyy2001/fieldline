@@ -33,8 +33,9 @@
     "bench:fps": "pnpm build && tsx bench/frame-times.ts",
     "lighthouse": "pnpm build && tsx scripts/lighthouse.ts",
     "report": "tsx scripts/results-report.ts",
+    "check:readme": "tsx scripts/results-report.ts --check",
     "record:demo": "pnpm build && tsx scripts/record-demo.ts",
-    "verify": "pnpm format:check && pnpm lint && pnpm check:style && pnpm typecheck && pnpm test:coverage && pnpm build && playwright test"
+    "verify": "pnpm format:check && pnpm lint && pnpm check:style && pnpm typecheck && pnpm test:coverage && pnpm check:readme && pnpm build && playwright test"
   },
   "dependencies": {
     "@angular/common": "22.2.2",

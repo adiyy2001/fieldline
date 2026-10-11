@@ -4,6 +4,7 @@ import {
   hostLabel,
   linesByLayer,
   markdownTable,
+  missingFromReadme,
   milliseconds,
   scientific,
 } from './results-report';
@@ -67,5 +68,21 @@ describe('results report helpers', () => {
     const layers = linesByLayer(clover);
     expect(layers.get('core')).toEqual({ covered: 2, total: 3 });
     expect(layers.get('app')).toEqual({ covered: 0, total: 1 });
+  });
+});
+
+describe('the README drift check', () => {
+  const readme = '| src/app                 | 1642 of 2004  | 81.9    |\n| 210 | 10.0 |';
+
+  it('ignores the padding prettier adds to table cells', () => {
+    expect(
+      missingFromReadme(readme, ['| src/app | 1642 of 2004 | 81.9 |', '| 210 | 10.0 |']),
+    ).toEqual([]);
+  });
+
+  it('lists every fragment the README does not contain', () => {
+    expect(
+      missingFromReadme(readme, ['| src/app | 1640 of 2000 | 82.0 |', '| 210 | 10.0 |']),
+    ).toEqual(['| src/app | 1640 of 2000 | 82.0 |']);
   });
 });

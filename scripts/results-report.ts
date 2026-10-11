@@ -353,7 +353,64 @@ function coverageSection(): void {
   );
 }
 
-if (process.argv[1]?.endsWith('results-report.ts') === true) {
+function collapseSpaces(text: string): string {
+  return text.replace(/[ \t]+/g, ' ');
+}
+
+export function missingFromReadme(readme: string, fragments: readonly string[]): string[] {
+  const normalized = collapseSpaces(readme);
+  return fragments.filter((fragment) => !normalized.includes(collapseSpaces(fragment)));
+}
+
+function coverageFragments(): readonly string[] {
+  const layers = linesByLayer(readFileSync(join('coverage', 'fieldline', 'clover.xml'), 'utf8'));
+  const percent = (name: string): string => {
+    const counts = layers.get(name);
+    return counts === undefined ? 'n/a' : ((counts.covered / counts.total) * 100).toFixed(1);
+  };
+  const rows = [...layers.entries()].map(
+    ([layer, { covered, total }]) =>
+      `| src/${layer} | ${String(covered)} of ${String(total)} | ${percent(layer)} |`,
+  );
+  return [
+    ...rows,
+    `core line coverage ${percent('core')} percent`,
+    `app line coverage ${percent('app')} percent`,
+  ];
+}
+
+function solveFragments(): readonly string[] {
+  const file = readJson('solve-timing.json') as SolveFile;
+  return file.rows
+    .filter(({ segmentsPerSpan }) => segmentsPerSpan === 12)
+    .map((row) => `| ${String(row.unknowns)} | ${milliseconds(row.totalMilliseconds)} |`);
+}
+
+function parityFragments(): readonly string[] {
+  return filesOf('gpu-parity-').map((name) => {
+    const { summary } = readJson(name) as ParityFile;
+    return `| ${scientific(summary.electricMaximum)} | ${scientific(summary.magneticMaximum)} | ${scientific(summary.mirrorMaximum)} |`;
+  });
+}
+
+function checkReadme(): void {
+  const readme = readFileSync('README.md', 'utf8');
+  const missing = missingFromReadme(readme, [
+    ...coverageFragments(),
+    ...solveFragments(),
+    ...parityFragments(),
+  ]);
+  if (missing.length > 0) {
+    console.error(`README.md differs from the stored results. Missing:\n${missing.join('\n')}`);
+    process.exitCode = 1;
+    return;
+  }
+  console.log('README.md matches the coverage, solve and parity results');
+}
+
+if (process.argv[1]?.endsWith('results-report.ts') === true && process.argv.includes('--check')) {
+  checkReadme();
+} else if (process.argv[1]?.endsWith('results-report.ts') === true) {
   coverageSection();
   validationSection();
   convergenceSection();

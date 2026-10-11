@@ -29,9 +29,12 @@ jobs:
       - run: pnpm lint
       - run: pnpm check:style
       - run: pnpm typecheck
-      - run: pnpm test:coverage
+      - name: Unit and integration tests with coverage
+        run: pnpm test:coverage
+      - run: pnpm check:readme
       - run: pnpm build
-      - run: pnpm exec playwright test
+      - name: End-to-end tests
+        run: pnpm exec playwright test
       - run: pnpm exec tsx scripts/lighthouse.ts
       - uses: actions/upload-artifact@v7
         if: always()
