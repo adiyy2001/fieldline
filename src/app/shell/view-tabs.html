@@ -8,13 +8,15 @@
       [attr.aria-disabled]="disabled(tab.id) ? 'true' : null"
       [attr.aria-describedby]="disabled(tab.id) ? 'fl-views3d-notice' : null"
       [attr.aria-controls]="'fl-view-' + tab.id"
-      [attr.aria-keyshortcuts]="tab.key"
+      [attr.aria-keyshortcuts]="ui.shortcutsEnabled() ? tab.key : null"
       [tabindex]="store.view() === tab.id ? 0 : -1"
       (click)="select(tab.id)"
       (keydown)="navigate($event, index)"
     >
       {{ tab.label }}
-      <kbd aria-hidden="true">{{ tab.key }}</kbd>
+      @if (ui.shortcutsEnabled()) {
+        <kbd aria-hidden="true">{{ tab.key }}</kbd>
+      }
     </button>
   }
 </div>

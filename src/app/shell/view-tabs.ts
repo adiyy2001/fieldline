@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, effect, inject } from '@angular/core';
 import type { ViewId } from '../../core/model/settings';
+import { UiState } from '../services/ui-state';
 import { FieldStore } from '../state/field-store';
 import { VIEW_AVAILABILITY, isThreeDView } from '../state/views';
 
@@ -26,6 +27,7 @@ export function nextTabIndex(key: string, current: number, count: number): numbe
 })
 export class ViewTabs {
   protected readonly store = inject(FieldStore);
+  protected readonly ui = inject(UiState);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   protected readonly tabs = VIEW_AVAILABILITY;
 

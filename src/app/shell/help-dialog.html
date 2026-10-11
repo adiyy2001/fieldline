@@ -1,5 +1,19 @@
 <dialog #dialog aria-labelledby="fl-help-title" (close)="closed()" (cancel)="closed()">
   <h2 id="fl-help-title">Keyboard shortcuts</h2>
+  <label class="toggle" for="fl-shortcuts-enabled">
+    <input
+      id="fl-shortcuts-enabled"
+      type="checkbox"
+      aria-describedby="fl-shortcuts-note"
+      [checked]="ui.shortcutsEnabled()"
+      (change)="toggled($event)"
+    />
+    Single-key shortcuts
+  </label>
+  <p class="note" id="fl-shortcuts-note">
+    Turn them off if speech input or a screen reader triggers them by accident. Arrow keys on a
+    focused view keep working.
+  </p>
   <dl>
     @for (shortcut of shortcuts; track shortcut.keys) {
       <div class="entry">

@@ -1,7 +1,8 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { until } from '../testing/doubles';
 import { FieldStore } from '../state/field-store';
+import { UiState } from '../services/ui-state';
 import { storeProviders } from '../testing/store-providers';
 import { ViewTabs, nextTabIndex } from './view-tabs';
 
@@ -21,6 +22,21 @@ function mount(gpu = false): {
 }
 
 describe('view tabs', () => {
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  it('hides the key hints and the aria-keyshortcuts while the shortcuts are off', () => {
+    const { fixture, root } = mount();
+    const tab = root.querySelector('[role="tab"]');
+    expect(tab?.getAttribute('aria-keyshortcuts')).toBe('1');
+    expect(tab?.querySelector('kbd')).not.toBeNull();
+    TestBed.inject(UiState).setShortcutsEnabled(false);
+    fixture.detectChanges();
+    expect(tab?.hasAttribute('aria-keyshortcuts')).toBe(false);
+    expect(tab?.querySelector('kbd')).toBeNull();
+  });
+
   it('exposes a tablist with the ground tab selected', () => {
     const { root } = mount();
     expect(root.querySelector('[role="tablist"]')?.getAttribute('aria-label')).toBe('Views');

@@ -234,6 +234,34 @@ test.describe('the ground view on WebGPU', () => {
     await expect(page.getByRole('dialog')).toHaveCount(0);
   });
 
+  test('single-key shortcuts can be turned off in the help dialog and stay off after a reload', async ({
+    page,
+  }) => {
+    await openGround(page);
+    await page.getByRole('button', { name: /^Keys/ }).click();
+    const dialog = page.getByRole('dialog', { name: 'Keyboard shortcuts' });
+    await dialog.getByLabel('Single-key shortcuts').uncheck();
+    await dialog.getByRole('button', { name: 'Close' }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('b');
+    await page.keyboard.press('?');
+    await expect(page.getByLabel('Electric (E)')).toBeChecked();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.locator('[role="tab"] kbd')).toHaveCount(0);
+    await page.reload();
+    await page.waitForFunction(() => 'fieldline' in window);
+    await callAutomation(page, 'settle');
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('b');
+    await expect(page.getByLabel('Electric (E)')).toBeChecked();
+    await page.getByRole('button', { name: /^Keys/ }).click();
+    await page.getByRole('dialog').getByLabel('Single-key shortcuts').check();
+    await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click();
+    await page.keyboard.press('b');
+    await expect(page.getByLabel('Magnetic (B)')).toBeChecked();
+  });
+
   test('the arrow keys move the probe and the readout follows', async ({ page }) => {
     await openGround(page, 'v=1&r=rms');
     const stage = page.getByRole('group', { name: /Ground field map/ });

@@ -24,6 +24,7 @@ function press(key: string, target: EventTarget | null = document.body, init = {
 describe('keyboard shortcuts', () => {
   afterEach(() => {
     document.body.replaceChildren();
+    localStorage.clear();
   });
 
   it('switches the field with e and b', () => {
@@ -111,6 +112,21 @@ describe('keyboard shortcuts', () => {
     ui.openHelp();
     expect(shortcuts.handle(press('b'))).toBe(false);
     expect(store.settings().quantity).toBe('electric');
+  });
+
+  it('ignores every single-key shortcut once they are turned off and works again when turned on', () => {
+    const { store, shortcuts, ui } = setup();
+    ui.setShortcutsEnabled(false);
+    for (const key of ['b', 'e', 'r', ' ', '[', ']', '1', '2', '?']) {
+      expect(shortcuts.handle(press(key))).toBe(false);
+    }
+    expect(store.settings().quantity).toBe('electric');
+    expect(store.settings().mode).toBe('rms');
+    expect(store.view()).toBe('ground');
+    expect(ui.helpOpen()).toBe(false);
+    ui.setShortcutsEnabled(true);
+    expect(shortcuts.handle(press('b'))).toBe(true);
+    expect(store.settings().quantity).toBe('magnetic');
   });
 
   it('listens on a target and stops when destroyed', () => {

@@ -80,7 +80,7 @@ export class Shortcuts {
     if (event.ctrlKey || event.metaKey || event.altKey || isTextEntry(event.target)) {
       return false;
     }
-    if (this.ui.helpOpen()) {
+    if (!this.ui.shortcutsEnabled() || this.ui.helpOpen()) {
       return false;
     }
     return this.run(event);

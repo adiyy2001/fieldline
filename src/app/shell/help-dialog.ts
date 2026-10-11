@@ -33,6 +33,12 @@ export class HelpDialog {
     });
   }
 
+  protected toggled(event: Event): void {
+    if (event.target instanceof HTMLInputElement) {
+      this.ui.setShortcutsEnabled(event.target.checked);
+    }
+  }
+
   protected closed(): void {
     this.ui.closeHelp();
   }
