@@ -5,12 +5,15 @@ import { until } from '../testing/doubles';
 import { storeProviders } from '../testing/store-providers';
 import { ParameterPanel } from './parameter-panel';
 
-async function mount(search = ''): Promise<{
+async function mount(
+  search = '',
+  gpu = false,
+): Promise<{
   fixture: ComponentFixture<ParameterPanel>;
   root: HTMLElement;
   store: InstanceType<typeof FieldStore>;
 }> {
-  TestBed.configureTestingModule({ providers: storeProviders({ search }) });
+  TestBed.configureTestingModule({ providers: storeProviders({ search, gpu }) });
   const store = TestBed.inject(FieldStore);
   const fixture = TestBed.createComponent(ParameterPanel);
   fixture.detectChanges();
@@ -94,7 +97,8 @@ describe('the parameter panel', () => {
     fixture.detectChanges();
     const input = inputByLabel(root, 'Line voltage');
     expect(input.getAttribute('aria-invalid')).toBe('true');
-    const message = root.querySelector(`#${input.getAttribute('aria-describedby') ?? 'none'}`);
+    const message = root.querySelector('.issue');
+    expect(input.getAttribute('aria-describedby')?.split(' ')).toContain(message?.id);
     expect(message?.textContent).toMatch(/1200/);
     expect(store.status()).toBe('invalid');
     expect(store.frame()).not.toBeNull();
@@ -120,6 +124,23 @@ describe('the parameter panel', () => {
     const { root } = await mount();
     expect(inputByLabel(root, 'Phase angle').disabled).toBe(true);
     expect(root.querySelector<HTMLButtonElement>('button.play')?.disabled).toBe(true);
+  });
+
+  it('keeps the phase controls on and locks the value choice in the field lines view', async () => {
+    const { fixture, root, store } = await mount('?v=1&w=lines', true);
+    expect(store.view()).toBe('lines');
+    expect(store.settings().mode).toBe('rms');
+    expect(inputByLabel(root, 'Phase angle').disabled).toBe(false);
+    expect(root.querySelector<HTMLButtonElement>('button.play')?.disabled).toBe(false);
+    const value = root.querySelector<HTMLFieldSetElement>(
+      'fieldset[aria-describedby="fl-value-note"]',
+    );
+    expect(value?.disabled).toBe(true);
+    expect(root.querySelector('#fl-value-note')?.textContent).toContain('instantaneous');
+    store.setView('ground');
+    fixture.detectChanges();
+    expect(value?.disabled).toBe(false);
+    expect(root.querySelector('#fl-value-note')).toBeNull();
   });
 
   it('moves the phase from the slider and stops the animation', async () => {

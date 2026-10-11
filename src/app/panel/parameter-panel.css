@@ -116,3 +116,13 @@ output {
   color: var(--danger);
   font-size: 0.8125rem;
 }
+
+.hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+
+.choice:disabled {
+  opacity: 0.7;
+}

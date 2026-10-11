@@ -149,15 +149,23 @@ function enumSetting<T extends string>(
   };
 }
 
+const PHASE_URL_DECIMALS = 1;
+
+function roundedToDecimals(decimals: number): (value: number) => number {
+  const scale = 10 ** decimals;
+  return (value) => Math.round(value * scale) / scale;
+}
+
 function numberSetting(
   key: string,
   read: (settings: ViewSettings) => number,
   write: (settings: ViewSettings, value: number) => ViewSettings,
+  normalize: (value: number) => number = (value) => value,
 ): UrlField {
   return {
     key,
     touches: [],
-    encode: (configuration) => String(read(configuration.settings)),
+    encode: (configuration) => String(normalize(read(configuration.settings))),
     apply: (configuration, raw) => {
       const value = parseNumber(raw);
       return value === undefined
@@ -332,6 +340,7 @@ const FIELDS: readonly UrlField[] = [
     'ang',
     (s) => s.phaseDegrees,
     (s, phaseDegrees) => ({ ...s, phaseDegrees }),
+    roundedToDecimals(PHASE_URL_DECIMALS),
   ),
   numberSetting(
     'ht',

@@ -114,6 +114,16 @@ describe('configuration URL codec', () => {
     expect(encodeConfiguration(defaultConfiguration())).toBe('v=1');
   });
 
+  it('writes the phase angle to a tenth of a degree', () => {
+    const configuration = defaultConfiguration();
+    const query = encodeConfiguration({
+      ...configuration,
+      settings: { ...configuration.settings, mode: 'instantaneous', phaseDegrees: 13.456789123 },
+    });
+    expect(new URLSearchParams(query).get('ang')).toBe('13.5');
+    expect(decodeConfiguration(query).settings.phaseDegrees).toBe(13.5);
+  });
+
   it('decodes an empty query to the default configuration', () => {
     expect(decodeConfiguration('')).toEqual(defaultConfiguration());
     expect(decodeConfiguration('?')).toEqual(defaultConfiguration());

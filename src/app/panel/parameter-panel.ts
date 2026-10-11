@@ -96,6 +96,10 @@ export class ParameterPanel {
     }));
   });
   protected readonly instantaneous = computed(() => this.store.settings().mode === 'instantaneous');
+  protected readonly linesView = computed(() => this.store.view() === 'lines');
+  protected readonly phaseControlsEnabled = computed(
+    () => this.instantaneous() || this.linesView(),
+  );
 
   protected issue(field: string): string | null {
     return this.store.issues().find((entry) => entry.field === field)?.message ?? null;

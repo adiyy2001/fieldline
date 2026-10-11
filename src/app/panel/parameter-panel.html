@@ -32,7 +32,7 @@
         Magnetic (B)
       </label>
     </fieldset>
-    <fieldset class="choice">
+    <fieldset class="choice" [disabled]="linesView()" aria-describedby="fl-value-note">
       <legend>Value</legend>
       <label>
         <input
@@ -53,6 +53,9 @@
         Instantaneous
       </label>
     </fieldset>
+    @if (linesView()) {
+      <p class="hint" id="fl-value-note">Field lines always follow the instantaneous field.</p>
+    }
     <div class="row phase">
       <label for="fl-phase">Phase angle</label>
       <div class="phase-controls">
@@ -63,7 +66,7 @@
           [max]="phaseRange.max"
           [step]="phaseRange.step"
           [value]="store.settings().phaseDegrees"
-          [disabled]="!instantaneous()"
+          [disabled]="!phaseControlsEnabled()"
           [attr.aria-valuetext]="phaseText() + ' degrees'"
           (input)="setPhaseFromSlider($event)"
         />
@@ -71,7 +74,7 @@
         <button
           type="button"
           class="play"
-          [disabled]="!instantaneous()"
+          [disabled]="!phaseControlsEnabled()"
           [attr.aria-pressed]="store.animating()"
           (click)="store.togglePlaying()"
         >
