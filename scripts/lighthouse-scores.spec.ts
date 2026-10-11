@@ -11,7 +11,7 @@ function result(overrides: Partial<AuditResult>, accessibility: number | null): 
     renderer: 'webgpu',
     formFactor: 'mobile',
     scores: { accessibility, 'best-practices': 1, seo: 1, performance: 0.9 },
-    failedAccessibilityAudits: [],
+    failedAudits: [],
     ...overrides,
   };
 }

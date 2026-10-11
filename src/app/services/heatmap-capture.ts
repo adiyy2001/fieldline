@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 export interface HeatmapCaptureRequest {
   readonly width: number;
   readonly height: number;
+  readonly contours?: boolean;
 }
 
 export interface HeatmapPixels {

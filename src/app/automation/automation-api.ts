@@ -487,6 +487,7 @@ export function createAutomationApi(dependencies: AutomationDependencies): Field
       return bridge().capture({
         width: request?.width ?? DEFAULT_CAPTURE_WIDTH,
         height: request?.height ?? DEFAULT_CAPTURE_HEIGHT,
+        contours: request?.contours ?? false,
       });
     },
     measureUpdate,

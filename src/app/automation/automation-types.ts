@@ -156,6 +156,7 @@ export interface GroundFrame {
 export interface FrameCaptureRequest {
   readonly width?: number;
   readonly height?: number;
+  readonly contours?: boolean;
 }
 
 export interface FrameCapture {
@@ -181,7 +182,11 @@ export interface AppBridge {
   snapshot(): AppSnapshot;
   settled(): Promise<void>;
   groundFrame(): GroundFrame | null;
-  capture(request: { width: number; height: number }): Promise<FrameCapture | null>;
+  capture(request: {
+    width: number;
+    height: number;
+    contours: boolean;
+  }): Promise<FrameCapture | null>;
 }
 
 export interface FieldlineAutomation {

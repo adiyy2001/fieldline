@@ -56,12 +56,14 @@ async function audit(
   }
   const { lhr } = run;
   const scoreOf = (id: Category): number | null => lhr.categories[id]?.score ?? null;
-  const failed = (lhr.categories['accessibility']?.auditRefs ?? []).flatMap((reference) => {
-    const entry = lhr.audits[reference.id];
-    return entry?.score !== null && entry?.score !== undefined && entry.score < 1
-      ? [{ id: entry.id, title: entry.title, score: entry.score }]
-      : [];
-  });
+  const failed = (['accessibility', 'best-practices'] as const).flatMap((category) =>
+    (lhr.categories[category]?.auditRefs ?? []).flatMap((reference) => {
+      const entry = lhr.audits[reference.id];
+      return entry?.score !== null && entry?.score !== undefined && entry.score < 1
+        ? [{ category, id: entry.id, title: entry.title, score: entry.score }]
+        : [];
+    }),
+  );
   return {
     renderer,
     formFactor,
@@ -71,7 +73,7 @@ async function audit(
       seo: scoreOf('seo'),
       performance: scoreOf('performance'),
     },
-    failedAccessibilityAudits: failed,
+    failedAudits: failed,
   };
 }
 

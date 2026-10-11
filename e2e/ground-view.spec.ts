@@ -16,6 +16,53 @@ async function openGround(page: Page, query = ''): Promise<void> {
   await callAutomation(page, 'settle');
 }
 
+const STROKE_CHANNEL_MINIMUM = 236;
+const FRAGMENT_PIXELS = 8;
+const MAXIMUM_STROKE_FRAGMENTS = 125;
+
+function countStrokeFragments(pixels: ArrayLike<number>, width: number, height: number): number {
+  const isStroke = (index: number): boolean =>
+    (pixels[index * 4] ?? 0) >= STROKE_CHANNEL_MINIMUM &&
+    (pixels[index * 4 + 1] ?? 0) >= STROKE_CHANNEL_MINIMUM &&
+    (pixels[index * 4 + 2] ?? 0) >= STROKE_CHANNEL_MINIMUM;
+  const visited = new Uint8Array(width * height);
+  let fragments = 0;
+  for (let start = 0; start < visited.length; start += 1) {
+    if (visited[start] === 1 || !isStroke(start)) {
+      continue;
+    }
+    let size = 0;
+    const pending = [start];
+    visited[start] = 1;
+    while (pending.length > 0) {
+      const index = pending.pop() ?? start;
+      size += 1;
+      const column = index % width;
+      const row = (index - column) / width;
+      for (let dy = -1; dy <= 1; dy += 1) {
+        for (let dx = -1; dx <= 1; dx += 1) {
+          const nextColumn = column + dx;
+          const nextRow = row + dy;
+          const next = nextRow * width + nextColumn;
+          if (
+            nextColumn >= 0 &&
+            nextColumn < width &&
+            nextRow >= 0 &&
+            nextRow < height &&
+            visited[next] === 0 &&
+            isStroke(next)
+          ) {
+            visited[next] = 1;
+            pending.push(next);
+          }
+        }
+      }
+    }
+    fragments += size < FRAGMENT_PIXELS ? 1 : 0;
+  }
+  return fragments;
+}
+
 async function readbackAgreesWithCpu(page: Page): Promise<number> {
   const state = await callAutomation(page, 'appState');
   const frame = await callAutomation(page, 'groundFrame');
@@ -73,12 +120,35 @@ async function readbackAgreesWithCpu(page: Page): Promise<number> {
   return distinct.size;
 }
 
+test('the ground view logs no console errors while it draws', async ({ page }) => {
+  const problems: string[] = [];
+  page.on('console', (message) => {
+    if (message.type() === 'error') {
+      problems.push(message.text());
+    }
+  });
+  page.on('pageerror', (error) => problems.push(error.message));
+  await openGround(page);
+  await expect(page.locator('.tower').first()).toBeVisible();
+  expect(problems).toEqual([]);
+});
+
 test.describe('the ground view on WebGPU', () => {
   test('draws a heatmap that is not blank and agrees with the CPU values', async ({ page }) => {
     await openGround(page);
     await expect(page.getByTestId('ground-caption')).toContainText('WebGPU, 512 by 1024');
     const distinct = await readbackAgreesWithCpu(page);
     expect(distinct).toBeGreaterThan(40);
+  });
+
+  test('dashes on steep contours stay whole instead of breaking into specks', async ({ page }) => {
+    await openGround(page, 'v=1&kv=1100&a=2000');
+    const size = { width: 1024, height: 384 };
+    const capture = await callAutomation(page, 'captureFrame', { ...size, contours: true });
+    expect(capture).not.toBeNull();
+    expect(
+      countStrokeFragments(capture?.pixels ?? [], size.width, size.height),
+    ).toBeLessThanOrEqual(MAXIMUM_STROKE_FRAGMENTS);
   });
 
   test('the magnetic and instantaneous heatmaps also agree with the CPU values', async ({

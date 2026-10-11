@@ -10,6 +10,7 @@ export const RENDERERS = ['webgpu', 'fallback'] as const;
 export type Renderer = (typeof RENDERERS)[number];
 
 export interface FailedAudit {
+  readonly category: Category;
   readonly id: string;
   readonly title: string;
   readonly score: number;
@@ -19,7 +20,7 @@ export interface AuditResult {
   readonly renderer: Renderer;
   readonly formFactor: FormFactor;
   readonly scores: Readonly<Record<Category, number | null>>;
-  readonly failedAccessibilityAudits: readonly FailedAudit[];
+  readonly failedAudits: readonly FailedAudit[];
 }
 
 export function belowThreshold(

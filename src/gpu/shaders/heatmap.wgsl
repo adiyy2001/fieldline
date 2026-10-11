@@ -94,8 +94,7 @@ fn fragmentMain(@builtin(position) position: vec4f) -> @location(0) vec4f {
   let scalar = bilinearScalar(lateral, along);
   let gradient = vec2f(dpdx(scalar), dpdy(scalar));
   let gradientLength = max(length(gradient), 1e-9);
-  let tangent = vec2f(-gradient.y, gradient.x) / gradientLength;
-  let travelled = dot(position.xy, tangent);
+  let travelled = select(position.y, position.x, abs(gradient.y) >= abs(gradient.x));
   var color = paletteColor(scalar / params.phase.w);
   let levelCount = u32(params.frame.w);
   for (var index = 0u; index < levelCount; index = index + 1u) {
