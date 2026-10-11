@@ -166,8 +166,8 @@ The slowest real case is the electric field lines on the Iris Xe, at 15.6 ms (64
 | Renderer     | Form factor | Accessibility | Best practices | SEO | Performance |
 | ------------ | ----------- | ------------- | -------------- | --- | ----------- |
 | WebGPU       | mobile      | 1             | 1              | 1   | 0.89        |
-| WebGPU       | desktop     | 1             | 1              | 1   | 0.86        |
-| CPU fallback | mobile      | 1             | 1              | 1   | 0.84        |
+| WebGPU       | desktop     | 1             | 1              | 1   | 0.76        |
+| CPU fallback | mobile      | 1             | 1              | 1   | 0.93        |
 | CPU fallback | desktop     | 1             | 1              | 1   | 1           |
 
 The WebGPU runs use the software adapter, so the performance score reflects a lab run without a GPU. The initial bundle is 367 kB raw, 101 kB transferred.
