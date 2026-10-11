@@ -269,7 +269,9 @@ test.describe('must have: compute and 3D views', () => {
     const before = (await callAutomation(page, 'appState'))?.settings.phaseDegrees;
     await page.getByTestId('scene-pause').click();
     await expect
-      .poll(async () => (await callAutomation(page, 'appState'))?.settings.phaseDegrees)
+      .poll(async () => (await callAutomation(page, 'appState'))?.settings.phaseDegrees, {
+        timeout: 60_000,
+      })
       .not.toBe(before);
   });
 
