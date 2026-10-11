@@ -211,7 +211,7 @@ Thresholds are 90 percent of lines for the core and 80 percent for the rest. A s
 - Unit tests (Vitest through the Angular builder) check the math against the analytic cases, plus fast-check properties for symmetry and superposition.
 - Playwright runs a `gpu` project against the production build with the SwiftShader adapter and a `cpu` project without WebGPU. They compare GPU and CPU fields, check the views, the keyboard paths, the fallback after a lost device, and screenshots of every view.
 - `pnpm test` runs unit tests, `pnpm test:coverage` adds coverage, `pnpm e2e` builds and runs Playwright (first run `pnpm exec playwright install chromium`).
-- CI runs the same steps and Lighthouse. I could not dry-run the workflow with `act` because it is not installed here, so I ran each of its commands in a clean container instead (see the commands above).
+- CI runs the same steps and Lighthouse. I could not dry-run the workflow with `act` because it is not installed here, so I ran a fresh clone with `pnpm install`, `pnpm start` and `pnpm verify` in a clean Node 24 container instead.
 
 ## Design decisions
 
