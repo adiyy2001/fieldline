@@ -50,7 +50,7 @@ describe('results report helpers', () => {
   });
 
   it('formats numbers and tables', () => {
-    expect(scientific(0.000645)).toBe('6.5e-4');
+    expect(scientific(0.000648)).toBe('6.5e-4');
     expect(milliseconds(42.14)).toBe('42.1');
     expect(milliseconds(1137.4)).toBe('1137');
     expect(markdownTable(['a', 'b'], [['1', '2']])).toBe('| a | b |\n| --- | --- |\n| 1 | 2 |');

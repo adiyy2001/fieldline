@@ -1,7 +1,7 @@
 {
   "environment": {
-    "date": "2026-10-11T00:42:24.551Z",
-    "commit": "e44caa1",
+    "date": "2026-10-11T01:13:51.595Z",
+    "commit": "ac6bbca",
     "node": "v24.21.0",
     "os": "linux 6.6.87.2-microsoft-standard-WSL2",
     "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
@@ -61,9 +61,9 @@
             "y": 1,
             "z": -49.03225806451613
           },
-          "gpuKernelMilliseconds": 748.182023,
-          "gpuWallMilliseconds": 750.6000000014901,
-          "cpuMilliseconds": 3922.300000000745
+          "gpuKernelMilliseconds": 766.812769,
+          "gpuWallMilliseconds": 769,
+          "cpuMilliseconds": 3735
         },
         {
           "scenario": "volume",
@@ -93,9 +93,9 @@
             "y": 29.523809523809522,
             "z": 595.9055118110236
           },
-          "gpuKernelMilliseconds": 743.776381,
-          "gpuWallMilliseconds": 748.5999999977648,
-          "cpuMilliseconds": 4324
+          "gpuKernelMilliseconds": 750.671259,
+          "gpuWallMilliseconds": 754.6999999992549,
+          "cpuMilliseconds": 4200.800000000745
         },
         {
           "scenario": "profile",
@@ -125,9 +125,9 @@
             "y": 1,
             "z": 450
           },
-          "gpuKernelMilliseconds": 1.638246,
-          "gpuWallMilliseconds": 5.900000002235174,
-          "cpuMilliseconds": 2.800000000745058
+          "gpuKernelMilliseconds": 1.457774,
+          "gpuWallMilliseconds": 5.799999997019768,
+          "cpuMilliseconds": 2.300000000745058
         },
         {
           "scenario": "clamp",
@@ -157,16 +157,16 @@
             "y": 20.138689606561933,
             "z": 437.5
           },
-          "gpuKernelMilliseconds": 0.594947,
-          "gpuWallMilliseconds": 3.7999999970197678,
-          "cpuMilliseconds": 1
+          "gpuKernelMilliseconds": 0.463943,
+          "gpuWallMilliseconds": 2.899999998509884,
+          "cpuMilliseconds": 0.8000000007450581
         }
       ]
     },
     {
       "tower": "delta",
       "segmentCount": 210,
-      "solveMilliseconds": 10.099999997764826,
+      "solveMilliseconds": 10.299999997019768,
       "scenarios": [
         {
           "scenario": "ground",
@@ -196,9 +196,9 @@
             "y": 1,
             "z": 601.0557184750733
           },
-          "gpuKernelMilliseconds": 742.796358,
-          "gpuWallMilliseconds": 744.3999999985099,
-          "cpuMilliseconds": 3512.199999999255
+          "gpuKernelMilliseconds": 744.295522,
+          "gpuWallMilliseconds": 746.1000000014901,
+          "cpuMilliseconds": 3191.10000000149
         },
         {
           "scenario": "volume",
@@ -228,9 +228,9 @@
             "y": 40.95238095238095,
             "z": 510.23622047244095
           },
-          "gpuKernelMilliseconds": 747.892594,
-          "gpuWallMilliseconds": 752.5,
-          "cpuMilliseconds": 3946.7000000029802
+          "gpuKernelMilliseconds": 727.983558,
+          "gpuWallMilliseconds": 733.8999999985099,
+          "cpuMilliseconds": 4043
         },
         {
           "scenario": "profile",
@@ -260,9 +260,9 @@
             "y": 1,
             "z": 450
           },
-          "gpuKernelMilliseconds": 1.109491,
-          "gpuWallMilliseconds": 5,
-          "cpuMilliseconds": 2.2000000029802322
+          "gpuKernelMilliseconds": 0.845976,
+          "gpuWallMilliseconds": 5.099999997764826,
+          "cpuMilliseconds": 1.800000000745058
         },
         {
           "scenario": "clamp",
@@ -292,16 +292,16 @@
             "y": 16.138689606561933,
             "z": 437.5
           },
-          "gpuKernelMilliseconds": 0.399508,
-          "gpuWallMilliseconds": 3.399999998509884,
-          "cpuMilliseconds": 1.1000000014901161
+          "gpuKernelMilliseconds": 0.382678,
+          "gpuWallMilliseconds": 3.100000001490116,
+          "cpuMilliseconds": 0.9000000022351742
         }
       ]
     },
     {
       "tower": "double-circuit",
       "segmentCount": 336,
-      "solveMilliseconds": 29.5,
+      "solveMilliseconds": 30.300000000745058,
       "scenarios": [
         {
           "scenario": "ground",
@@ -331,9 +331,9 @@
             "y": 1,
             "z": 904.1642228739003
           },
-          "gpuKernelMilliseconds": 1193.167088,
-          "gpuWallMilliseconds": 1195.199999999255,
-          "cpuMilliseconds": 4797.89999999851
+          "gpuKernelMilliseconds": 1114.182145,
+          "gpuWallMilliseconds": 1116,
+          "cpuMilliseconds": 4626.5
         },
         {
           "scenario": "volume",
@@ -363,9 +363,9 @@
             "y": 30.476190476190474,
             "z": 595.9055118110236
           },
-          "gpuKernelMilliseconds": 1131.934554,
-          "gpuWallMilliseconds": 1137.1000000014901,
-          "cpuMilliseconds": 5503.800000000745
+          "gpuKernelMilliseconds": 1107.804187,
+          "gpuWallMilliseconds": 1113.8999999985099,
+          "cpuMilliseconds": 5649.199999999255
         },
         {
           "scenario": "profile",
@@ -395,9 +395,9 @@
             "y": 1,
             "z": 450
           },
-          "gpuKernelMilliseconds": 1.866321,
-          "gpuWallMilliseconds": 5.699999999254942,
-          "cpuMilliseconds": 3.5
+          "gpuKernelMilliseconds": 1.122075,
+          "gpuWallMilliseconds": 6.5,
+          "cpuMilliseconds": 3.399999998509884
         },
         {
           "scenario": "clamp",
@@ -427,9 +427,9 @@
             "y": 28.138689606561933,
             "z": 437.5
           },
-          "gpuKernelMilliseconds": 0.660149,
-          "gpuWallMilliseconds": 3.399999998509884,
-          "cpuMilliseconds": 1.300000000745058
+          "gpuKernelMilliseconds": 0.524927,
+          "gpuWallMilliseconds": 3,
+          "cpuMilliseconds": 0.8999999985098839
         }
       ]
     }

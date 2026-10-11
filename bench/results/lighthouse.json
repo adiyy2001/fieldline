@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-11T00:52:06.447Z",
+  "generatedAt": "2026-10-11T01:20:28.346Z",
   "node": "v24.21.0",
   "platform": "linux 6.6.87.2-microsoft-standard-WSL2 x64",
   "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
@@ -28,72 +28,44 @@
       "formFactor": "mobile",
       "scores": {
         "accessibility": 1,
-        "best-practices": 0.96,
+        "best-practices": 1,
         "seo": 1,
         "performance": 0.89
       },
-      "failedAudits": [
-        {
-          "category": "best-practices",
-          "id": "errors-in-console",
-          "title": "Browser errors were logged to the console",
-          "score": 0
-        }
-      ]
+      "failedAudits": []
     },
     {
       "renderer": "webgpu",
       "formFactor": "desktop",
       "scores": {
         "accessibility": 1,
-        "best-practices": 0.96,
+        "best-practices": 1,
         "seo": 1,
-        "performance": 0.94
+        "performance": 0.86
       },
-      "failedAudits": [
-        {
-          "category": "best-practices",
-          "id": "errors-in-console",
-          "title": "Browser errors were logged to the console",
-          "score": 0
-        }
-      ]
+      "failedAudits": []
     },
     {
       "renderer": "fallback",
       "formFactor": "mobile",
       "scores": {
         "accessibility": 1,
-        "best-practices": 0.96,
+        "best-practices": 1,
         "seo": 1,
         "performance": 0.84
       },
-      "failedAudits": [
-        {
-          "category": "best-practices",
-          "id": "errors-in-console",
-          "title": "Browser errors were logged to the console",
-          "score": 0
-        }
-      ]
+      "failedAudits": []
     },
     {
       "renderer": "fallback",
       "formFactor": "desktop",
       "scores": {
         "accessibility": 1,
-        "best-practices": 0.96,
+        "best-practices": 1,
         "seo": 1,
         "performance": 1
       },
-      "failedAudits": [
-        {
-          "category": "best-practices",
-          "id": "errors-in-console",
-          "title": "Browser errors were logged to the console",
-          "score": 0
-        }
-      ]
+      "failedAudits": []
     }
   ]
 }

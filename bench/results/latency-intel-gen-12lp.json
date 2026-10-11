@@ -1,7 +1,7 @@
 {
   "environment": {
-    "date": "2026-10-11T00:04:01.659Z",
-    "commit": "6e615d9",
+    "date": "2026-10-11T01:22:12.491Z",
+    "commit": "ac6bbca",
     "node": "v24.21.0",
     "os": "linux 6.6.87.2-microsoft-standard-WSL2",
     "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
@@ -34,72 +34,72 @@
       "name": "horizontal geometry change",
       "backend": "gpu",
       "quality": "full",
-      "updateMedianMilliseconds": 74.6,
-      "updateP95Milliseconds": 78.5,
-      "solveMedianMilliseconds": 9.1,
-      "evaluateMedianMilliseconds": 52.2,
+      "updateMedianMilliseconds": 73,
+      "updateP95Milliseconds": 83,
+      "solveMedianMilliseconds": 9.2,
+      "evaluateMedianMilliseconds": 51.4,
       "renderMedianMilliseconds": 8.1,
-      "endToEndMedianMilliseconds": 82.8,
+      "endToEndMedianMilliseconds": 81.1,
       "withinTarget": true
     },
     {
       "name": "horizontal geometry drag, draft quality",
       "backend": "gpu",
       "quality": "draft",
-      "updateMedianMilliseconds": 57.6,
-      "updateP95Milliseconds": 63.8,
-      "solveMedianMilliseconds": 5.7,
-      "evaluateMedianMilliseconds": 19.4,
-      "renderMedianMilliseconds": 8,
-      "endToEndMedianMilliseconds": 65.5,
+      "updateMedianMilliseconds": 61.2,
+      "updateP95Milliseconds": 76.4,
+      "solveMedianMilliseconds": 7.8,
+      "evaluateMedianMilliseconds": 20.6,
+      "renderMedianMilliseconds": 8.2,
+      "endToEndMedianMilliseconds": 68.8,
       "withinTarget": true
     },
     {
       "name": "horizontal voltage change",
       "backend": "gpu",
       "quality": "full",
-      "updateMedianMilliseconds": 105.8,
-      "updateP95Milliseconds": 121,
+      "updateMedianMilliseconds": 104.2,
+      "updateP95Milliseconds": 115.9,
       "solveMedianMilliseconds": 0,
-      "evaluateMedianMilliseconds": 94.1,
-      "renderMedianMilliseconds": 8.3,
-      "endToEndMedianMilliseconds": 114.7,
+      "evaluateMedianMilliseconds": 92.5,
+      "renderMedianMilliseconds": 8,
+      "endToEndMedianMilliseconds": 112.1,
       "withinTarget": true
     },
     {
       "name": "double-circuit geometry change",
       "backend": "gpu",
       "quality": "full",
-      "updateMedianMilliseconds": 120.7,
-      "updateP95Milliseconds": 134.2,
-      "solveMedianMilliseconds": 28.9,
-      "evaluateMedianMilliseconds": 71.7,
+      "updateMedianMilliseconds": 118.7,
+      "updateP95Milliseconds": 134.9,
+      "solveMedianMilliseconds": 27.7,
+      "evaluateMedianMilliseconds": 73.4,
       "renderMedianMilliseconds": 8.1,
-      "endToEndMedianMilliseconds": 128.6,
+      "endToEndMedianMilliseconds": 126.9,
       "withinTarget": true
     },
     {
       "name": "double-circuit voltage change",
       "backend": "gpu",
       "quality": "full",
-      "updateMedianMilliseconds": 120.2,
-      "updateP95Milliseconds": 127.6,
+      "updateMedianMilliseconds": 121.7,
+      "updateP95Milliseconds": 133.8,
       "solveMedianMilliseconds": 0,
-      "evaluateMedianMilliseconds": 105.2,
-      "renderMedianMilliseconds": 8.1,
-      "endToEndMedianMilliseconds": 128.7,
+      "evaluateMedianMilliseconds": 107.2,
+      "renderMedianMilliseconds": 8.3,
+      "endToEndMedianMilliseconds": 129.6,
       "withinTarget": true
     },
     {
       "name": "double-circuit phasing change",
       "backend": "gpu",
       "quality": "full",
-      "updateMedianMilliseconds": 128.2,
-      "updateP95Milliseconds": 133.8,
+      "updateMedianMilliseconds": 132.5,
+      "updateP95Milliseconds": 140.5,
       "solveMedianMilliseconds": 0,
-      "evaluateMedianMilliseconds": 113.6,
+      "evaluateMedianMilliseconds": 118.5,
       "renderMedianMilliseconds": 8.3,
-      "endToEndMedianMilliseconds": 136.5,
+      "endToEndMedianMilliseconds": 141.7,
       "withinTarget": true
     }
   ],
@@ -112,20 +112,20 @@
           "quality": "full",
           "solveMilliseconds": 8.699999988079071,
           "evaluateMilliseconds": 47.80000001192093,
-          "pipelineMilliseconds": 56.5,
-          "updateMilliseconds": 70.30000001192093,
-          "renderMilliseconds": 7.5,
-          "endToEndMilliseconds": 77.80000001192093
+          "pipelineMilliseconds": 56.59999996423721,
+          "updateMilliseconds": 72.69999998807907,
+          "renderMilliseconds": 8.300000011920929,
+          "endToEndMilliseconds": 81
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 9.699999988079071,
-          "evaluateMilliseconds": 50.19999998807907,
-          "pipelineMilliseconds": 60,
-          "updateMilliseconds": 75.20000004768372,
+          "solveMilliseconds": 10.899999976158142,
+          "evaluateMilliseconds": 54.90000003576279,
+          "pipelineMilliseconds": 65.80000001192093,
+          "updateMilliseconds": 83,
           "renderMilliseconds": 8.199999988079071,
-          "endToEndMilliseconds": 83.40000003576279
+          "endToEndMilliseconds": 91.19999998807907
         },
         {
           "backend": "gpu",
@@ -133,129 +133,129 @@
           "solveMilliseconds": 8.799999952316284,
           "evaluateMilliseconds": 51.200000047683716,
           "pipelineMilliseconds": 60,
-          "updateMilliseconds": 75.40000003576279,
-          "renderMilliseconds": 7.899999976158142,
-          "endToEndMilliseconds": 83.30000001192093
+          "updateMilliseconds": 71.60000002384186,
+          "renderMilliseconds": 8.199999988079071,
+          "endToEndMilliseconds": 79.80000001192093
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 8.699999988079071,
-          "evaluateMilliseconds": 54.09999996423721,
-          "pipelineMilliseconds": 62.89999997615814,
-          "updateMilliseconds": 75.60000002384186,
-          "renderMilliseconds": 7.5,
-          "endToEndMilliseconds": 83.10000002384186
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 9.099999964237213,
-          "evaluateMilliseconds": 48.5,
-          "pipelineMilliseconds": 57.59999996423721,
+          "solveMilliseconds": 9.199999988079071,
+          "evaluateMilliseconds": 48.69999998807907,
+          "pipelineMilliseconds": 57.89999997615814,
           "updateMilliseconds": 69.30000001192093,
-          "renderMilliseconds": 8.300000011920929,
-          "endToEndMilliseconds": 77.60000002384186
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 12.799999952316284,
-          "evaluateMilliseconds": 52.60000002384186,
-          "pipelineMilliseconds": 65.5,
-          "updateMilliseconds": 78.5,
-          "renderMilliseconds": 8.200000047683716,
-          "endToEndMilliseconds": 86.70000004768372
+          "renderMilliseconds": 8.199999988079071,
+          "endToEndMilliseconds": 77.5
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 9.5,
-          "evaluateMilliseconds": 54.59999996423721,
-          "pipelineMilliseconds": 64.09999996423721,
-          "updateMilliseconds": 76.39999997615814,
-          "renderMilliseconds": 7.600000023841858,
-          "endToEndMilliseconds": 84
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 9.699999988079071,
-          "evaluateMilliseconds": 53,
-          "pipelineMilliseconds": 62.69999998807907,
-          "updateMilliseconds": 74.59999996423721,
-          "renderMilliseconds": 8.199999988079071,
-          "endToEndMilliseconds": 82.79999995231628
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 8.700000047683716,
-          "evaluateMilliseconds": 57.299999952316284,
-          "pipelineMilliseconds": 66,
-          "updateMilliseconds": 78,
-          "renderMilliseconds": 8.100000023841858,
-          "endToEndMilliseconds": 86.10000002384186
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 9.399999976158142,
-          "evaluateMilliseconds": 52.5,
-          "pipelineMilliseconds": 61.89999997615814,
+          "evaluateMilliseconds": 51.30000001192093,
+          "pipelineMilliseconds": 60.89999997615814,
           "updateMilliseconds": 73,
-          "renderMilliseconds": 8,
-          "endToEndMilliseconds": 81
+          "renderMilliseconds": 8.100000023841858,
+          "endToEndMilliseconds": 81.10000002384186
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 9.100000023841858,
-          "evaluateMilliseconds": 52.19999998807907,
-          "pipelineMilliseconds": 61.30000001192093,
-          "updateMilliseconds": 72.90000003576279,
-          "renderMilliseconds": 7.699999988079071,
-          "endToEndMilliseconds": 80.60000002384186
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 9.600000023841858,
-          "evaluateMilliseconds": 53.80000001192093,
-          "pipelineMilliseconds": 63.5,
-          "updateMilliseconds": 75.30000001192093,
-          "renderMilliseconds": 8.399999976158142,
-          "endToEndMilliseconds": 83.69999998807907
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 9.699999988079071,
-          "evaluateMilliseconds": 47.80000001192093,
-          "pipelineMilliseconds": 57.5,
-          "updateMilliseconds": 69,
-          "renderMilliseconds": 8.099999964237213,
-          "endToEndMilliseconds": 77.09999996423721
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 8.399999976158142,
-          "evaluateMilliseconds": 50.60000002384186,
-          "pipelineMilliseconds": 59,
-          "updateMilliseconds": 71.39999997615814,
-          "renderMilliseconds": 7.700000047683716,
-          "endToEndMilliseconds": 79.10000002384186
+          "solveMilliseconds": 9.199999988079071,
+          "evaluateMilliseconds": 48.89999997615814,
+          "pipelineMilliseconds": 58.09999996423721,
+          "updateMilliseconds": 70.10000002384186,
+          "renderMilliseconds": 7.599999964237213,
+          "endToEndMilliseconds": 77.69999998807907
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 9.099999964237213,
-          "evaluateMilliseconds": 45.90000003576279,
-          "pipelineMilliseconds": 55,
-          "updateMilliseconds": 67.10000002384186,
+          "evaluateMilliseconds": 51.40000003576279,
+          "pipelineMilliseconds": 60.5,
+          "updateMilliseconds": 72.89999997615814,
+          "renderMilliseconds": 7.700000047683716,
+          "endToEndMilliseconds": 80.60000002384186
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 11.200000047683716,
+          "evaluateMilliseconds": 50.59999996423721,
+          "pipelineMilliseconds": 61.80000001192093,
+          "updateMilliseconds": 73.80000001192093,
+          "renderMilliseconds": 7.899999976158142,
+          "endToEndMilliseconds": 81.69999998807907
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 9.199999988079071,
+          "evaluateMilliseconds": 49.09999996423721,
+          "pipelineMilliseconds": 58.299999952316284,
+          "updateMilliseconds": 68.89999997615814,
           "renderMilliseconds": 8.199999988079071,
-          "endToEndMilliseconds": 75.30000001192093
+          "endToEndMilliseconds": 77.09999996423721
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 12.400000035762787,
+          "evaluateMilliseconds": 51.5,
+          "pipelineMilliseconds": 64,
+          "updateMilliseconds": 76.69999998807907,
+          "renderMilliseconds": 7.599999964237213,
+          "endToEndMilliseconds": 84.29999995231628
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 9.199999988079071,
+          "evaluateMilliseconds": 52.30000001192093,
+          "pipelineMilliseconds": 61.60000002384186,
+          "updateMilliseconds": 73.90000003576279,
+          "renderMilliseconds": 7.800000011920929,
+          "endToEndMilliseconds": 81.70000004768372
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 9.800000011920929,
+          "evaluateMilliseconds": 53,
+          "pipelineMilliseconds": 62.90000003576279,
+          "updateMilliseconds": 74.79999995231628,
+          "renderMilliseconds": 8.400000035762787,
+          "endToEndMilliseconds": 83.19999998807907
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 10,
+          "evaluateMilliseconds": 54.89999997615814,
+          "pipelineMilliseconds": 65,
+          "updateMilliseconds": 77,
+          "renderMilliseconds": 8.300000011920929,
+          "endToEndMilliseconds": 85.30000001192093
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 9.300000011920929,
+          "evaluateMilliseconds": 51.799999952316284,
+          "pipelineMilliseconds": 61.09999996423721,
+          "updateMilliseconds": 72.40000003576279,
+          "renderMilliseconds": 7.699999988079071,
+          "endToEndMilliseconds": 80.10000002384186
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 8.699999988079071,
+          "evaluateMilliseconds": 53.60000002384186,
+          "pipelineMilliseconds": 62.30000001192093,
+          "updateMilliseconds": 73.59999996423721,
+          "renderMilliseconds": 8,
+          "endToEndMilliseconds": 81.59999996423721
         }
       ]
     },
@@ -265,152 +265,152 @@
         {
           "backend": "gpu",
           "quality": "draft",
-          "solveMilliseconds": 6.599999964237213,
-          "evaluateMilliseconds": 21.5,
-          "pipelineMilliseconds": 28.19999998807907,
-          "updateMilliseconds": 59.90000003576279,
-          "renderMilliseconds": 8.599999964237213,
+          "solveMilliseconds": 13.5,
+          "evaluateMilliseconds": 26.5,
+          "pipelineMilliseconds": 40,
+          "updateMilliseconds": 76.39999997615814,
+          "renderMilliseconds": 8.399999976158142,
+          "endToEndMilliseconds": 84.79999995231628
+        },
+        {
+          "backend": "gpu",
+          "quality": "draft",
+          "solveMilliseconds": 9.899999976158142,
+          "evaluateMilliseconds": 21,
+          "pipelineMilliseconds": 30.899999976158142,
+          "updateMilliseconds": 62.39999997615814,
+          "renderMilliseconds": 8.400000035762787,
+          "endToEndMilliseconds": 70.80000001192093
+        },
+        {
+          "backend": "gpu",
+          "quality": "draft",
+          "solveMilliseconds": 7.700000047683716,
+          "evaluateMilliseconds": 24.30000001192093,
+          "pipelineMilliseconds": 32.10000002384186,
+          "updateMilliseconds": 65.79999995231628,
+          "renderMilliseconds": 8.400000035762787,
+          "endToEndMilliseconds": 74.19999998807907
+        },
+        {
+          "backend": "gpu",
+          "quality": "draft",
+          "solveMilliseconds": 7.800000011920929,
+          "evaluateMilliseconds": 21.100000023841858,
+          "pipelineMilliseconds": 28.900000035762787,
+          "updateMilliseconds": 61,
+          "renderMilliseconds": 7.800000011920929,
+          "endToEndMilliseconds": 68.80000001192093
+        },
+        {
+          "backend": "gpu",
+          "quality": "draft",
+          "solveMilliseconds": 8.399999976158142,
+          "evaluateMilliseconds": 20.69999998807907,
+          "pipelineMilliseconds": 29.19999998807907,
+          "updateMilliseconds": 61.5,
+          "renderMilliseconds": 8.600000023841858,
+          "endToEndMilliseconds": 70.10000002384186
+        },
+        {
+          "backend": "gpu",
+          "quality": "draft",
+          "solveMilliseconds": 8.200000047683716,
+          "evaluateMilliseconds": 20.5,
+          "pipelineMilliseconds": 28.700000047683716,
+          "updateMilliseconds": 63.299999952316284,
+          "renderMilliseconds": 8.800000011920929,
+          "endToEndMilliseconds": 72.09999996423721
+        },
+        {
+          "backend": "gpu",
+          "quality": "draft",
+          "solveMilliseconds": 12.5,
+          "evaluateMilliseconds": 20.600000023841858,
+          "pipelineMilliseconds": 33.10000002384186,
+          "updateMilliseconds": 65.19999998807907,
+          "renderMilliseconds": 3.300000011920929,
           "endToEndMilliseconds": 68.5
         },
         {
           "backend": "gpu",
           "quality": "draft",
-          "solveMilliseconds": 10.699999988079071,
-          "evaluateMilliseconds": 18.19999998807907,
-          "pipelineMilliseconds": 28.899999976158142,
-          "updateMilliseconds": 59,
-          "renderMilliseconds": 7.800000011920929,
-          "endToEndMilliseconds": 66.80000001192093
+          "solveMilliseconds": 6.199999988079071,
+          "evaluateMilliseconds": 20.400000035762787,
+          "pipelineMilliseconds": 26.600000023841858,
+          "updateMilliseconds": 57,
+          "renderMilliseconds": 8.099999964237213,
+          "endToEndMilliseconds": 65.09999996423721
+        },
+        {
+          "backend": "gpu",
+          "quality": "draft",
+          "solveMilliseconds": 10.200000047683716,
+          "evaluateMilliseconds": 23.299999952316284,
+          "pipelineMilliseconds": 33.5,
+          "updateMilliseconds": 65.89999997615814,
+          "renderMilliseconds": 8.199999988079071,
+          "endToEndMilliseconds": 74.09999996423721
+        },
+        {
+          "backend": "gpu",
+          "quality": "draft",
+          "solveMilliseconds": 5.400000035762787,
+          "evaluateMilliseconds": 19,
+          "pipelineMilliseconds": 24.400000035762787,
+          "updateMilliseconds": 57.10000002384186,
+          "renderMilliseconds": 7.899999976158142,
+          "endToEndMilliseconds": 65
+        },
+        {
+          "backend": "gpu",
+          "quality": "draft",
+          "solveMilliseconds": 7.900000035762787,
+          "evaluateMilliseconds": 20.80000001192093,
+          "pipelineMilliseconds": 28.80000001192093,
+          "updateMilliseconds": 61.19999998807907,
+          "renderMilliseconds": 7.899999976158142,
+          "endToEndMilliseconds": 69.09999996423721
+        },
+        {
+          "backend": "gpu",
+          "quality": "draft",
+          "solveMilliseconds": 7.800000011920929,
+          "evaluateMilliseconds": 19.600000023841858,
+          "pipelineMilliseconds": 27.5,
+          "updateMilliseconds": 57.59999996423721,
+          "renderMilliseconds": 8.199999988079071,
+          "endToEndMilliseconds": 65.79999995231628
         },
         {
           "backend": "gpu",
           "quality": "draft",
           "solveMilliseconds": 4.199999988079071,
-          "evaluateMilliseconds": 17.200000047683716,
-          "pipelineMilliseconds": 21.5,
-          "updateMilliseconds": 51.19999998807907,
-          "renderMilliseconds": 8.300000011920929,
-          "endToEndMilliseconds": 59.5
-        },
-        {
-          "backend": "gpu",
-          "quality": "draft",
-          "solveMilliseconds": 8,
-          "evaluateMilliseconds": 19.399999976158142,
-          "pipelineMilliseconds": 27.399999976158142,
-          "updateMilliseconds": 58.19999998807907,
-          "renderMilliseconds": 7.5,
-          "endToEndMilliseconds": 65.69999998807907
-        },
-        {
-          "backend": "gpu",
-          "quality": "draft",
-          "solveMilliseconds": 8.699999988079071,
-          "evaluateMilliseconds": 20.600000023841858,
-          "pipelineMilliseconds": 29.30000001192093,
-          "updateMilliseconds": 60.299999952316284,
-          "renderMilliseconds": 8.100000023841858,
-          "endToEndMilliseconds": 68.39999997615814
-        },
-        {
-          "backend": "gpu",
-          "quality": "draft",
-          "solveMilliseconds": 4.399999976158142,
-          "evaluateMilliseconds": 17.600000023841858,
-          "pipelineMilliseconds": 22,
-          "updateMilliseconds": 52.90000003576279,
-          "renderMilliseconds": 7.899999976158142,
-          "endToEndMilliseconds": 60.80000001192093
-        },
-        {
-          "backend": "gpu",
-          "quality": "draft",
-          "solveMilliseconds": 5.699999988079071,
-          "evaluateMilliseconds": 16.099999964237213,
-          "pipelineMilliseconds": 21.799999952316284,
-          "updateMilliseconds": 51.89999997615814,
-          "renderMilliseconds": 8.400000035762787,
-          "endToEndMilliseconds": 60.30000001192093
-        },
-        {
-          "backend": "gpu",
-          "quality": "draft",
-          "solveMilliseconds": 5.299999952316284,
-          "evaluateMilliseconds": 16.5,
-          "pipelineMilliseconds": 21.799999952316284,
-          "updateMilliseconds": 52.299999952316284,
-          "renderMilliseconds": 7.800000011920929,
-          "endToEndMilliseconds": 60.09999996423721
-        },
-        {
-          "backend": "gpu",
-          "quality": "draft",
-          "solveMilliseconds": 4.300000011920929,
-          "evaluateMilliseconds": 19.69999998807907,
-          "pipelineMilliseconds": 24,
-          "updateMilliseconds": 52.5,
-          "renderMilliseconds": 8.200000047683716,
-          "endToEndMilliseconds": 60.700000047683716
-        },
-        {
-          "backend": "gpu",
-          "quality": "draft",
-          "solveMilliseconds": 4.599999964237213,
-          "evaluateMilliseconds": 19.400000035762787,
-          "pipelineMilliseconds": 24,
-          "updateMilliseconds": 57.59999996423721,
-          "renderMilliseconds": 7.900000035762787,
-          "endToEndMilliseconds": 65.5
-        },
-        {
-          "backend": "gpu",
-          "quality": "draft",
-          "solveMilliseconds": 9.599999964237213,
-          "evaluateMilliseconds": 21.5,
-          "pipelineMilliseconds": 31.099999964237213,
-          "updateMilliseconds": 62.60000002384186,
-          "renderMilliseconds": 7.699999988079071,
-          "endToEndMilliseconds": 70.30000001192093
-        },
-        {
-          "backend": "gpu",
-          "quality": "draft",
-          "solveMilliseconds": 11.199999988079071,
-          "evaluateMilliseconds": 21.299999952316284,
-          "pipelineMilliseconds": 32.59999996423721,
-          "updateMilliseconds": 63.80000001192093,
-          "renderMilliseconds": 8.199999988079071,
-          "endToEndMilliseconds": 72
-        },
-        {
-          "backend": "gpu",
-          "quality": "draft",
-          "solveMilliseconds": 4.299999952316284,
-          "evaluateMilliseconds": 18.900000035762787,
-          "pipelineMilliseconds": 23.19999998807907,
-          "updateMilliseconds": 53.09999996423721,
-          "renderMilliseconds": 7.600000023841858,
+          "evaluateMilliseconds": 19.899999976158142,
+          "pipelineMilliseconds": 24.099999964237213,
+          "updateMilliseconds": 54.69999998807907,
+          "renderMilliseconds": 6,
           "endToEndMilliseconds": 60.69999998807907
         },
         {
           "backend": "gpu",
           "quality": "draft",
-          "solveMilliseconds": 8.099999964237213,
-          "evaluateMilliseconds": 21.900000035762787,
-          "pipelineMilliseconds": 30,
-          "updateMilliseconds": 63.19999998807907,
-          "renderMilliseconds": 8,
-          "endToEndMilliseconds": 71.19999998807907
+          "solveMilliseconds": 4,
+          "evaluateMilliseconds": 17.69999998807907,
+          "pipelineMilliseconds": 21.80000001192093,
+          "updateMilliseconds": 50.90000003576279,
+          "renderMilliseconds": 8.599999964237213,
+          "endToEndMilliseconds": 59.5
         },
         {
           "backend": "gpu",
           "quality": "draft",
-          "solveMilliseconds": 4.5,
-          "evaluateMilliseconds": 21.80000001192093,
-          "pipelineMilliseconds": 26.30000001192093,
-          "updateMilliseconds": 55.89999997615814,
-          "renderMilliseconds": 8,
-          "endToEndMilliseconds": 63.89999997615814
+          "solveMilliseconds": 4.300000011920929,
+          "evaluateMilliseconds": 17.599999964237213,
+          "pipelineMilliseconds": 21.899999976158142,
+          "updateMilliseconds": 50.60000002384186,
+          "renderMilliseconds": 5.199999988079071,
+          "endToEndMilliseconds": 55.80000001192093
         }
       ]
     },
@@ -421,150 +421,150 @@
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 97.30000001192093,
-          "pipelineMilliseconds": 97.39999997615814,
-          "updateMilliseconds": 111.80000001192093,
-          "renderMilliseconds": 8.5,
-          "endToEndMilliseconds": 120.30000001192093
+          "evaluateMilliseconds": 86,
+          "pipelineMilliseconds": 86.10000002384186,
+          "updateMilliseconds": 97.90000003576279,
+          "renderMilliseconds": 8.599999964237213,
+          "endToEndMilliseconds": 106.5
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 81,
-          "pipelineMilliseconds": 81.09999996423721,
-          "updateMilliseconds": 92.80000001192093,
-          "renderMilliseconds": 8.600000023841858,
-          "endToEndMilliseconds": 101.40000003576279
+          "evaluateMilliseconds": 85,
+          "pipelineMilliseconds": 85,
+          "updateMilliseconds": 96.69999998807907,
+          "renderMilliseconds": 8,
+          "endToEndMilliseconds": 104.69999998807907
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0.09999996423721313,
+          "evaluateMilliseconds": 91.40000003576279,
+          "pipelineMilliseconds": 91.5,
+          "updateMilliseconds": 103.5,
+          "renderMilliseconds": 8,
+          "endToEndMilliseconds": 111.5
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 82,
-          "pipelineMilliseconds": 82,
-          "updateMilliseconds": 93.40000003576279,
-          "renderMilliseconds": 7.699999988079071,
-          "endToEndMilliseconds": 101.10000002384186
+          "evaluateMilliseconds": 89,
+          "pipelineMilliseconds": 89,
+          "updateMilliseconds": 100.60000002384186,
+          "renderMilliseconds": 8.100000023841858,
+          "endToEndMilliseconds": 108.70000004768372
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 89.90000003576279,
-          "pipelineMilliseconds": 89.90000003576279,
-          "updateMilliseconds": 100.90000003576279,
-          "renderMilliseconds": 8.299999952316284,
+          "evaluateMilliseconds": 89.29999995231628,
+          "pipelineMilliseconds": 89.29999995231628,
+          "updateMilliseconds": 101.39999997615814,
+          "renderMilliseconds": 7.800000011920929,
           "endToEndMilliseconds": 109.19999998807907
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 90,
-          "pipelineMilliseconds": 90,
-          "updateMilliseconds": 100.80000001192093,
+          "evaluateMilliseconds": 90.30000001192093,
+          "pipelineMilliseconds": 90.40000003576279,
+          "updateMilliseconds": 102,
+          "renderMilliseconds": 8.100000023841858,
+          "endToEndMilliseconds": 110.10000002384186
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 85.5,
+          "pipelineMilliseconds": 85.5,
+          "updateMilliseconds": 98,
           "renderMilliseconds": 8,
-          "endToEndMilliseconds": 108.80000001192093
+          "endToEndMilliseconds": 106
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0.09999996423721313,
-          "evaluateMilliseconds": 89.30000001192093,
-          "pipelineMilliseconds": 89.39999997615814,
-          "updateMilliseconds": 102.60000002384186,
-          "renderMilliseconds": 7.599999964237213,
-          "endToEndMilliseconds": 110.19999998807907
+          "evaluateMilliseconds": 96.30000001192093,
+          "pipelineMilliseconds": 96.39999997615814,
+          "updateMilliseconds": 108.5,
+          "renderMilliseconds": 7.899999976158142,
+          "endToEndMilliseconds": 116.39999997615814
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 90.20000004768372,
-          "pipelineMilliseconds": 90.20000004768372,
-          "updateMilliseconds": 101.30000001192093,
-          "renderMilliseconds": 8.300000011920929,
-          "endToEndMilliseconds": 109.60000002384186
+          "evaluateMilliseconds": 92.5,
+          "pipelineMilliseconds": 92.5,
+          "updateMilliseconds": 104.19999998807907,
+          "renderMilliseconds": 7.900000035762787,
+          "endToEndMilliseconds": 112.10000002384186
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 95.19999998807907,
-          "pipelineMilliseconds": 95.29999995231628,
-          "updateMilliseconds": 107.59999996423721,
-          "renderMilliseconds": 15.199999988079071,
-          "endToEndMilliseconds": 122.79999995231628
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 94.10000002384186,
-          "pipelineMilliseconds": 94.19999998807907,
-          "updateMilliseconds": 105.79999995231628,
-          "renderMilliseconds": 15.900000035762787,
-          "endToEndMilliseconds": 121.69999998807907
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 92.80000001192093,
-          "pipelineMilliseconds": 92.80000001192093,
-          "updateMilliseconds": 105.19999998807907,
-          "renderMilliseconds": 8.100000023841858,
-          "endToEndMilliseconds": 113.30000001192093
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 94.60000002384186,
-          "pipelineMilliseconds": 94.69999998807907,
-          "updateMilliseconds": 106.5,
+          "evaluateMilliseconds": 96.69999998807907,
+          "pipelineMilliseconds": 96.69999998807907,
+          "updateMilliseconds": 108.19999998807907,
           "renderMilliseconds": 8.199999988079071,
-          "endToEndMilliseconds": 114.69999998807907
+          "endToEndMilliseconds": 116.39999997615814
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0.09999996423721313,
-          "evaluateMilliseconds": 102.60000002384186,
-          "pipelineMilliseconds": 102.69999998807907,
-          "updateMilliseconds": 113.39999997615814,
-          "renderMilliseconds": 7.699999988079071,
-          "endToEndMilliseconds": 121.09999996423721
+          "evaluateMilliseconds": 95.30000001192093,
+          "pipelineMilliseconds": 95.39999997615814,
+          "updateMilliseconds": 107.59999996423721,
+          "renderMilliseconds": 7.900000035762787,
+          "endToEndMilliseconds": 115.5
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 108.79999995231628,
-          "pipelineMilliseconds": 108.79999995231628,
-          "updateMilliseconds": 121,
-          "renderMilliseconds": 8.599999964237213,
-          "endToEndMilliseconds": 129.5999999642372
+          "evaluateMilliseconds": 97.60000002384186,
+          "pipelineMilliseconds": 97.60000002384186,
+          "updateMilliseconds": 109.20000004768372,
+          "renderMilliseconds": 8.299999952316284,
+          "endToEndMilliseconds": 117.5
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 106.30000001192093,
-          "pipelineMilliseconds": 106.30000001192093,
-          "updateMilliseconds": 118,
-          "renderMilliseconds": 15.800000011920929,
-          "endToEndMilliseconds": 133.80000001192093
+          "evaluateMilliseconds": 98.59999996423721,
+          "pipelineMilliseconds": 98.59999996423721,
+          "updateMilliseconds": 110.69999998807907,
+          "renderMilliseconds": 7.700000047683716,
+          "endToEndMilliseconds": 118.40000003576279
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 0.10000002384185791,
-          "evaluateMilliseconds": 104.5,
-          "pipelineMilliseconds": 104.60000002384186,
-          "updateMilliseconds": 116.30000001192093,
-          "renderMilliseconds": 8.100000023841858,
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 96.89999997615814,
+          "pipelineMilliseconds": 96.89999997615814,
+          "updateMilliseconds": 108.40000003576279,
+          "renderMilliseconds": 8.5,
+          "endToEndMilliseconds": 116.90000003576279
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 104.69999998807907,
+          "pipelineMilliseconds": 104.80000001192093,
+          "updateMilliseconds": 115.90000003576279,
+          "renderMilliseconds": 8.5,
           "endToEndMilliseconds": 124.40000003576279
         }
       ]
@@ -575,152 +575,152 @@
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 27.600000023841858,
-          "evaluateMilliseconds": 70.39999997615814,
-          "pipelineMilliseconds": 98,
-          "updateMilliseconds": 112.69999998807907,
-          "renderMilliseconds": 8.399999976158142,
-          "endToEndMilliseconds": 121.09999996423721
+          "solveMilliseconds": 30.30000001192093,
+          "evaluateMilliseconds": 65.09999996423721,
+          "pipelineMilliseconds": 95.39999997615814,
+          "updateMilliseconds": 109.69999998807907,
+          "renderMilliseconds": 7.700000047683716,
+          "endToEndMilliseconds": 117.40000003576279
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 27.5,
-          "evaluateMilliseconds": 66.40000003576279,
-          "pipelineMilliseconds": 94,
-          "updateMilliseconds": 108.30000001192093,
+          "solveMilliseconds": 26.69999998807907,
+          "evaluateMilliseconds": 63,
+          "pipelineMilliseconds": 89.89999997615814,
+          "updateMilliseconds": 105.10000002384186,
+          "renderMilliseconds": 8.800000011920929,
+          "endToEndMilliseconds": 113.90000003576279
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 26.30000001192093,
+          "evaluateMilliseconds": 71.09999996423721,
+          "pipelineMilliseconds": 97.39999997615814,
+          "updateMilliseconds": 113.80000001192093,
+          "renderMilliseconds": 8.699999988079071,
+          "endToEndMilliseconds": 122.5
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 50.59999996423721,
+          "evaluateMilliseconds": 69.69999998807907,
+          "pipelineMilliseconds": 120.39999997615814,
+          "updateMilliseconds": 134.89999997615814,
+          "renderMilliseconds": 7.900000035762787,
+          "endToEndMilliseconds": 142.80000001192093
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 27.69999998807907,
+          "evaluateMilliseconds": 75.5,
+          "pipelineMilliseconds": 103.29999995231628,
+          "updateMilliseconds": 119.5,
           "renderMilliseconds": 8,
-          "endToEndMilliseconds": 116.30000001192093
+          "endToEndMilliseconds": 127.5
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 28.900000035762787,
-          "evaluateMilliseconds": 72.10000002384186,
-          "pipelineMilliseconds": 101.10000002384186,
-          "updateMilliseconds": 116.19999998807907,
-          "renderMilliseconds": 8.599999964237213,
-          "endToEndMilliseconds": 124.79999995231628
+          "solveMilliseconds": 26,
+          "evaluateMilliseconds": 64.40000003576279,
+          "pipelineMilliseconds": 90.60000002384186,
+          "updateMilliseconds": 104.90000003576279,
+          "renderMilliseconds": 7.899999976158142,
+          "endToEndMilliseconds": 112.80000001192093
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 41.10000002384186,
-          "evaluateMilliseconds": 71.69999998807907,
-          "pipelineMilliseconds": 112.80000001192093,
-          "updateMilliseconds": 128.89999997615814,
-          "renderMilliseconds": 8.400000035762787,
-          "endToEndMilliseconds": 137.30000001192093
+          "solveMilliseconds": 26.399999976158142,
+          "evaluateMilliseconds": 63.30000001192093,
+          "pipelineMilliseconds": 89.69999998807907,
+          "updateMilliseconds": 103.30000001192093,
+          "renderMilliseconds": 7.900000035762787,
+          "endToEndMilliseconds": 111.20000004768372
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 27,
-          "evaluateMilliseconds": 69.59999996423721,
-          "pipelineMilliseconds": 96.59999996423721,
-          "updateMilliseconds": 111.19999998807907,
-          "renderMilliseconds": 8,
-          "endToEndMilliseconds": 119.19999998807907
+          "solveMilliseconds": 27.299999952316284,
+          "evaluateMilliseconds": 73.40000003576279,
+          "pipelineMilliseconds": 100.69999998807907,
+          "updateMilliseconds": 115.40000003576279,
+          "renderMilliseconds": 8.199999988079071,
+          "endToEndMilliseconds": 123.60000002384186
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 28.69999998807907,
-          "evaluateMilliseconds": 67.5,
-          "pipelineMilliseconds": 96.19999998807907,
-          "updateMilliseconds": 111,
-          "renderMilliseconds": 8.300000011920929,
-          "endToEndMilliseconds": 119.30000001192093
+          "solveMilliseconds": 27.69999998807907,
+          "evaluateMilliseconds": 76.5,
+          "pipelineMilliseconds": 104.19999998807907,
+          "updateMilliseconds": 118.69999998807907,
+          "renderMilliseconds": 8.199999988079071,
+          "endToEndMilliseconds": 126.89999997615814
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 34.80000001192093,
-          "evaluateMilliseconds": 71.5,
-          "pipelineMilliseconds": 106.40000003576279,
-          "updateMilliseconds": 121.19999998807907,
-          "renderMilliseconds": 8.100000023841858,
-          "endToEndMilliseconds": 129.30000001192093
+          "solveMilliseconds": 27.700000047683716,
+          "evaluateMilliseconds": 76.39999997615814,
+          "pipelineMilliseconds": 104.10000002384186,
+          "updateMilliseconds": 118.80000001192093,
+          "renderMilliseconds": 8.099999964237213,
+          "endToEndMilliseconds": 126.89999997615814
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 30.69999998807907,
-          "evaluateMilliseconds": 70.39999997615814,
-          "pipelineMilliseconds": 101.09999996423721,
-          "updateMilliseconds": 116,
+          "solveMilliseconds": 29.5,
+          "evaluateMilliseconds": 65.30000001192093,
+          "pipelineMilliseconds": 94.80000001192093,
+          "updateMilliseconds": 109,
           "renderMilliseconds": 8.5,
-          "endToEndMilliseconds": 124.5
+          "endToEndMilliseconds": 117.5
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 29.599999964237213,
-          "evaluateMilliseconds": 69.5,
-          "pipelineMilliseconds": 99.09999996423721,
-          "updateMilliseconds": 114.30000001192093,
-          "renderMilliseconds": 8,
-          "endToEndMilliseconds": 122.30000001192093
+          "solveMilliseconds": 27.799999952316284,
+          "evaluateMilliseconds": 77.70000004768372,
+          "pipelineMilliseconds": 105.5,
+          "updateMilliseconds": 120.80000001192093,
+          "renderMilliseconds": 8.099999964237213,
+          "endToEndMilliseconds": 128.89999997615814
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 40.80000001192093,
-          "evaluateMilliseconds": 77.5,
-          "pipelineMilliseconds": 118.40000003576279,
-          "updateMilliseconds": 134.19999998807907,
-          "renderMilliseconds": 8,
-          "endToEndMilliseconds": 142.19999998807907
+          "solveMilliseconds": 25.900000035762787,
+          "evaluateMilliseconds": 84.89999997615814,
+          "pipelineMilliseconds": 110.80000001192093,
+          "updateMilliseconds": 125.29999995231628,
+          "renderMilliseconds": 8.100000023841858,
+          "endToEndMilliseconds": 133.39999997615814
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 28.5,
-          "evaluateMilliseconds": 77.30000001192093,
-          "pipelineMilliseconds": 105.80000001192093,
-          "updateMilliseconds": 120.80000001192093,
-          "renderMilliseconds": 8,
-          "endToEndMilliseconds": 128.80000001192093
+          "evaluateMilliseconds": 77.5,
+          "pipelineMilliseconds": 106,
+          "updateMilliseconds": 120.59999996423721,
+          "renderMilliseconds": 7.700000047683716,
+          "endToEndMilliseconds": 128.30000001192093
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 29,
-          "evaluateMilliseconds": 84.79999995231628,
-          "pipelineMilliseconds": 113.79999995231628,
-          "updateMilliseconds": 128.10000002384186,
-          "renderMilliseconds": 13.5,
-          "endToEndMilliseconds": 141.60000002384186
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 28.399999976158142,
-          "evaluateMilliseconds": 84.60000002384186,
-          "pipelineMilliseconds": 113,
-          "updateMilliseconds": 127.69999998807907,
-          "renderMilliseconds": 7.899999976158142,
-          "endToEndMilliseconds": 135.5999999642372
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 26.900000035762787,
-          "evaluateMilliseconds": 79.30000001192093,
-          "pipelineMilliseconds": 106.20000004768372,
-          "updateMilliseconds": 120.69999998807907,
-          "renderMilliseconds": 7.899999976158142,
-          "endToEndMilliseconds": 128.5999999642372
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 29.399999976158142,
-          "evaluateMilliseconds": 82,
-          "pipelineMilliseconds": 111.39999997615814,
-          "updateMilliseconds": 125.90000003576279,
-          "renderMilliseconds": 13.099999964237213,
-          "endToEndMilliseconds": 139
+          "solveMilliseconds": 27.19999998807907,
+          "evaluateMilliseconds": 78.30000001192093,
+          "pipelineMilliseconds": 105.60000002384186,
+          "updateMilliseconds": 119.30000001192093,
+          "renderMilliseconds": 7.600000023841858,
+          "endToEndMilliseconds": 126.90000003576279
         }
       ]
     },
@@ -731,151 +731,151 @@
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 89.5,
-          "pipelineMilliseconds": 89.5,
-          "updateMilliseconds": 104.09999996423721,
-          "renderMilliseconds": 8.200000047683716,
-          "endToEndMilliseconds": 112.30000001192093
+          "evaluateMilliseconds": 100.30000001192093,
+          "pipelineMilliseconds": 100.30000001192093,
+          "updateMilliseconds": 114.5,
+          "renderMilliseconds": 8,
+          "endToEndMilliseconds": 122.5
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 97.19999998807907,
-          "pipelineMilliseconds": 97.29999995231628,
-          "updateMilliseconds": 111.5,
-          "renderMilliseconds": 15.700000047683716,
-          "endToEndMilliseconds": 127.20000004768372
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 97.90000003576279,
-          "pipelineMilliseconds": 97.90000003576279,
-          "updateMilliseconds": 113.90000003576279,
-          "renderMilliseconds": 7.899999976158142,
-          "endToEndMilliseconds": 121.80000001192093
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 106.90000003576279,
-          "pipelineMilliseconds": 106.90000003576279,
-          "updateMilliseconds": 121.40000003576279,
-          "renderMilliseconds": 8.299999952316284,
-          "endToEndMilliseconds": 129.69999998807907
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 103.89999997615814,
-          "pipelineMilliseconds": 104,
-          "updateMilliseconds": 117.69999998807907,
-          "renderMilliseconds": 8.300000011920929,
-          "endToEndMilliseconds": 126
+          "evaluateMilliseconds": 100.20000004768372,
+          "pipelineMilliseconds": 100.20000004768372,
+          "updateMilliseconds": 115,
+          "renderMilliseconds": 8.199999988079071,
+          "endToEndMilliseconds": 123.19999998807907
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0.10000002384185791,
-          "evaluateMilliseconds": 105.19999998807907,
-          "pipelineMilliseconds": 105.30000001192093,
-          "updateMilliseconds": 120.19999998807907,
-          "renderMilliseconds": 7.900000035762787,
-          "endToEndMilliseconds": 128.10000002384186
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 102,
-          "pipelineMilliseconds": 102,
-          "updateMilliseconds": 116.30000001192093,
+          "evaluateMilliseconds": 98.10000002384186,
+          "pipelineMilliseconds": 98.20000004768372,
+          "updateMilliseconds": 115.19999998807907,
           "renderMilliseconds": 8.399999976158142,
-          "endToEndMilliseconds": 124.69999998807907
+          "endToEndMilliseconds": 123.59999996423721
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 94.60000002384186,
-          "pipelineMilliseconds": 94.69999998807907,
-          "updateMilliseconds": 109.30000001192093,
+          "evaluateMilliseconds": 98.40000003576279,
+          "pipelineMilliseconds": 98.40000003576279,
+          "updateMilliseconds": 113.19999998807907,
+          "renderMilliseconds": 8.899999976158142,
+          "endToEndMilliseconds": 122.09999996423721
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 103,
+          "pipelineMilliseconds": 103.10000002384186,
+          "updateMilliseconds": 119.60000002384186,
+          "renderMilliseconds": 8,
+          "endToEndMilliseconds": 127.60000002384186
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 97.30000001192093,
+          "pipelineMilliseconds": 97.30000001192093,
+          "updateMilliseconds": 110.40000003576279,
+          "renderMilliseconds": 8.399999976158142,
+          "endToEndMilliseconds": 118.80000001192093
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0.10000002384185791,
+          "evaluateMilliseconds": 103.5,
+          "pipelineMilliseconds": 103.60000002384186,
+          "updateMilliseconds": 117.30000001192093,
           "renderMilliseconds": 7.800000011920929,
-          "endToEndMilliseconds": 117.10000002384186
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0.09999996423721313,
-          "evaluateMilliseconds": 107.20000004768372,
-          "pipelineMilliseconds": 107.30000001192093,
-          "updateMilliseconds": 125.40000003576279,
-          "renderMilliseconds": 7.599999964237213,
-          "endToEndMilliseconds": 133
+          "endToEndMilliseconds": 125.10000002384186
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 107.5,
-          "pipelineMilliseconds": 107.5,
-          "updateMilliseconds": 121.89999997615814,
-          "renderMilliseconds": 7.900000035762787,
-          "endToEndMilliseconds": 129.80000001192093
+          "evaluateMilliseconds": 111.59999996423721,
+          "pipelineMilliseconds": 111.59999996423721,
+          "updateMilliseconds": 127.09999996423721,
+          "renderMilliseconds": 8.300000011920929,
+          "endToEndMilliseconds": 135.39999997615814
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 107.5,
-          "pipelineMilliseconds": 107.5,
-          "updateMilliseconds": 121.70000004768372,
-          "renderMilliseconds": 8.699999988079071,
-          "endToEndMilliseconds": 130.4000000357628
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 109,
-          "pipelineMilliseconds": 109,
-          "updateMilliseconds": 123.90000003576279,
-          "renderMilliseconds": 7.799999952316284,
-          "endToEndMilliseconds": 131.69999998807907
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 105.60000002384186,
-          "pipelineMilliseconds": 105.60000002384186,
-          "updateMilliseconds": 120.59999996423721,
-          "renderMilliseconds": 8.100000023841858,
-          "endToEndMilliseconds": 128.69999998807907
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 105.10000002384186,
-          "pipelineMilliseconds": 105.19999998807907,
-          "updateMilliseconds": 119.5,
-          "renderMilliseconds": 15.300000011920929,
-          "endToEndMilliseconds": 134.80000001192093
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 111.69999998807907,
-          "pipelineMilliseconds": 111.79999995231628,
-          "updateMilliseconds": 127.60000002384186,
+          "evaluateMilliseconds": 107.19999998807907,
+          "pipelineMilliseconds": 107.19999998807907,
+          "updateMilliseconds": 121.69999998807907,
           "renderMilliseconds": 7.899999976158142,
-          "endToEndMilliseconds": 135.5
+          "endToEndMilliseconds": 129.5999999642372
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 109.60000002384186,
+          "pipelineMilliseconds": 109.60000002384186,
+          "updateMilliseconds": 123.80000001192093,
+          "renderMilliseconds": 7.599999964237213,
+          "endToEndMilliseconds": 131.39999997615814
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 109.30000001192093,
+          "pipelineMilliseconds": 109.30000001192093,
+          "updateMilliseconds": 124.10000002384186,
+          "renderMilliseconds": 8.5,
+          "endToEndMilliseconds": 132.60000002384186
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 118.29999995231628,
+          "pipelineMilliseconds": 118.29999995231628,
+          "updateMilliseconds": 133.39999997615814,
+          "renderMilliseconds": 8.300000011920929,
+          "endToEndMilliseconds": 141.69999998807907
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 109.39999997615814,
+          "pipelineMilliseconds": 109.5,
+          "updateMilliseconds": 123.89999997615814,
+          "renderMilliseconds": 15.899999976158142,
+          "endToEndMilliseconds": 139.79999995231628
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 118.10000002384186,
+          "pipelineMilliseconds": 118.20000004768372,
+          "updateMilliseconds": 133.79999995231628,
+          "renderMilliseconds": 8.600000023841858,
+          "endToEndMilliseconds": 142.39999997615814
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 111.5,
+          "pipelineMilliseconds": 111.59999996423721,
+          "updateMilliseconds": 125.69999998807907,
+          "renderMilliseconds": 8,
+          "endToEndMilliseconds": 133.69999998807907
         }
       ]
     },
@@ -886,151 +886,151 @@
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 104.80000001192093,
-          "pipelineMilliseconds": 104.80000001192093,
-          "updateMilliseconds": 119,
-          "renderMilliseconds": 8.400000035762787,
-          "endToEndMilliseconds": 127.40000003576279
+          "evaluateMilliseconds": 109.69999998807907,
+          "pipelineMilliseconds": 109.69999998807907,
+          "updateMilliseconds": 123.70000004768372,
+          "renderMilliseconds": 15.699999988079071,
+          "endToEndMilliseconds": 139.4000000357628
         },
         {
           "backend": "gpu",
           "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 114.5,
-          "pipelineMilliseconds": 114.5,
-          "updateMilliseconds": 128.9000000357628,
-          "renderMilliseconds": 7.599999964237213,
-          "endToEndMilliseconds": 136.5
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 116.59999996423721,
-          "pipelineMilliseconds": 116.59999996423721,
-          "updateMilliseconds": 130.80000001192093,
-          "renderMilliseconds": 8,
-          "endToEndMilliseconds": 138.80000001192093
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 113.89999997615814,
-          "pipelineMilliseconds": 114,
-          "updateMilliseconds": 128.4000000357628,
-          "renderMilliseconds": 8.199999988079071,
-          "endToEndMilliseconds": 136.60000002384186
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 111.40000003576279,
-          "pipelineMilliseconds": 111.40000003576279,
-          "updateMilliseconds": 126.10000002384186,
-          "renderMilliseconds": 8.5,
-          "endToEndMilliseconds": 134.60000002384186
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 114.5,
-          "pipelineMilliseconds": 114.5,
-          "updateMilliseconds": 129.39999997615814,
-          "renderMilliseconds": 7.600000023841858,
-          "endToEndMilliseconds": 137
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 113.60000002384186,
-          "pipelineMilliseconds": 113.60000002384186,
-          "updateMilliseconds": 128.19999998807907,
-          "renderMilliseconds": 8.400000035762787,
-          "endToEndMilliseconds": 136.60000002384186
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 113.10000002384186,
-          "pipelineMilliseconds": 113.19999998807907,
-          "updateMilliseconds": 127.90000003576279,
-          "renderMilliseconds": 8.399999976158142,
-          "endToEndMilliseconds": 136.30000001192093
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 107.20000004768372,
-          "pipelineMilliseconds": 107.20000004768372,
-          "updateMilliseconds": 121.5,
-          "renderMilliseconds": 8.200000047683716,
-          "endToEndMilliseconds": 129.70000004768372
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 113.09999996423721,
-          "pipelineMilliseconds": 113.09999996423721,
-          "updateMilliseconds": 127.5,
-          "renderMilliseconds": 8.399999976158142,
-          "endToEndMilliseconds": 135.89999997615814
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 119.19999998807907,
-          "pipelineMilliseconds": 119.19999998807907,
-          "updateMilliseconds": 133.79999995231628,
-          "renderMilliseconds": 8.300000011920929,
-          "endToEndMilliseconds": 142.0999999642372
-        },
-        {
-          "backend": "gpu",
-          "quality": "full",
-          "solveMilliseconds": 0,
-          "evaluateMilliseconds": 111.5,
-          "pipelineMilliseconds": 111.5,
-          "updateMilliseconds": 125.5,
+          "solveMilliseconds": 0.10000002384185791,
+          "evaluateMilliseconds": 122.69999998807907,
+          "pipelineMilliseconds": 122.80000001192093,
+          "updateMilliseconds": 137.80000001192093,
           "renderMilliseconds": 8.100000023841858,
-          "endToEndMilliseconds": 133.60000002384186
+          "endToEndMilliseconds": 145.9000000357628
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 115.80000001192093,
-          "pipelineMilliseconds": 115.80000001192093,
-          "updateMilliseconds": 131.0999999642372,
-          "renderMilliseconds": 8.5,
-          "endToEndMilliseconds": 139.5999999642372
+          "evaluateMilliseconds": 112.89999997615814,
+          "pipelineMilliseconds": 112.89999997615814,
+          "updateMilliseconds": 127.5,
+          "renderMilliseconds": 8,
+          "endToEndMilliseconds": 135.5
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0.10000002384185791,
+          "evaluateMilliseconds": 117.5,
+          "pipelineMilliseconds": 117.60000002384186,
+          "updateMilliseconds": 132.5,
+          "renderMilliseconds": 8.400000035762787,
+          "endToEndMilliseconds": 140.9000000357628
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 110.59999996423721,
-          "pipelineMilliseconds": 110.69999998807907,
-          "updateMilliseconds": 125.09999996423721,
+          "evaluateMilliseconds": 125.69999998807907,
+          "pipelineMilliseconds": 125.69999998807907,
+          "updateMilliseconds": 140.0999999642372,
+          "renderMilliseconds": 8.100000023841858,
+          "endToEndMilliseconds": 148.19999998807907
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 111.69999998807907,
+          "pipelineMilliseconds": 111.69999998807907,
+          "updateMilliseconds": 126,
+          "renderMilliseconds": 7.800000011920929,
+          "endToEndMilliseconds": 133.80000001192093
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0.10000002384185791,
+          "evaluateMilliseconds": 112.30000001192093,
+          "pipelineMilliseconds": 112.40000003576279,
+          "updateMilliseconds": 126,
+          "renderMilliseconds": 16.5,
+          "endToEndMilliseconds": 142.5
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 123.90000003576279,
+          "pipelineMilliseconds": 124,
+          "updateMilliseconds": 140.5,
+          "renderMilliseconds": 8.600000023841858,
+          "endToEndMilliseconds": 149.10000002384186
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 118.5,
+          "pipelineMilliseconds": 118.5,
+          "updateMilliseconds": 132,
+          "renderMilliseconds": 7.699999988079071,
+          "endToEndMilliseconds": 139.69999998807907
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 119.70000004768372,
+          "pipelineMilliseconds": 119.70000004768372,
+          "updateMilliseconds": 133.9000000357628,
+          "renderMilliseconds": 7.800000011920929,
+          "endToEndMilliseconds": 141.70000004768372
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 121.39999997615814,
+          "pipelineMilliseconds": 121.39999997615814,
+          "updateMilliseconds": 136.0999999642372,
           "renderMilliseconds": 8.300000011920929,
-          "endToEndMilliseconds": 133.39999997615814
+          "endToEndMilliseconds": 144.39999997615814
         },
         {
           "backend": "gpu",
           "quality": "full",
           "solveMilliseconds": 0,
-          "evaluateMilliseconds": 114.90000003576279,
-          "pipelineMilliseconds": 114.90000003576279,
-          "updateMilliseconds": 130.29999995231628,
-          "renderMilliseconds": 8.700000047683716,
-          "endToEndMilliseconds": 139
+          "evaluateMilliseconds": 112.19999998807907,
+          "pipelineMilliseconds": 112.29999995231628,
+          "updateMilliseconds": 126.30000001192093,
+          "renderMilliseconds": 8,
+          "endToEndMilliseconds": 134.30000001192093
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 119.39999997615814,
+          "pipelineMilliseconds": 119.5,
+          "updateMilliseconds": 134.19999998807907,
+          "renderMilliseconds": 8.600000023841858,
+          "endToEndMilliseconds": 142.80000001192093
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 117.79999995231628,
+          "pipelineMilliseconds": 117.79999995231628,
+          "updateMilliseconds": 132.19999998807907,
+          "renderMilliseconds": 8.300000011920929,
+          "endToEndMilliseconds": 140.5
+        },
+        {
+          "backend": "gpu",
+          "quality": "full",
+          "solveMilliseconds": 0,
+          "evaluateMilliseconds": 121.59999996423721,
+          "pipelineMilliseconds": 121.59999996423721,
+          "updateMilliseconds": 136.30000001192093,
+          "renderMilliseconds": 15.099999964237213,
+          "endToEndMilliseconds": 151.39999997615814
         }
       ]
     }
