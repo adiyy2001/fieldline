@@ -239,7 +239,7 @@ The full list is in [docs/adr](docs/adr). The ones that shaped the project most:
 - GPU accuracy in the clamp zone. 6.5e-4 is under the 1e-3 target with a factor of 1.5. Outside the clamp zone it is below 1.2e-4. Very large grids would need one origin per tile.
 - CPU fallback is slower than the target. Full quality updates take 263 to 429 ms on the CPU backend (median). Only the draft drag is under 200 ms.
 - Measured on one laptop. Two real GPUs (a high-end laptop part and an integrated one) on the same machine, one browser engine (Chromium). Firefox and Safari were not tested. I would like numbers from a mid-range discrete GPU.
-- Lighthouse performance is 0.84 to 1. The lab score comes from the software adapter. The best practices score was 0.96 before I fixed the tower marks of the ground view, which had a negative height and logged a console error, and the marks were never drawn.
+- Lighthouse performance is 0.76 to 1, and it moves by about 0.1 between runs on the same build. The lab score comes from the software adapter. The best practices score was 0.96 before I fixed the tower marks of the ground view, which had a negative height and logged a console error, and the marks were never drawn.
 - The GPU contour dashes follow the dominant axis of the gradient. On very steep contours the dash length is not exactly constant (ADR 24).
 
 ## Credits and licence
