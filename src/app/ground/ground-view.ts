@@ -173,6 +173,9 @@ export class GroundView {
         this.size.set({ width: Math.round(width), height: Math.round(height) });
       };
       measure(element.clientWidth, element.clientHeight);
+      if (typeof ResizeObserver === 'undefined') {
+        return;
+      }
       const observer = new ResizeObserver((entries) => {
         const entry = entries[0];
         if (entry !== undefined) {

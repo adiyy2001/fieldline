@@ -261,6 +261,9 @@ export class Scene3dViewComponent {
         });
       };
       measure(element.clientWidth, element.clientHeight);
+      if (typeof ResizeObserver === 'undefined') {
+        return;
+      }
       const observer = new ResizeObserver((entries) => {
         const entry = entries[0];
         if (entry !== undefined) {
