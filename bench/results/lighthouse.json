@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-10-11T00:12:00.102Z",
+  "node": "v24.21.0",
+  "platform": "linux 6.6.87.2-microsoft-standard-WSL2 x64",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-12700H",
+  "browsers": [
+    {
+      "renderer": "webgpu",
+      "chromium": "156.0.8078.4",
+      "flags": [
+        "--enable-unsafe-webgpu",
+        "--use-webgpu-adapter=swiftshader",
+        "--use-angle=swiftshader",
+        "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+      ]
+    },
+    {
+      "renderer": "fallback",
+      "chromium": "156.0.8078.4",
+      "flags": []
+    }
+  ],
+  "threshold": 0.95,
+  "note": "The webgpu runs use the software adapter and the fallback runs have no adapter at all, so the page renders on the worker pool. Performance runs with simulated throttling off and says nothing about real GPUs.",
+  "results": [
+    {
+      "renderer": "webgpu",
+      "formFactor": "mobile",
+      "scores": {
+        "accessibility": 1,
+        "best-practices": 0.96,
+        "seo": 1,
+        "performance": 0.86
+      },
+      "failedAccessibilityAudits": []
+    },
+    {
+      "renderer": "webgpu",
+      "formFactor": "desktop",
+      "scores": {
+        "accessibility": 1,
+        "best-practices": 0.96,
+        "seo": 1,
+        "performance": 0.87
+      },
+      "failedAccessibilityAudits": []
+    },
+    {
+      "renderer": "fallback",
+      "formFactor": "mobile",
+      "scores": {
+        "accessibility": 1,
+        "best-practices": 0.96,
+        "seo": 1,
+        "performance": 0.84
+      },
+      "failedAccessibilityAudits": []
+    },
+    {
+      "renderer": "fallback",
+      "formFactor": "desktop",
+      "scores": {
+        "accessibility": 1,
+        "best-practices": 0.96,
+        "seo": 1,
+        "performance": 1
+      },
+      "failedAccessibilityAudits": []
+    }
+  ]
+}
