@@ -63,3 +63,16 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+input[type='radio'],
+input[type='checkbox'] {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+}
+
+label:has(> input[type='radio']),
+label:has(> input[type='checkbox']),
+summary {
+  min-height: 1.5rem;
+}

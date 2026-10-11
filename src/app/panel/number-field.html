@@ -10,12 +10,12 @@
       [step]="step()"
       [value]="value()"
       [attr.aria-invalid]="issue() === null ? null : 'true'"
-      [attr.aria-describedby]="issue() === null ? null : issueId"
+      [attr.aria-describedby]="describedBy()"
       (input)="typed($event)"
       (change)="committed($event)"
     />
     @if (unit() !== '') {
-      <span class="unit" aria-hidden="true">{{ unit() }}</span>
+      <span class="unit" [id]="unitId" aria-hidden="true">{{ unit() }}</span>
     }
   </div>
   @if (slider()) {

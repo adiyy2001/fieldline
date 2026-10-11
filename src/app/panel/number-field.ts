@@ -35,6 +35,14 @@ export class NumberField {
   private readonly serial = nextFieldId++;
   protected readonly inputId = `fl-field-${String(this.serial)}`;
   protected readonly issueId = `fl-field-issue-${String(this.serial)}`;
+  protected readonly unitId = `fl-field-unit-${String(this.serial)}`;
+  protected readonly describedBy = computed(() => {
+    const ids = [
+      ...(this.unit() === '' ? [] : [this.unitId]),
+      ...(this.issue() === null ? [] : [this.issueId]),
+    ];
+    return ids.length === 0 ? null : ids.join(' ');
+  });
   protected readonly sliderValue = computed(() =>
     Math.min(this.max(), Math.max(this.min(), this.value())),
   );

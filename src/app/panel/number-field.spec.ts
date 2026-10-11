@@ -51,6 +51,17 @@ describe('the number field', () => {
     expect(root.querySelector('.unit')?.textContent).toBe('kV');
   });
 
+  it('describes the input with its unit and with the issue when there is one', () => {
+    const plain = mount().root.querySelector<HTMLInputElement>('input[type="number"]');
+    const unit = plain?.getAttribute('aria-describedby') ?? '';
+    expect(mount().root.querySelector('.unit')?.id).not.toBe('');
+    expect(unit).toMatch(/^fl-field-unit-\d+$/);
+    const invalid = mount('Too high').root.querySelector<HTMLInputElement>('input[type="number"]');
+    expect(invalid?.getAttribute('aria-describedby')).toMatch(
+      /^fl-field-unit-\d+ fl-field-issue-\d+$/,
+    );
+  });
+
   it('emits interactive edits while typing and committed edits on change', () => {
     const { root, edits } = mount();
     const input = root.querySelector<HTMLInputElement>('input[type="number"]');
@@ -100,7 +111,7 @@ describe('the number field', () => {
     const input = root.querySelector('input[type="number"]');
     const message = root.querySelector('.issue');
     expect(input?.getAttribute('aria-invalid')).toBe('true');
-    expect(input?.getAttribute('aria-describedby')).toBe(message?.id);
+    expect(input?.getAttribute('aria-describedby')?.split(' ')).toContain(message?.id);
     expect(message?.textContent).toContain('between 110 and 800');
   });
 
