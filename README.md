@@ -1,6 +1,6 @@
 # fieldline
 
-Real-time 3D visualization of the electric and magnetic fields around overhead high-voltage lines, computed on the GPU with WebGPU, with exposure contours, lateral profiles and a phase-arrangement optimizer.
+GPU-computed real-time 3D visualization of the electric and magnetic fields near overhead high-voltage lines, with exposure contours, lateral profiles and a phase-arrangement optimizer. Built with WebGPU.
 
 ![Field lines over one 50 Hz cycle, the ground field with exposure contours, a phasing change and the lateral profile](docs/img/demo.gif)
 
@@ -15,9 +15,9 @@ The two coverage badges are static and come from `pnpm test:coverage` (see the t
 
 ## Why I built this
 
-I work on software for high-voltage substations, and a question that keeps coming back is how strong the field under a line is when the line passes near homes. I wanted to compute it properly, see its three-dimensional shape and check the numbers against analytic solutions instead of trusting a picture.
+I work on software for high-voltage substations, and one question that keeps coming up is how strong the field under a line is when the line passes near houses. I wanted to calculate it properly, see its 3D shape and check the numbers against analytic solutions rather than trust a picture.
 
-It is also a serious WebGPU compute project. The field evaluation, marching cubes and the field line tracer are compute passes, and a float64 TypeScript version of the same math is the reference they are tested against.
+It's also a serious WebGPU compute project. Field evaluation, marching cubes and the field line tracer are compute passes, and a float64 TypeScript implementation of the same math is the reference they are tested against.
 
 ## What is hard about it
 
